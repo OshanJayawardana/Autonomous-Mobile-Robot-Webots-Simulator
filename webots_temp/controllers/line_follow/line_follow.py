@@ -15,7 +15,7 @@ def pid(p,i,d,last_error):
     #kp=0.14
     #ki=0.001
     #kd=0.0001
-    kp=0.1
+    kp=0.14
     ki=0.001
     kd=0.0001
     ir_values=[]
@@ -72,14 +72,14 @@ def setMotors(left_speed,right_speed,dc):
     leftMotor.setVelocity(left_speed)
     rightMotor.setVelocity(right_speed)
     
-    front_leftMotor.setVelocity(left_speed)
-    front_rightMotor.setVelocity(right_speed)
+    #front_leftMotor.setVelocity(left_speed)
+    #front_rightMotor.setVelocity(right_speed)
     #setting brakes
     left_brk.setDampingConstant(dc)
     right_brk.setDampingConstant(dc)
     
-    front_left_brk.setDampingConstant(dc)
-    front_right_brk.setDampingConstant(dc)
+    #front_left_brk.setDampingConstant(dc)
+    #front_right_brk.setDampingConstant(dc)
     #storing the speed for next loop
     last_left_speed=left_speed
     last_right_speed=right_speed
@@ -88,28 +88,31 @@ def setMotors(left_speed,right_speed,dc):
 #....................................................
 #sharpTurn
 def sharpTurn(turn,pos_lst,junc,direct_count,turn_command):
-    pos_left.enable(TIME_STEP)
-    pos_val=pos_left.getValue()
+    if turn==2:
+        pos_val=pos_left.getValue()
+    else:
+        pos_val=pos_right.getValue()
     if abs(pos_val)>0:
-        pos_lst.append(pos_left.getValue())
+        pos_lst.append(pos_val)
         print(abs(pos_lst[0]-pos_lst[-1]))
-        if abs(pos_lst[0]-pos_lst[-1])>3.9:
+        if abs(pos_lst[0]-pos_lst[-1])>2.9:
             junc=-1
             pos_lst=[]
             turn_command=0
             #pos_left.disable()
+            #pos_right.disable()
             direct_count+=1
     if turn==0:
         print("turning left")
-        left_speed=-0.2*MAX_SPEED
-        right_speed=0.2*MAX_SPEED
+        left_speed=-0.1*MAX_SPEED
+        right_speed=0.5*MAX_SPEED
     elif turn==1:
-        left_speed=0.2*MAX_SPEED
-        right_speed=0.2*MAX_SPEED
+        left_speed=0.5*MAX_SPEED
+        right_speed=0.5*MAX_SPEED
         print("going forward")
     elif turn==2:
-        left_speed=0.2*MAX_SPEED
-        right_speed=-0.2*MAX_SPEED
+        left_speed=0.5*MAX_SPEED
+        right_speed=-0.1*MAX_SPEED
         print("turning right")
     else:
         print("wrong input. enter a value from 0-2")
@@ -120,7 +123,7 @@ def sharpTurn(turn,pos_lst,junc,direct_count,turn_command):
 def brakes(last_left_speed,last_right_speed,dc,turn_command):
     print("brake")
     speed=max([last_left_speed,last_right_speed])
-    if speed<0.0001:
+    if speed<0.5*MAX_SPEED:
         left_speed=(0)
         right_speed=(0)
         led.set(1)
@@ -129,7 +132,7 @@ def brakes(last_left_speed,last_right_speed,dc,turn_command):
     else:
         left_speed=speed-0.09
         right_speed=speed-0.09
-        dc+=3
+        dc+=0
     return left_speed,right_speed,dc,turn_command
 ######################################################
 
@@ -155,14 +158,17 @@ right_brk=robot.getDevice("brake_right")
 left_brk.setDampingConstant(0)
 right_brk.setDampingConstant(0)
 
-front_left_brk=robot.getDevice("front_left_brake")
-front_right_brk=robot.getDevice("front_right_brake")
-front_left_brk.setDampingConstant(0)
-front_right_brk.setDampingConstant(0)
+#front_left_brk=robot.getDevice("front_left_brake")
+#front_right_brk=robot.getDevice("front_right_brake")
+#front_left_brk.setDampingConstant(0)
+#front_right_brk.setDampingConstant(0)
 #....................................................
 
 #encorders
 pos_left=robot.getDevice("pos_left")
+pos_right=robot.getDevice("pos_right")
+pos_left.enable(TIME_STEP)
+pos_right.enable(TIME_STEP)
 #....................................................
 
 #led
@@ -177,12 +183,12 @@ rightMotor.setPosition(float('inf'))
 leftMotor.setVelocity(0.1*MAX_SPEED)
 rightMotor.setVelocity(0.1*MAX_SPEED)
 
-front_leftMotor = robot.getDevice('front_left')
-front_rightMotor = robot.getDevice('front_right')
-front_leftMotor.setPosition(float('inf'))
-front_rightMotor.setPosition(float('inf'))
-front_leftMotor.setVelocity(0.1*MAX_SPEED)
-front_rightMotor.setVelocity(0.1*MAX_SPEED)
+#front_leftMotor = robot.getDevice('front_left')
+#front_rightMotor = robot.getDevice('front_right')
+#front_leftMotor.setPosition(float('inf'))
+#front_rightMotor.setPosition(float('inf'))
+#front_leftMotor.setVelocity(0.1*MAX_SPEED)
+#front_rightMotor.setVelocity(0.1*MAX_SPEED)
 #....................................................
 
 #initial pid values

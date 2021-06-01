@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.6760871661109092 0.6980084829968188 0.23598792656532172 5.355786215550604
-  position -1.3625489749166793 1.6991522112100905 1.4198970838713842
+  orientation -0.5841809657287714 -0.5820947313938898 -0.5655955471568666 2.0589571051695934
+  position -0.3696501578581446 2.558564587245216 -0.7173178208632676
 }
 TexturedBackground {
 }
@@ -69,6 +69,45 @@ Robot {
   translation -0.532342 0.0400178 0.155064
   rotation -0.006826409069353844 0.0012931398237059056 -0.9999758636730258 -3.141575307179586
   children [
+    DEF caster_left BallJoint {
+      jointParameters BallJointParameters {
+        anchor 0.056 0.019 -0.15
+      }
+      endPoint DEF left_caster Solid {
+        translation 0.05604662350206546 0.01899650995316667 -0.14998913406109657
+        rotation -0.6117495748047937 -0.5320115602649412 -0.5854281830170264 3.430358375579431
+        children [
+          DEF caster Shape {
+            appearance PBRAppearance {
+            }
+            geometry Sphere {
+              radius 0.019
+              subdivision 4
+            }
+          }
+        ]
+        name "caster_left"
+        boundingObject USE caster
+        physics Physics {
+        }
+      }
+    }
+    DEF caster_right BallJoint {
+      jointParameters BallJointParameters {
+        anchor -0.056 0.019 -0.15
+      }
+      endPoint DEF right_caster Solid {
+        translation -0.056 0.019 -0.15
+        rotation -0.6918968720489387 0.30647896017165654 0.653719638240274 3.896996070932116
+        children [
+          USE caster
+        ]
+        name "caster_right"
+        boundingObject USE caster
+        physics Physics {
+        }
+      }
+    }
     DEF body Shape {
       appearance PBRAppearance {
       }
@@ -97,12 +136,12 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation 0 -0.01 0
+          translation 0 -0.0075 0
           name "ir3"
           type "infra-red"
         }
         DistanceSensor {
-          translation 0 0.01 0
+          translation 0 0.0075 0
           name "ir4"
           type "infra-red"
         }
@@ -135,7 +174,7 @@ Robot {
       }
     }
     DEF ts_panel Solid {
-      translation 0 0.01 -0.095
+      translation 0 0.01 -0.105
       rotation 0 0 1 1.5708
       scale 2 2 2
       children [
@@ -152,63 +191,6 @@ Robot {
         USE ir_panel
       ]
       name "ts_pane;"
-    }
-    DEF front_left HingeJoint {
-      jointParameters HingeJointParameters {
-        position 5.637151010535637
-        anchor 0.075 0 -0.15
-      }
-      device [
-        RotationalMotor {
-          name "front_left"
-        }
-        Brake {
-          name "front_left_brake"
-        }
-      ]
-      endPoint Solid {
-        translation 0.075 0 -0.15
-        rotation 0.302551304184483 -0.3025524155195175 -0.903838892834101 4.611452985230338
-        children [
-          DEF front_wheel Shape {
-            appearance PBRAppearance {
-            }
-            geometry Cylinder {
-              height 0.005
-              radius 0.04
-            }
-          }
-        ]
-        name "front_left_wheel"
-        boundingObject USE front_wheel
-        physics Physics {
-        }
-      }
-    }
-    DEF front_right HingeJoint {
-      jointParameters HingeJointParameters {
-        position 5.965399102771373
-        anchor -0.075 0 -0.15
-      }
-      device [
-        Brake {
-          name "front_right_brake"
-        }
-        RotationalMotor {
-          name "front_right"
-        }
-      ]
-      endPoint Solid {
-        translation -0.075 0 -0.15
-        rotation 0.15628061254455908 -0.1562811865963576 -0.975270506505109 4.687347520839201
-        children [
-          USE front_wheel
-        ]
-        name "front_right_wheel"
-        boundingObject USE front_wheel
-        physics Physics {
-        }
-      }
     }
     DEF axel_rear Solid {
       rotation 0 0 1 1.5708
