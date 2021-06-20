@@ -54,8 +54,8 @@ def pid(p,i,d,last_error):
 def juncFind():
     ir_left=ts[0].getValue()
     ir_right=ts[1].getValue()
-    left=ir_left<400
-    right=ir_right<400
+    left=ir_left<300
+    right=ir_right<250
     if left and not(right):
         junc=0
     elif left and right:
@@ -95,7 +95,7 @@ def sharpTurn(turn,pos_lst,junc,direct_count,turn_command):
     if abs(pos_val)>0:
         pos_lst.append(pos_val)
         print(abs(pos_lst[0]-pos_lst[-1]))
-        if abs(pos_lst[0]-pos_lst[-1])>2.9:
+        if abs(pos_lst[0]-pos_lst[-1])>5.0:
             junc=-1
             pos_lst=[]
             turn_command=0
@@ -104,7 +104,7 @@ def sharpTurn(turn,pos_lst,junc,direct_count,turn_command):
             direct_count+=1
     if turn==0:
         print("turning left")
-        left_speed=-0.1*MAX_SPEED
+        left_speed=0*MAX_SPEED
         right_speed=0.5*MAX_SPEED
     elif turn==1:
         left_speed=0.5*MAX_SPEED
@@ -112,7 +112,7 @@ def sharpTurn(turn,pos_lst,junc,direct_count,turn_command):
         print("going forward")
     elif turn==2:
         left_speed=0.5*MAX_SPEED
-        right_speed=-0.1*MAX_SPEED
+        right_speed=0*MAX_SPEED
         print("turning right")
     else:
         print("wrong input. enter a value from 0-2")
@@ -126,12 +126,12 @@ def brakes(last_left_speed,last_right_speed,dc,turn_command):
     if speed<0.5*MAX_SPEED:
         left_speed=(0)
         right_speed=(0)
-        led.set(1)
+        #led.set(1)
         turn_command=1
         dc=0
     else:
-        left_speed=speed-0.09
-        right_speed=speed-0.09
+        left_speed=speed-1
+        right_speed=speed-1
         dc+=0
     return left_speed,right_speed,dc,turn_command
 ######################################################
@@ -204,6 +204,7 @@ turn_command=0
 pos_lst=[]
 junc=-1
 direct=[2,1,2,2,2,0,2,2,2,2,1,0]
+#direct=[1,0]
 direct_count=0
 ######################################################
 
@@ -212,8 +213,12 @@ direct_count=0
 while robot.step(TIME_STEP) != -1:
     
     if junc!=-1 and turn_command:#turning code
+        led.set(0)
         pos_lst,junc,left_speed,right_speed,direct_count,turn_command=sharpTurn(direct[direct_count],pos_lst,junc,direct_count,turn_command)        
     elif junc!=-1:#braking to run when junction is found
+        print(ts[0].getValue())
+        print(ts[1].getValue())
+        led.set(1)
         left_speed,right_speed,dc,turn_command=brakes(last_left_speed,last_right_speed,dc,turn_command)
     else:#code running when freely line following
         #pos_left.disable()

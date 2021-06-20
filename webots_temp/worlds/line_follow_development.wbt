@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.5841809657287714 -0.5820947313938898 -0.5655955471568666 2.0589571051695934
-  position -0.3696501578581446 2.558564587245216 -0.7173178208632676
+  orientation 0.05111036404077116 0.997934503156858 -0.038916039067392084 1.3035232829320547
+  position 0.2548631448572629 0.03580607077795888 -0.13866225551583702
 }
 TexturedBackground {
 }
@@ -66,22 +66,22 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation -0.532342 0.0400178 0.155064
-  rotation -0.006826409069353844 0.0012931398237059056 -0.9999758636730258 -3.141575307179586
+  translation -0.525292 0.03056 -0.0550869
+  rotation -0.006826409078883563 0.0012920598256568677 -0.9999758650689997 -3.141575307179586
   children [
     DEF caster_left BallJoint {
       jointParameters BallJointParameters {
-        anchor 0.056 0.019 -0.15
+        anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.05604662350206546 0.01899650995316667 -0.14998913406109657
-        rotation -0.6117495748047937 -0.5320115602649412 -0.5854281830170264 3.430358375579431
+        translation 0.056016641909522456 0.015997705881768208 -0.14996588630965454
+        rotation -0.12300669683510111 -0.9869351056943303 -0.10405983702581162 1.4172811641875531
         children [
           DEF caster Shape {
             appearance PBRAppearance {
             }
             geometry Sphere {
-              radius 0.019
+              radius 0.014
               subdivision 4
             }
           }
@@ -94,11 +94,11 @@ Robot {
     }
     DEF caster_right BallJoint {
       jointParameters BallJointParameters {
-        anchor -0.056 0.019 -0.15
+        anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.056 0.019 -0.15
-        rotation -0.6918968720489387 0.30647896017165654 0.653719638240274 3.896996070932116
+        translation -0.056 0.016 -0.15
+        rotation 0.0032692965634476445 0.9999704763584355 -0.006953999673843877 2.262677676521408
         children [
           USE caster
         ]
@@ -116,7 +116,7 @@ Robot {
       }
     }
     DEF ir_panel Solid {
-      translation -3.67321e-08 0.01 -0.075
+      translation -5.10335e-14 0 -0.075
       rotation 0 0 1 1.5708
       scale 1.5 1.5 1.5
       children [
@@ -174,7 +174,7 @@ Robot {
       }
     }
     DEF ts_panel Solid {
-      translation 0 0.01 -0.105
+      translation 0 0 -0.095
       rotation 0 0 1 1.5708
       scale 2 2 2
       children [
@@ -271,7 +271,7 @@ Robot {
             }
             geometry Cylinder {
               height 0.005
-              radius 0.04
+              radius 0.03
             }
           }
         ]
@@ -386,7 +386,7 @@ DEF path1 Solid {
   ]
 }
 DEF path1 Solid {
-  translation 0.943 0 -0.129999
+  translation 0.943 0 0.450001
   rotation 0 1 0 -1.5707953071795862
   children [
     USE road
@@ -394,7 +394,7 @@ DEF path1 Solid {
   name "solid(4)"
 }
 DEF path1 Solid {
-  translation 0.943 0 -1.03
+  translation 0.943 0 -1.61
   rotation 0 1 0 -1.5707953071795862
   children [
     USE road
