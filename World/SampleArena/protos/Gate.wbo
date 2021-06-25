@@ -1,0 +1,69 @@
+#VRML_OBJ R2021a utf8
+DEF LeftGate_01 Robot {
+  translation -0.77134 0.025 -1.495
+  rotation -0.5773509358560258 0.577349935856137 0.577349935856137 2.0944
+  children [
+    DEF Base Shape {
+      appearance PBRAppearance {
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+      isPickable FALSE
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.1 0 0
+      }
+      device [
+        DEF mot RotationalMotor {
+          name "mot"
+        }
+        PositionSensor {
+          name "ps_1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.024999999999999994 0 0.01
+        rotation 1 0 0 0
+        children [
+          DEF rod Shape {
+            appearance PBRAppearance {
+              roughness 1
+            }
+            geometry Box {
+              size 0.01 0.01 0.01
+            }
+          }
+          Connector {
+            translation 0.01 0.191 0
+            children [
+              DEF Gate Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 0
+                  roughness 1
+                }
+                geometry Box {
+                  size 0.01 0.4 0.01
+                }
+              }
+            ]
+            boundingObject USE Gate
+          }
+        ]
+        boundingObject USE rod
+        physics Physics {
+        }
+      }
+    }
+  ]
+  name "lg1"
+  boundingObject Box {
+    size 0.05 0.05 0.05
+  }
+  physics Physics {
+  }
+  controller "GateController"
+}
