@@ -41,7 +41,7 @@ double dc = 0; //damping coeficient
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-int direct[]={0,2,2,0,1,0,2, 1, 2, 2, 2, 0, 2, 2, 2, 2, 1, 0}; //direct = [1, 0];
+int direct[]={0,2,2,2,1,0,1, 2, 0, 2, 2, 1, 1, 1, 2, 2, 1, 0}; //direct = [1, 0];
 int direct_count = 0;
 ////////////////////////////////////////////////////////
 
