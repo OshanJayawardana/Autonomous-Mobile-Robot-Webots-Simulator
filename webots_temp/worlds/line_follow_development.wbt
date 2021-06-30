@@ -3,14 +3,15 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.1727949670686259 0.9089616963537721 0.3793817785785515 3.926625990921758
-  position -1.5288218349678866 5.685776813092265 -1.4535300212011386
+  orientation 0.10599065825899752 0.9296059300514979 0.3529855452775853 3.6859998167584807
+  position 2.0586077939270315 2.476789371362136 -1.0525620089085352
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
+  translation 0.0106156 -9.76996e-15 0.078644
   floorSize 10 10
   floorAppearance PBRAppearance {
     baseColor 0 0 0
@@ -66,7 +67,7 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation 2.05857 0.0297617 4.60028
+  translation 3.54964 0.0297617 0.341802
   rotation 0.7022633033568287 1.3267905731340067e-06 -0.711917307527071 -3.141555307179586
   children [
     DEF caster_left BallJoint {
@@ -75,8 +76,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.056012772417495194 0.015977509201186492 -0.15002787535096598
-        rotation -0.25741859325858785 0.738394707261294 -0.6233048404539127 1.0101646605373604
+        translation 0.056007918235323 0.015974770995267347 -0.1500273277284272
+        rotation -0.3605393835252863 0.7585616178667559 -0.5427666393825029 1.1748756897796353
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -99,8 +100,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05599999313234591 0.01600003454025535 -0.1500000551356573
-        rotation 0.18460563752356438 -0.4903558422076581 -0.8517463863189186 3.05871075328594
+        translation -0.055999961485533135 0.016000034466618664 -0.15000004011013168
+        rotation 0.44629569625623544 -0.4818264422359911 -0.7540977596209718 3.372184195234703
         children [
           USE caster
         ]
@@ -675,4 +676,204 @@ DEF arena1 Solid {
     }
   ]
   name "<STL_BINARY>(2)"
+}
+Robot {
+  translation 2.05 0 0.95
+  children [
+    Solid {
+      translation 0 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BOX Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.25 0.025 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.5 0.1 0.02
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate1"
+  controller "gate1"
+}
+Robot {
+  translation 2.05 0 1.55
+  children [
+    Solid {
+      translation 0 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BOX Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.25 0.025 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.5 0.1 0.02
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate2"
+  controller "gate2"
+}
+Robot {
+  translation 4.16 0 0.95
+  children [
+    Solid {
+      translation 0 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BOX Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.25 0.025 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.5 0.1 0.02
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate3"
+  controller "gate1"
+}
+Robot {
+  translation 4.16 0 1.55
+  children [
+    Solid {
+      translation 0 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BOX Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.25 0.025 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.5 0.1 0.02
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate4"
+  controller "gate2"
 }
