@@ -1,0 +1,31 @@
+from controller import Robot
+
+
+if __name__ == "__main__":
+    robot2 = Robot()
+    timestep =64
+    max_speed = 10
+    gate_motor = robot2.getMotor('gate_motor')
+    start_time = robot2.getTime() 
+    open_gate = False
+    start_time = robot2.getTime()
+    
+    
+    gate_motor.setPosition(-1.57)
+    gate_motor.setVelocity(1*max_speed)
+     
+    while(True):
+        current_time = robot2.getTime()
+        temp_time = current_time-start_time
+        if(temp_time>=20):
+            start_time = robot2.getTime()
+            current_time = robot2.getTime()
+            continue
+        if(temp_time<10 and not(open_gate)):
+            gate_motor.setPosition(-1.57)
+            gate_motor.setVelocity(1*max_speed)
+            open_gate = True
+        elif(temp_time<20 and temp_time>=10 and gate_open):
+            gate_motor.setPosition(0)
+            gate_motor.setVelocity(1*max_speed)
+            open_gate = True
