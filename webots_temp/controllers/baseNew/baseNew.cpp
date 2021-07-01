@@ -9,6 +9,7 @@
 #include <vector>
 #include<string> 
 #include <webots/LED.hpp>
+#include <string>
 
 
 #define TIME_STEP 64
@@ -38,7 +39,7 @@ double lastError = 0;
 //....................................................
 
 //global variables for pillar counting
-int reverse = 0;
+bool reverse = false;
 int pc=1;
 int count = 0;
 int ps=0;
@@ -47,24 +48,26 @@ int pj=0;
 //.......................................................
 
 //global variables for gate sync
+bool safety=true; //safety lock for gate sync. turn off only when code is finalized
+
 bool gatePrev=false;
 bool gateCur=false;
 bool go=false;
-
+//.....................................................
 double dc = 0; //damping coeficient
-
+//......................................................
 //junction identifying parameters
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-int direct[]={0,2,2,2,1,0,1, 2, 0, 2, 2, 1, 1}; //direct = [1, 0];
-const char *state[14]={"startingPath","wallFollow","straighPath","enterMaze",
-"circlePath","circlePath","box","colorChecked","circlePath","ramp","pillar","counted",
-"gate1","gate2"};
+vector<int> direct{0, 2, 2, 2, 2,1,1}; //direct = [1, 0];
+vector<string> state{"startingPath","wallFollow","straighPath","enterMaze",
+"ramp","pillar","counted","gate1","gate2"};
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 10;
+int direct_count = 0;
+bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
 double last_left_speed;
@@ -345,6 +348,18 @@ void sharpTurn(int turn) {
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
+    else if (turn == -1){
+        hardLength = 37.0;
+        std::cout << "turning back"<<std::endl;
+        leftSpeed = -0.5 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
+    }
+    else if (turn == 20){
+        hardLength = 19.0;
+        std::cout << "ramp right"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = -0.5 * MAX_SPEED;
+    }
     else {
         cout << "wrong input. enter a value from 0-2";
     }
@@ -362,7 +377,9 @@ void sharpTurn(int turn) {
             pos_lst={};
             turn_command = false;
             direct_count += 1;
-            go=false;//remove this at final stage. This only for safety
+            if (safety){go=false;}
+            canUpdateStates = true;
+            //remove this at final stage. This only for safety
             //depends on final robot speed
         }
     }
@@ -399,7 +416,7 @@ void pillarCnt() {
     if ((ds[j]->getValue())>100 && (ds[j]->getValue())<250){
       pj=j;
       cs=1;
-      if (ps==0 && direct_count==pillarLoc) {
+      if (ps==0 && state[direct_count]=="pillar") {
           count += 1; 
           led->set(1);
           ps=cs;   
@@ -416,9 +433,10 @@ void pillarCnt() {
 
     if (ts[j]->getValue() < 400) {
       if (count%2 == 1) {  //wrong path
-        reverse = 1; 
+        reverse = true; 
         pc = 0;
       }
+      
     }
    }
 
@@ -426,7 +444,7 @@ void pillarCnt() {
 //////////////////////////////////////////////////////////////////////////////////////
 void gatesync(){
     const double value = fds->getValue();
-    std::cout << "Sensor value is : " << value << std::endl;
+    //std::cout << "Sensor value is : " << value << std::endl;
     if (value <= 750){
       gatePrev=gateCur;
       gateCur=true;
@@ -443,11 +461,11 @@ void gatesync(){
     }
     
     
-    std::cout << "gatePrev = " << gatePrev << " gateCur = " << gateCur  <<std::endl;
-    if ( go && (direct_count==gate1Loc or direct_count==gate2Loc)){
+    //std::cout << "gatePrev = " << gatePrev << " gateCur = " << gateCur  <<std::endl;
+    if ( go && (state[direct_count]=="gate1" or state[direct_count]=="gate2")){
       std::cout << "go" <<std::endl;  
     }
-    else if(direct_count==gate1Loc or direct_count==gate2Loc){
+    else if(state[direct_count]=="gate1" or state[direct_count]=="gate2"){
       std::cout << "stop" <<std::endl;
       leftSpeed=0;
       rightSpeed=0;
@@ -545,11 +563,34 @@ int main(int argc, char **argv) {
           junc = juncFind();
       }
       
+      if (direct_count==3 && canUpdateStates){
+          vector<int> mazeStates{2,1,0,1,2, 0};
+          direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+          vector<string> stateNames{"circlePath","circlePath","box","colorChecked","circlePath"};
+          state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+          canUpdateStates = false;
+      }
+      if (direct_count==11 && canUpdateStates){
+          if (reverse){
+              vector<int> mazeStates{-1,0,1,0};
+              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
+              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+              canUpdateStates = false;
+          }
+      }
+      
       pillarCnt();
       gatesync();
       setMotors();
       cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
       std::cout << "No. of pillars: " << count << std::endl; 
+      for (auto i = direct.begin(); i != direct.end(); ++i)
+        std::cout << *i << ' ';
+      std::cout<<" "<<std::endl;
+      for (auto i = state.begin(); i != state.end(); ++i)
+        std::cout << *i << ' ';
+      std::cout<<" "<<std::endl;
       
   };
 

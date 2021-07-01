@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9927750723863737 0.08918136905905524 0.08027664081775389 1.4730102236232723
-  position 4.096543947595853 4.741780282744383 1.4677302122974663
+  orientation 0.49460916343990824 -0.8020574063493856 -0.33476214296328466 4.881351786018915
+  position 7.431516537870663 4.731750484329983 4.459115322307385
 }
 TexturedBackground {
 }
@@ -32,6 +32,25 @@ RectangleArena {
         "textures/parquetry/chequered_parquetry_occlusion.jpg"
       ]
     }
+  }
+}
+DEF box Solid {
+  translation 2.93707 0.025 3.03707
+  rotation 0 1 0 -0.785395307179586
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  name "box"
+  boundingObject USE box
+  physics Physics {
   }
 }
 DEF path Solid {
@@ -67,7 +86,7 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation 3.56916 0.0299548 0.343549
+  translation 3.64136 0.0300709 4.57312
   rotation -0.7010257965543971 0.0017394794951834064 0.7131337930405197 3.13821
   children [
     DEF caster_left BallJoint {
@@ -76,8 +95,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.055965016172877545 0.01599622383111043 -0.14998558201609766
-        rotation 0.3317987673140134 0.06379962056344073 0.941190302980679 3.24745648927977
+        translation 0.05598607087338114 0.01601585750694642 -0.15003163107295847
+        rotation -0.2575053519988433 0.35274758454784866 0.8995888701443623 2.0873464766559504
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -100,8 +119,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.0560000205610235 0.01600001451480467 -0.1500000603879076
-        rotation 0.8433447745248153 -0.17312198724189484 -0.5087222904641644 1.8441995418849737
+        translation -0.055999996330079946 0.015999937355326715 -0.14999998149834534
+        rotation 0.004246703086716438 0.9876503691750291 -0.15661645437603858 3.6089806141402954
         children [
           USE caster
         ]
@@ -367,6 +386,8 @@ Robot {
       ]
       name "fds"
       boundingObject USE ds0
+      physics Physics {
+      }
       lookupTable [
         0 0 0
         0.4 1000 0
@@ -721,7 +742,7 @@ DEF Gate1 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.038249183076859435 0.2720566736478757 0
+        translation -0.03824918307685944 0.27205667364787584 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
@@ -823,7 +844,7 @@ DEF Gate3 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.038249183076859435 0.2720566736478757 0
+        translation -0.03824918307685944 0.27205667364787584 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
