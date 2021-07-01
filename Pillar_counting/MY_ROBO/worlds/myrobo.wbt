@@ -1,0 +1,379 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.011586727138415569 -0.8949809225557243 -0.4459539169191416 3.201749642818692
+  position -0.2974497419463475 2.0488906295545366 -2.0196753735129405
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Robot {
+  translation -0.529503 0.04 -0.683687
+  rotation 0 1 0 2.77402e-06
+  children [
+    DEF ir_panel Solid {
+      translation 1.82548e-07 -0.02 0.092
+      rotation -0.707108281185553 0.70710528118436 1.6017406369411004e-08 3.14159
+      children [
+        DistanceSensor {
+          translation 0 0.02 0
+          name "ir7"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 0.0175 0
+          name "ir6"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 0.0125 0
+          name "ir5"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 0.005 0
+          name "ir4"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 -0.005 0
+          name "ir3"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 -0.0125 0
+          name "ir2"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 -0.02 0
+          name "ir0"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0 -0.0175 0
+          name "ir1"
+          type "infra-red"
+        }
+        DEF panel Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Box {
+            size 0.003 0.04 0.01
+          }
+        }
+      ]
+      name "ir_panel"
+      boundingObject USE panel
+      physics Physics {
+      }
+    }
+    DEF body Shape {
+      appearance PBRAppearance {
+        baseColor 0.3 0.3 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.05 0.2
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.06 0 0.05
+      }
+      device [
+        RotationalMotor {
+          name "wheel1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.060031708092580446 -7.795971322048876e-06 0.04997374169183587
+        rotation -0.00040392995816517646 0.0003927529613737397 0.9999998412928377 1.5710628941829492
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0.3 0 0.4
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.02
+              radius 0.04
+            }
+          }
+        ]
+        boundingObject USE wheel
+        physics DEF phy_whl Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor -0.06 0 0.05
+      }
+      device [
+        RotationalMotor {
+          name "wheel2"
+        }
+      ]
+      endPoint Solid {
+        translation -0.06001860288637667 -3.377373832160242e-06 0.04997881871460026
+        rotation -5.846893486968792e-05 0.00019290111678023318 -0.9999999796852711 4.714239952775411
+        children [
+          USE wheel
+        ]
+        name "solid(1)"
+        boundingObject USE wheel
+        physics USE phy_whl
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.06 0 -0.05
+      }
+      device [
+        RotationalMotor {
+          name "wheel3"
+        }
+      ]
+      endPoint Solid {
+        translation 0.06001854878081301 -8.696491702891935e-07 -0.04997838717891183
+        rotation -0.0004040229330086889 0.00039285308754039055 0.9999998412159481 1.5710633049943037
+        children [
+          USE wheel
+        ]
+        name "solid(2)"
+        boundingObject USE wheel
+        physics USE phy_whl
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor -0.06 0 -0.05
+      }
+      device [
+        RotationalMotor {
+          name "wheel4"
+        }
+      ]
+      endPoint Solid {
+        translation -0.060031647003588096 -4.627606503252488e-06 -0.049972845423399866
+        rotation -5.839146402468233e-05 0.00019278008897727534 -0.9999999797131368 4.714239548970173
+        children [
+          USE wheel
+        ]
+        name "solid(2)"
+        boundingObject USE wheel
+        physics USE phy_whl
+      }
+    }
+    DistanceSensor {
+      translation 0.05 0 0
+      children [
+        DEF ir Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_left"
+      boundingObject USE ir
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.12 1000 0
+      ]
+    }
+    DistanceSensor {
+      translation -0.05 0 0
+      rotation 0 1 0 3.14159
+      children [
+        DEF ir Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_right"
+      boundingObject USE ir
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.12 1000 0
+      ]
+    }
+    DistanceSensor {
+      translation -0.0400078 -0.02 0.10039
+      rotation 0 0 1 -1.5707953071795862
+      children [
+        DEF ir Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ts1"
+      boundingObject USE ir
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.12 1000 0
+      ]
+      type "infra-red"
+    }
+    DistanceSensor {
+      translation 0.0400078 -0.02 0.10039
+      rotation 0 0 1 -1.5707953071795862
+      children [
+        DEF ir Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ts0"
+      boundingObject USE ir
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.12 1000 0
+      ]
+      type "infra-red"
+    }
+    LED {
+      translation 0 0.02 0
+      scale 100 100 100
+      children [
+        SpotLight {
+          attenuation 0 0 1
+          beamWidth 0.5
+          color 0 0 0
+          direction 0 1 -1
+          intensity 100
+          on FALSE
+          radius 80
+        }
+      ]
+      name "led1"
+      physics Physics {
+      }
+    }
+    LED {
+      translation 0 0.02 0.05
+      scale 100 100 100
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+            emissiveIntensity 40
+          }
+          geometry Sphere {
+            radius 0.0002
+          }
+        }
+      ]
+      name "led2"
+    }
+  ]
+  boundingObject USE body
+  physics Physics {
+  }
+  controller "PillarCounting"
+}
+Solid {
+  translation -0.36 0.05 -0.45
+  rotation 0 1 0 6.32203e-06
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0.9 0.9 0.9
+        metalness 0
+      }
+      geometry Box {
+        size 0.03 0.1 0.03
+      }
+    }
+  ]
+  boundingObject USE box
+  physics Physics {
+  }
+}
+Solid {
+  translation -0.36 0.05 -0.15
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0.9 0.9 0.9
+        metalness 0
+      }
+      geometry Box {
+        size 0.03 0.1 0.03
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE box
+  physics Physics {
+  }
+}
+DEF path Solid {
+  translation -0.529999 0 -0.279999
+  rotation 0 1 0 -1.5707953071795862
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.8 0.0001 0.02
+      }
+    }
+  ]
+  name "path"
+  boundingObject USE box
+}
+DEF path Solid {
+  translation -0.229999 0 0.110001
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.6 0.0001 0.02
+      }
+    }
+  ]
+  name "path(1)"
+  boundingObject USE box
+}
+Apple {
+  translation 0.0767823 0.05 0.583497
+  rotation 0 -1 0 -0.5236053071795865
+}
+RectangleArena {
+  floorSize 5 5
+}

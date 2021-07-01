@@ -1,0 +1,298 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.2621692093760512 0.7866387275244932 0.5589873147163382 3.8786886918260546
+  position -0.9383051115625698 2.6208362910348653 -0.6155479066745188
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 3 2
+  floorAppearance PBRAppearance {
+    roughness 1
+    roughnessMap ImageTexture {
+      url [
+        "textures/parquetry/chequered_parquetry_roughness.jpg"
+      ]
+    }
+    metalness 0
+    normalMap ImageTexture {
+      url [
+        "textures/parquetry/chequered_parquetry_normal.jpg"
+      ]
+    }
+    occlusionMap ImageTexture {
+      url [
+        "textures/parquetry/chequered_parquetry_occlusion.jpg"
+      ]
+    }
+  }
+  wallHeight 0.2
+}
+Robot {
+  translation 1.0038 0.0397211 0.423253
+  rotation -0.00022321999011404336 -0.999999955712048 -0.0001968469912820495 -0.1037253071795865
+  children [
+    Transform {
+      rotation 0 0 1 0
+      children [
+        DEF body Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.1 0.05 0.23
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -97.34442671993084
+            anchor 0.06 0 0.05
+          }
+          device [
+            RotationalMotor {
+              name "back_right_motor"
+            }
+          ]
+          endPoint Solid {
+            translation 0.05999970130056319 -3.367992959971857e-06 0.04999704382667852
+            rotation -0.7072899536890577 0.7067274436003499 0.016650581750949172 3.1082680478146365
+            children [
+              DEF wheel Shape {
+                appearance PBRAppearance {
+                  baseColor 1 0 0
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.04
+                }
+              }
+            ]
+            boundingObject USE wheel
+            physics DEF physics_wh Physics {
+            }
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -89.74746896700758
+            anchor -0.06 0 0.05
+          }
+          device [
+            RotationalMotor {
+              name "back_left_motor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.060000298692266196 1.3575273186016902e-06 0.04999566774290565
+            rotation 0.614007994227345 -0.6135187118335743 -0.49657725809282116 4.0640392822959015
+            children [
+              USE wheel
+            ]
+            name "solid(1)"
+            boundingObject USE wheel
+            physics USE physics_wh
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -97.3444161649854
+            anchor 0.06 0 -0.05
+          }
+          device [
+            RotationalMotor {
+              name "front_right_motor"
+            }
+          ]
+          endPoint Solid {
+            translation 0.06000029883783703 -3.3926984436251384e-06 -0.05000297444015589
+            rotation -0.7072899086771898 0.706727408678238 0.01665397569215885 3.1082612677649686
+            children [
+              USE wheel
+            ]
+            name "solid(2)"
+            boundingObject USE wheel
+            physics USE physics_wh
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position -89.74746137151413
+            anchor -0.06 0 -0.05
+          }
+          device [
+            RotationalMotor {
+              name "front_left_motor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.05999970115439979 1.3659169415119165e-06 -0.05000434590899187
+            rotation 0.6140065482541209 -0.6135177577672701 -0.49658022474246893 4.064043394038791
+            children [
+              USE wheel
+            ]
+            name "solid(3)"
+            boundingObject USE wheel
+            physics USE physics_wh
+          }
+        }
+        DistanceSensor {
+          translation 0.05 0 -0.1
+          rotation 1 0 0 0
+          children [
+            DEF ds Shape {
+              appearance PBRAppearance {
+                baseColor 0 1 0
+                roughness 1
+                metalness 0
+              }
+              geometry Box {
+                size 0.01 0.01 0.01
+              }
+            }
+          ]
+          name "ds1"
+          boundingObject USE ds
+          physics Physics {
+          }
+          lookupTable [
+            0 0 0
+            0.4 1000 0
+          ]
+        }
+        DistanceSensor {
+          translation -0.05 0 -0.1
+          rotation 0 0.9999999999999999 0 3.14
+          children [
+            USE ds
+          ]
+          name "ds0"
+          boundingObject USE ds
+          physics Physics {
+          }
+          lookupTable [
+            0 0 0
+            0.4 1000 0
+          ]
+        }
+        DistanceSensor {
+          translation 0.04 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir0"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.03 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir1"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.02 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir2"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.007 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir3"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.007 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir4"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.02 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir5"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.03 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir6"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.04 -0.025 -0.113
+          rotation 0 0 1 -1.57
+          name "ir7"
+          type "infra-red"
+        }
+      ]
+    }
+  ]
+  boundingObject USE body
+  physics Physics {
+  }
+  controller "C"
+}
+Solid {
+  translation 0.5 0.0005 0
+  rotation 1 0 0 1.57
+  scale 0.015 0.015 0.015
+  children [
+    Solid {
+      name "obj_0"
+    }
+    Solid {
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.16862746 0.18039216 0.19215687
+            roughness 1
+            metalness 0
+            name "color_2829873"
+          }
+          geometry IndexedFaceSet {
+            coord Coordinate {
+              point [
+                32.0019 22.998 0, 33.9999 22.998 0, 31.82 19.275 0, 22.284 -5.284 0, 19.376 -7.92 0, 20.872 -3.872 0, 18.109 -6.376 0, 31.272 15.586 0, 32.278 11.389 0, 30.366 11.968 0, 5.611 -15.278 0.01, 9.307 -13.955 0.01, 5.032 -13.366 0.01, 16.223 -10.259 0, 29.11 8.457 0.01, 30.955 7.693 0.01, 30.366 11.968 0.01, 16.223 -10.259 0.01, 15.113 -8.598 0.01, 12.856 -12.277 0.01, 1.414 -14.272 0.01, 27.515 5.086 0.01, 29.277 4.144 0.01, 15.113 -8.598 0, 12.856 -12.277 0, 31.272 15.586 0.01, 32.278 11.389 0.01, 27.259 0.777 0.01, 25.598 1.887 0.01, 11.914 -10.515 0, 8.543 -12.11 0, 9.307 -13.955 0, 1.414 -14.272 0, 5.032 -13.366 0, 1.804 -16.231 0.01, 8.543 -12.11 0.01, 33.231 15.196 0, 33.231 15.196 0.01, 33.9999 22.998 0.01, 29.11 8.457 0, 30.955 7.693 0, 29.277 4.144 0, 27.515 5.086 0, 33.807 19.079 0, 33.807 19.079 0.01, 31.82 19.275 0.01, 32.0019 22.998 0.01, 25.598 1.887 0, 27.259 0.777 0, -2.275 -14.82 0.01, 24.92 -2.376 0.01, 23.376 -1.109 0.01, -5.997 -16.9999 0.01, -5.997 -16.9999 0, -2.079 -16.807 0, -2.079 -16.807 0.01, 1.804 -16.231 0, 5.611 -15.278 0, 22.284 -5.284 0.01, 19.376 -7.92 0.01, -5.997 -15.0029 0.01, 24.92 -2.376 0, -2.275 -14.82 0, -5.997 -15.0029 0, 20.872 -3.872 0.01, 18.109 -6.376 0.01, 23.376 -1.109 0, 11.914 -10.515 0.01
+              ]
+            }
+            coordIndex [
+              0, 1, 2, -1, 3, 4, 5, -1, 6, 5, 4, -1, 7, 8, 9, -1, 10, 11, 12, -1, 4, 13, 6, -1, 14, 15, 16, -1, 17, 18, 19, -1, 20, 10, 12, -1, 21, 22, 14, -1, 23, 6, 13, -1, 13, 24, 23, -1, 25, 16, 26, -1, 27, 22, 28, -1, 26, 16, 15, -1, 29, 23, 24, -1, 30, 29, 24, -1, 24, 31, 30, -1, 32, 20, 12, -1, 32, 12, 33, -1, 10, 20, 34, -1, 35, 12, 11, -1, 19, 35, 11, -1, 8, 36, 37, -1, 8, 37, 26, -1, 1, 0, 38, -1, 39, 9, 40, -1, 40, 41, 39, -1, 42, 39, 41, -1, 36, 43, 44, -1, 36, 44, 37, -1, 43, 1, 38, -1, 43, 38, 44, -1, 2, 45, 46, -1, 2, 46, 0, -1, 47, 42, 41, -1, 47, 41, 48, -1, 49, 34, 20, -1, 0, 46, 38, -1, 33, 30, 31, -1, 50, 27, 51, -1, 21, 28, 22, -1, 15, 14, 22, -1, 52, 53, 54, -1, 52, 54, 55, -1, 56, 57, 10, -1, 56, 10, 34, -1, 7, 25, 45, -1, 7, 45, 2, -1, 4, 58, 59, -1, 60, 52, 49, -1, 31, 57, 33, -1, 32, 33, 57, -1, 57, 56, 32, -1, 54, 56, 55, -1, 34, 55, 56, -1, 10, 31, 11, -1, 9, 16, 25, -1, 9, 25, 7, -1, 55, 49, 52, -1, 34, 49, 55, -1, 61, 50, 3, -1, 57, 31, 10, -1, 62, 49, 32, -1, 20, 32, 49, -1, 46, 45, 38, -1, 26, 37, 25, -1, 38, 45, 44, -1, 39, 14, 16, -1, 39, 16, 9, -1, 3, 50, 58, -1, 19, 31, 24, -1, 49, 62, 63, -1, 49, 63, 60, -1, 48, 41, 22, -1, 48, 22, 27, -1, 19, 11, 31, -1, 42, 21, 14, -1, 42, 14, 39, -1, 61, 48, 50, -1, 27, 50, 48, -1, 63, 53, 60, -1, 63, 62, 53, -1, 54, 62, 56, -1, 41, 40, 15, -1, 41, 15, 22, -1, 13, 17, 24, -1, 64, 50, 51, -1, 47, 28, 21, -1, 47, 21, 42, -1, 53, 52, 60, -1, 32, 56, 62, -1, 53, 62, 54, -1, 24, 17, 19, -1, 15, 40, 8, -1, 15, 8, 26, -1, 65, 59, 64, -1, 28, 51, 27, -1, 18, 17, 65, -1, 51, 47, 66, -1, 47, 51, 28, -1, 17, 4, 59, -1, 67, 19, 18, -1, 50, 64, 58, -1, 25, 37, 45, -1, 37, 44, 45, -1, 35, 19, 67, -1, 17, 59, 65, -1, 58, 64, 59, -1, 51, 66, 5, -1, 51, 5, 64, -1, 4, 17, 13, -1, 64, 5, 6, -1, 64, 6, 65, -1, 3, 58, 4, -1, 65, 6, 23, -1, 65, 23, 18, -1, 18, 23, 29, -1, 18, 29, 67, -1, 30, 35, 67, -1, 30, 67, 29, -1, 33, 12, 35, -1, 33, 35, 30, -1, 8, 40, 9, -1, 1, 43, 2, -1, 43, 36, 2, -1, 7, 2, 36, -1, 8, 7, 36, -1, 48, 66, 47, -1, 61, 3, 5, -1, 5, 66, 61, -1, 48, 61, 66, -1
+            ]
+          }
+        }
+      ]
+      name "group_0_2829873"
+    }
+  ]
+  name "tinker.obj"
+}
+Wall {
+  translation -0.1 0 -0.05
+  rotation 0 1 0 0.15
+  size 0.75 0.2 0.01
+  appearance Roughcast {
+    colorOverride 0 1 0
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}
+Wall {
+  translation -1 0 -0.45
+  rotation 0 1 0 -0.15
+  name "wall(1)"
+  size 0.75 0.2 0.01
+  appearance Roughcast {
+    colorOverride 0 1 0
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}

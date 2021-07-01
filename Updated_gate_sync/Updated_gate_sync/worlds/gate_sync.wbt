@@ -1,0 +1,226 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.9364577112041041 0.32992816078898907 0.11914010174901382 5.498970267805822
+  position -0.16236867986166748 1.1970122560713157 1.4490387933277025
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+}
+Robot {
+  translation 0 0 -0.75
+  children [
+    DEF BODY Transform {
+      translation 0 0.0415 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.08
+            radius 0.045
+          }
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.045 0.025 0
+      }
+      device [
+        DEF MOTOR1 RotationalMotor {
+          name "MOTOR1"
+        }
+      ]
+      endPoint DEF WHEEL Solid {
+        translation 0.045 0.025 0
+        rotation 0 0 1 1.57
+        children [
+          DEF WHEEL Shape {
+            appearance PBRAppearance {
+              baseColor 1 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.01
+              radius 0.025
+            }
+          }
+        ]
+        boundingObject USE WHEEL
+        physics DEF WHEEL_PHYSICS Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor -0.045 0.025 0
+      }
+      device [
+        DEF MOTOR2 RotationalMotor {
+          name "MOTOR2"
+        }
+      ]
+      endPoint Solid {
+        translation -0.045 0.025 0
+        rotation 0 0 1 1.57
+        children [
+          USE WHEEL
+        ]
+        name "solid(1)"
+        boundingObject USE WHEEL
+        physics USE WHEEL_PHYSICS
+      }
+    }
+    Solid {
+      translation 0.015 0.07 0.045
+      children [
+        DEF EYES Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.005 0.005 0.005
+          }
+        }
+      ]
+      name "solid(2)"
+    }
+    Solid {
+      translation -0.015 0.07 0.045
+      children [
+        USE EYES
+      ]
+      name "solid(3)"
+    }
+    DistanceSensor {
+      translation 5.0981e-08 0.05 0.05
+      rotation 0 1 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "sensor1"
+      lookupTable [
+        0 0 0
+        0.5 1000 0
+      ]
+    }
+  ]
+  boundingObject USE BODY
+  physics Physics {
+  }
+  controller "robot_controllerCPP"
+}
+Robot {
+  translation 0.13 0 -0.45
+  children [
+    Solid {
+      translation 0.1 0.025 0
+      children [
+        DEF BOX Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.1 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.1 0.04 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.4 0.08 0.01
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate"
+  controller "gate1cpp"
+}
+Robot {
+  translation 0.13 0 0.15
+  children [
+    Solid {
+      translation 0.1 0.025 0
+      children [
+        DEF BOX Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.05 0.05 0.05
+          }
+        }
+      ]
+      boundingObject USE BOX
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.1 0.025 0
+      }
+      device [
+        RotationalMotor {
+          name "gate_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.1 0.04 0
+        rotation 0 0 1 0
+        children [
+          DEF gate Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.4 0.08 0.01
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE gate
+      }
+    }
+  ]
+  name "gate2"
+  controller "gate2cpp"
+}
