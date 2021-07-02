@@ -1,0 +1,172 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.017765594634387257 -0.996918574608936 -0.07640509961366375 3.098991819130597
+  position 0.10912723661583025 0.1339665606093548 -0.5214062092439876
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+}
+Robot {
+  children [
+    Solid {
+      translation 0 0.05 0
+      children [
+        DEF BASE Shape {
+          appearance PBRAppearance {
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.06 0.1 0.1
+          }
+        }
+      ]
+      name "BASE"
+      boundingObject USE BASE
+      physics Physics {
+      }
+    }
+    SliderJoint {
+      jointParameters JointParameters {
+        axis 0 1 0
+      }
+      device [
+        LinearMotor {
+          name "motor1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.07 0.1399999237347121 5.50089e-14
+        rotation 3.76856366987665e-08 9.519830826708693e-09 0.9999999999999993 -3.015197673459023e-07
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 1
+              roughness 1
+              metalness 0
+            }
+            geometry DEF arm Box {
+              size 0.02 0.2 0.1
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              anchor 0.08 -0.03 0.04
+            }
+            device [
+              RotationalMotor {
+                name "motor2"
+              }
+            ]
+            endPoint Solid {
+              translation 0.06 -0.08000000000000015 0.039999800000000016
+              rotation 1 0 0 5.304645953591612e-06
+              children [
+                DEF arm Shape {
+                  appearance PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF leftarm Box {
+                    size 0.08 0.1 0.01
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE leftarm
+              physics Physics {
+              }
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              anchor 0.08 -0.03 -0.04
+            }
+            device [
+              RotationalMotor {
+                name "motor3"
+              }
+            ]
+            endPoint Solid {
+              translation 0.06000000000000001 -0.07999929999999988 -0.04000020000000001
+              rotation 1 0 0 5.3051482319982414e-06
+              children [
+                DEF rightarm Shape {
+                  appearance PBRAppearance {
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF leftarm Box {
+                    size 0.08 0.1 0.01
+                  }
+                }
+              ]
+              name "solid(2)"
+              boundingObject USE rightarm
+              physics Physics {
+              }
+            }
+          }
+        ]
+        boundingObject USE arm
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.05 0.09 0
+      }
+      device [
+        RotationalMotor {
+          name "motor4"
+        }
+      ]
+      endPoint Solid {
+        translation 0.05 0.05 0
+        rotation 0 0 1 0
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 0
+              roughness 1
+              metalness 0
+            }
+            geometry DEF colorsensor Box {
+              size 0.01 0.09 0.06
+            }
+          }
+        ]
+        name "solid(1)"
+      }
+    }
+  ]
+  controller "liftup"
+}
+Solid {
+  translation 0.12 0.04 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        roughness 1
+        metalness 0
+        IBLStrength 0
+      }
+      geometry DEF box Box {
+        size 0.06 0.06 0.06
+      }
+    }
+  ]
+  boundingObject USE box
+  physics Physics {
+  }
+}
