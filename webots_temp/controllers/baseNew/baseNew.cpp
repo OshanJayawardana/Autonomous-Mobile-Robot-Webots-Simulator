@@ -37,6 +37,18 @@ double i = 0;
 double d = 0;
 double lastError = 0;
 //....................................................
+//global variables for maze
+bool mazeIn=false;
+int quad;
+int rad;
+bool boxFound=false;
+bool colorChecked=false;
+
+bool even=true; //path check parameter
+
+bool found=false;
+bool checked=false;
+//....................................................
 
 //global variables for pillar counting
 bool reverse = false;
@@ -60,13 +72,12 @@ double dc = 0; //damping coeficient
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-vector<int> direct{0, 2, 2, 2, 2,1,1}; //direct = [1, 0];
-vector<string> state{"startingPath","wallFollow","straighPath","enterMaze",
-"ramp","pillar","counted","gate1","gate2"};
+vector<int> direct{0, 2, 2}; //direct = [1, 0];
+vector<string> state{"startingPath","wallFollow","straighPath","enterMaze"};
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 0;
+int direct_count = 2;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -337,7 +348,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 1) {
-        hardLength = 5.0;
+        hardLength = 8.0;
         std::cout << "going forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -360,6 +371,12 @@ void sharpTurn(int turn) {
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
     }
+    else if (turn == 41){
+        hardLength = 8.0;
+        std::cout << "quad 4 forward"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
+    }
     else {
         cout << "wrong input. enter a value from 0-2";
     }
@@ -379,6 +396,7 @@ void sharpTurn(int turn) {
             direct_count += 1;
             if (safety){go=false;}
             canUpdateStates = true;
+            //canUpdateLoc=true;
             //remove this at final stage. This only for safety
             //depends on final robot speed
         }
@@ -483,6 +501,188 @@ void gatesync(){
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 
+int quadUpdate(int cur, int add){
+    cur+=add;
+    if (cur>4){
+        cur=cur%4;
+    }
+    return cur;
+}
+
+int radUpdate(int cur,int add){
+    cur+=add;
+    if (cur<1){
+        cur=4;
+    }
+    if (cur>4){
+      cur=cur%4;
+    }
+    return cur;
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+void mazeLoc(){
+    if (true){
+        //...............................................quad and rad Updating
+        //Initial quad
+        if (state[direct_count-1]=="enterMaze"){
+            quad=1;
+        }
+        //....................................................
+        //circle to (circle or rad)
+        if (state[direct_count-1]=="circlePath" && direct[direct_count-1]==1){
+            quad = quadUpdate(quad, 1);
+        }
+        else if (state[direct_count-1]=="circlePath"){
+            if (direct[direct_count-1]==2){
+                rad=quad;
+            }
+            else if (direct[direct_count-1]==0){
+                rad=radUpdate(quad,-1);
+            }
+        }
+        //............................................
+        //rad to circle
+        if (state[direct_count-1]=="radiusOut"){
+            if (direct[direct_count-1]==2){
+                quad = quadUpdate(rad, 1);
+            }
+            else if (direct[direct_count-1]==0){
+                quad=rad;
+            }
+        }
+        //.................................................
+        //rad to rad
+        if (state[direct_count-1]=="radiusIn"){
+            rad=radUpdate(rad,direct[direct_count-1]+1);
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+void maze(){
+    //maze entrance
+    if (state[direct_count]=="enterMaze" && canUpdateStates){
+          mazeIn=true;
+          vector<int> mazeStates{0,2,1,2,2, 1,0,2};
+          direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+          vector<string> stateNames{"circlePath","radiusIn","radiusOut","circlePath","radiusIn","radiusOut","circlePath"};
+          state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+          
+      }
+    //maze location finder
+    if (canUpdateStates && mazeIn){
+        mazeLoc();
+    }
+    
+    //box check
+    const double value = fds->getValue();
+    if (value<400 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
+        boxFound=true;
+        colorChecked=true;
+        junc=9;
+        //direct_count=direct.size();
+        //direct.insert(direct.begin()+direct_count,-1);
+        checked=true;
+        //canUpdateStates=true;
+        direct[direct_count]=-1;
+        
+    }
+    else if (value<400 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
+        boxFound=true;
+        //direct_count=direct.size();
+        //direct_count+=1;
+        junc=9;
+        found=true;
+        direct[direct_count]=-1;
+        //canUpdateStates=true;
+        //direct.insert(direct.begin()+direct_count,-1);
+    }
+    
+    if (boxFound && colorChecked && canUpdateStates && checked){//exit path
+        direct_count=direct.size();
+        if (rad==1){
+            vector<int> mazeStates{0,0,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==2){
+            vector<int> mazeStates{2,2,0};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==3){
+            vector<int> mazeStates{2,0,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==4){
+            vector<int> mazeStates{0,2,0};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        
+        if (even){
+            vector<int> mazeStates{0,0,1,1};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        else{
+            vector<int> mazeStates{2,2,1,1};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        checked=false;
+        
+        
+    }
+    else if (boxFound && canUpdateStates && found){
+        direct_count=direct.size() ;
+        if (rad==1 or rad==4){
+            vector<int> mazeStates{2,41,2,2,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusOut","circlePath","circlePath","radiusIn","radiusOut"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        else {
+            vector<int> mazeStates{2,2,2,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusOut","circlePath","radiusIn","radiusOut"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        found = false;
+        
+        
+    }
+    
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+void correct(){
+    if (state[direct_count]=="counted" && canUpdateStates){
+          if (reverse && !even){
+              vector<int> mazeStates{-1,0,1,0};
+              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
+              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+              //canUpdateStates = false;
+          }
+          else if(reverse && even){
+              vector<int> mazeStates{-1,2,1,2};
+              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
+              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+          }
+      }    
+}
+
+
+
 int main(int argc, char **argv) {
   // create the Robot instance.
   Robot *robot = new Robot();
@@ -545,6 +745,7 @@ int main(int argc, char **argv) {
   while (robot->step(TIME_STEP) != -1) {
       //std::cout<<"junc"<<junc<<std::endl;
       //turning code
+      //......................................................
       if (junc != -1 && turn_command) {
           sharpTurn(direct[direct_count]);
           std::cout << "Motor state = turn"<< std::endl;
@@ -562,35 +763,37 @@ int main(int argc, char **argv) {
           wall();
           junc = juncFind();
       }
-      
-      if (direct_count==3 && canUpdateStates){
-          vector<int> mazeStates{2,1,0,1,2, 0};
-          direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
-          vector<string> stateNames{"circlePath","circlePath","box","colorChecked","circlePath"};
-          state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
-          canUpdateStates = false;
-      }
-      if (direct_count==11 && canUpdateStates){
-          if (reverse){
-              vector<int> mazeStates{-1,0,1,0};
-              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
-              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
-              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
-              canUpdateStates = false;
-          }
-      }
-      
+      //......................................................
+      maze();
       pillarCnt();
+      correct();
       gatesync();
       setMotors();
+      canUpdateStates=false;
+      
+      cout << "quad = "<< quad << " rad = " << rad<< endl;
+      
       cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
       std::cout << "No. of pillars: " << count << std::endl; 
-      for (auto i = direct.begin(); i != direct.end(); ++i)
-        std::cout << *i << ' ';
-      std::cout<<" "<<std::endl;
-      for (auto i = state.begin(); i != state.end(); ++i)
-        std::cout << *i << ' ';
-      std::cout<<" "<<std::endl;
+      
+      for(int i=0; i<direct.size(); ++i){
+        if (i==direct_count){
+              std::cout << '*';
+        }
+        std::cout << direct[i] <<" ";
+      }
+      std::cout<< " " << std::endl; 
+      
+      
+      
+      for(int i=0; i<state.size(); ++i){
+        if (i==direct_count){
+              std::cout << '*';
+        }
+        std::cout << state[i] <<" ";
+      }
+      std::cout<< " " << std::endl; 
+      
       
   };
 
