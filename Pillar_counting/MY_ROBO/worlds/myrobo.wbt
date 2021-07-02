@@ -3,16 +3,16 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.011586727138415569 -0.8949809225557243 -0.4459539169191416 3.201749642818692
-  position -0.2974497419463475 2.0488906295545366 -2.0196753735129405
+  orientation -0.09131924884913362 -0.9470162774196824 -0.3079301302110543 2.5940073853151833
+  position -1.1217036732976624 0.6769832333695095 -1.050822103417203
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Robot {
-  translation -0.529503 0.04 -0.683687
-  rotation 0 1 0 2.77402e-06
+  translation -0.5295136867507604 0.039779775115854045 -0.67728166501943
+  rotation -0.9240291611959778 0.008053344374567954 0.38223716839658883 0.0006997599505211416
   children [
     DEF ir_panel Solid {
       translation 1.82548e-07 -0.02 0.092
@@ -83,6 +83,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position 0.16076797078469818
         anchor 0.06 0 0.05
       }
       device [
@@ -91,8 +92,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.060031708092580446 -7.795971322048876e-06 0.04997374169183587
-        rotation -0.00040392995816517646 0.0003927529613737397 0.9999998412928377 1.5710628941829492
+        translation 0.060031708092580446 -3.4921060957950893e-06 0.04997283235174859
+        rotation 0.07961985027238827 -0.07965227699187039 0.9936378586852521 1.5774442434657967
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -112,6 +113,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position 0.16076796492270723
         anchor -0.06 0 0.05
       }
       device [
@@ -120,8 +122,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.06001860288637667 -3.377373832160242e-06 0.04997881871460026
-        rotation -5.846893486968792e-05 0.00019290111678023318 -0.9999999796852711 4.714239952775411
+        translation -0.06001860288637667 5.680073827212242e-08 0.04997855121731045
+        rotation -0.0802448763156834 0.08023015433461264 -0.9935410822711485 4.707770962118762
         children [
           USE wheel
         ]
@@ -132,6 +134,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position 0.16076799253703453
         anchor 0.06 0 -0.05
       }
       device [
@@ -140,8 +143,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06001854878081301 -8.696491702891935e-07 -0.04997838717891183
-        rotation -0.0004040229330086889 0.00039285308754039055 0.9999998412159481 1.5710633049943037
+        translation 0.06001854878081301 -4.318136084731838e-06 -0.04997880509434269
+        rotation 0.07961973655096523 -0.07965218903547241 0.9936378748484844 1.5774446384854104
         children [
           USE wheel
         ]
@@ -152,6 +155,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position 0.160767960878876
         anchor -0.06 0 -0.05
       }
       device [
@@ -160,8 +164,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.060031647003588096 -4.627606503252488e-06 -0.049972845423399866
-        rotation -5.839146402468233e-05 0.00019278008897727534 -0.9999999797131368 4.714239548970173
+        translation -0.060031647003588096 -8.914736323547026e-06 -0.04997393636156322
+        rotation -0.08024476566826545 0.08023003279662777 -0.9935411010221455 4.707770573639329
         children [
           USE wheel
         ]
@@ -297,15 +301,22 @@ Robot {
       ]
       name "led2"
     }
+    Camera {
+      translation 1e-07 -0.01 0.1
+      rotation 0 1 0 -3.141592653589793
+      fieldOfView 1
+      width 640
+      height 640
+    }
   ]
   boundingObject USE body
   physics Physics {
   }
-  controller "PillarCounting"
+  controller "ColorDetection"
 }
 Solid {
-  translation -0.36 0.05 -0.45
-  rotation 0 1 0 6.32203e-06
+  translation -0.36001855044187275 0.049981762836474965 -0.4500185502073214
+  rotation -0.7070532214295624 0.012048361704544954 0.707057691455453 0.0005247211205973905
   children [
     DEF box Shape {
       appearance PBRAppearance {
@@ -322,7 +333,8 @@ Solid {
   }
 }
 Solid {
-  translation -0.36 0.05 -0.15
+  translation -0.36001855032459745 0.049981762836474965 -0.15001855032459743
+  rotation 0.7071067811865119 5.101270829540453e-15 -0.7071067811865832 -0.0005246830341631205
   children [
     DEF box Shape {
       appearance PBRAppearance {
@@ -338,6 +350,28 @@ Solid {
   boundingObject USE box
   physics Physics {
   }
+}
+Solid {
+  translation -0.5300000001733842 0.02496502348462172 -0.009999999999999959
+  rotation -2.429086303382606e-07 4.6257014566367985e-10 -0.9999999999999707 -7.722380303221367e-09
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE box
+  physics Physics {
+  }
+  recognitionColors [
+    0 0 1
+  ]
 }
 DEF path Solid {
   translation -0.529999 0 -0.279999
@@ -371,9 +405,24 @@ DEF path Solid {
   boundingObject USE box
 }
 Apple {
-  translation 0.0767823 0.05 0.583497
+  translation -0.2658 0.049915374647126975 0.250135
   rotation 0 -1 0 -0.5236053071795865
 }
 RectangleArena {
   floorSize 5 5
+  floorAppearance PBRAppearance {
+    baseColor 0 0 0
+    roughness 1
+    metalness 0
+    normalMap ImageTexture {
+      url [
+        "textures/parquetry/dark_strip_parquetry_normal.jpg"
+      ]
+    }
+    occlusionMap ImageTexture {
+      url [
+        "textures/parquetry/dark_strip_parquetry_occlusion.jpg"
+      ]
+    }
+  }
 }

@@ -5,6 +5,7 @@ sceneTreePerspectives: 000000ff0000000100000002000000c0000000fa01000000020100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 0 "controllers/PillarCounting/PillarCounting.cpp"
+textFiles: 1 "controllers/PillarCounting/PillarCounting.cpp" "controllers/ColorDetection/ColorDetection.cpp"
 globalOptionalRendering: DistanceSensorRays
 consoles: Console:All:All
+renderingDevicePerspectives: robot:camera;1;0.3875;0;0
