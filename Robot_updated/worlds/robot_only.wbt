@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.3032591467559573 0.8900901071881618 0.34025503816198704 4.465116165169283
-  position -0.2108218168259563 0.28018121108741884 0.07110279178098779
+  orientation 0.5682694122195041 0.7846195799144159 0.24787494821103778 5.244366847486421
+  position -0.21641824614371927 0.3242643571049279 0.4802700564238095
 }
 TexturedBackground {
 }
@@ -13,6 +13,7 @@ TexturedBackgroundLight {
 RectangleArena {
 }
 Robot {
+  translation 0 0.02 0
   children [
     DEF motor_base_stand_left_rear Solid {
       translation 0.1285 0.043 0.124
@@ -982,7 +983,7 @@ Robot {
       }
       endPoint Solid {
         translation 0.16 -0.0105 0.16
-        rotation -0.8348923911043526 0.5038175562534222 -0.22163611006983114 4.201794118230628
+        rotation -0.8244157681504567 0.5224204835359635 -0.2177509577635485 4.034337237000017
         children [
           Shape {
             geometry DEF caster Sphere {
@@ -1003,7 +1004,7 @@ Robot {
       }
       endPoint Solid {
         translation 0.04 -0.0105 0.16
-        rotation -0.16943491095235344 0.04934445263010616 -0.984305306266914 3.6422545236542225
+        rotation -0.11791483940529618 0.07120360713080964 -0.9904676355033438 3.63325505529689
         children [
           Shape {
             geometry DEF caster Sphere {
@@ -1028,8 +1029,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.014999955385372837 0.018016841537859925 0.030000015918697883
-        rotation 5.5385289572290676e-08 -5.718666701584212e-08 0.9999999999999968 1.578000241746064
+        translation 0.01499995538537283 0.018016841537859925 0.030000015918697883
+        rotation 5.5385289572290696e-08 -5.718666701584212e-08 0.9999999999999968 1.578000241746064
         children [
           DEF WHEEL Shape {
             geometry Cylinder {
@@ -1055,8 +1056,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.18899999426258093 0.019225617083202966 0.030000009367746057
-        rotation -7.475574913083479e-08 7.410392351195825e-08 0.9999999999999944 1.578000168740522
+        translation 0.18899999426258104 0.019225617083202966 0.030000009367746057
+        rotation -7.47557491308348e-08 7.410392351195825e-08 0.9999999999999944 1.578000168740522
         children [
           DEF WHEEL Shape {
             geometry Cylinder {
@@ -1114,10 +1115,126 @@ Robot {
       physics Physics {
       }
     }
+    SliderJoint {
+      jointParameters JointParameters {
+        axis 0 1 0
+      }
+      device [
+        LinearMotor {
+          name "slider_motor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.1 0.09 0.2
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 1
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.06 0.15 0.01
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 1
+              anchor 0.03 0 0
+            }
+            device [
+              RotationalMotor {
+                name "left_arm_motor"
+              }
+            ]
+            endPoint Solid {
+              translation 0.03 -0.03999999999999996 0.03999999999999978
+              rotation 0 0 1 0
+              children [
+                DEF LEFT_ARM Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF left_arm Box {
+                    size 0.01 0.07 0.05
+                  }
+                }
+              ]
+              name "left_arm"
+              boundingObject USE left_arm
+              physics Physics {
+              }
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 1
+              anchor -0.03 0 0
+            }
+            device [
+              RotationalMotor {
+                name "right_arm_motor"
+              }
+            ]
+            endPoint Solid {
+              translation -0.03 -0.03999999999999966 0.039999999999999404
+              rotation 0 0 1 0
+              children [
+                DEF RIGHT_ARM Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF right_arm Box {
+                    size 0.01 0.07 0.05
+                  }
+                }
+              ]
+              name "right_arm"
+              boundingObject USE right_arm
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "solid(5)"
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.1 0.05 0.17
+      }
+      device [
+        RotationalMotor {
+          name "sensor_motor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.1 0.02 0.17
+        rotation 1 0 0 0
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 0
+              roughness 1
+              metalness 0
+            }
+            geometry DEF sensor_platform Box {
+              size 0.05 0.06 0.01
+            }
+          }
+        ]
+        name "solid(6)"
+        boundingObject USE sensor_platform
+      }
+    }
   ]
   physics Physics {
     density -1
     mass 0.3
   }
-  controller "my_controller"
+  controller "cpp_controller"
 }
