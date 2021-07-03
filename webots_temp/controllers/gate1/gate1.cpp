@@ -6,7 +6,7 @@
 #include <ctime>
 
 
-#define TIME_STEP 32
+#define TIME_STEP 64
 
 using namespace webots;
 
@@ -14,18 +14,18 @@ int main(){
   Robot *robot = new Robot();
   Motor *motor = robot->getMotor("gate_motor");
   std::time_t initial_time = time(NULL);
-  std::cout << "Initial time : " << initial_time << std::endl;
+  //std::cout << "Initial time : " << initial_time << std::endl;
   while(robot->step(32)!=-1){
     std::time_t current_time;
     current_time = time(NULL);
     std::time_t temp_time = current_time - initial_time;
-    std::cout << temp_time << std::endl;
+    //std::cout << temp_time << std::endl;
     if(0<=temp_time && temp_time<=10){
-      std::cout<<"gate 1 opened"<<std::endl;
+      //std::cout<<"gate 1 opened"<<std::endl;
       motor->setPosition(-M_PI/2);
     }
     else if(10<temp_time && temp_time<20){
-      std::cout<<"gate 1 closed" << std::endl;
+      //std::cout<<"gate 1 closed" << std::endl;
       motor->setPosition(0);
     }
     if (temp_time>=20){

@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <vector>
 #include<string> 
+#include <webots/LED.hpp>
+#include <string>
 
 
 #define TIME_STEP 64
@@ -20,6 +22,7 @@ using namespace std;
 DistanceSensor* ir[8]; //ir_panle
 DistanceSensor* ts[2]; //two irs to detect junctions
 DistanceSensor* ds[2]; //Two distance sensors to detect wall.
+DistanceSensor* fds;
 Brake* left_brk;
 Brake* right_brk;
 PositionSensor* pos_left;
@@ -34,15 +37,48 @@ double i = 0;
 double d = 0;
 double lastError = 0;
 //....................................................
+//global variables for maze
+bool mazeIn=false;
+int quad;
+int rad;
+bool boxFound=false;
+bool colorChecked=false;
 
+bool even=true; //path check parameter
+
+bool found=false;
+bool checked=false;
+//....................................................
+
+//global variables for pillar counting
+bool reverse = false;
+int pc=1;
+int count = 0;
+int ps=0;
+int cs=0;
+int pj=0;
+//.......................................................
+
+//global variables for gate sync
+bool safety=true; //safety lock for gate sync. turn off only when code is finalized
+
+bool gatePrev=false;
+bool gateCur=false;
+bool go=false;
+//.....................................................
 double dc = 0; //damping coeficient
-
+//......................................................
 //junction identifying parameters
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-int direct[]={0,2,2,2,1,0,1, 2, 0, 2, 2, 1, 1, 1, 2, 2, 1, 0}; //direct = [1, 0];
-int direct_count = 0;
+vector<int> direct{0, 2, 2}; //direct = [1, 0];
+vector<string> state{"startingPath","wallFollow","straighPath","enterMaze"};
+int pillarLoc=10;
+int gate1Loc=pillarLoc+2;
+int gate2Loc=pillarLoc+3;
+int direct_count = 2;
+bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
 double last_left_speed;
@@ -185,14 +221,14 @@ void pid() {
 //Wall following
 void wallFollowing() {
     if (leftWall) {
-        cout << "left wall" << endl;
+        //cout << "left wall" << endl;
         if (leftDsValue > 400) {
-            cout << "turn left" << endl;
+            //cout << "turn left" << endl;
             leftSpeed = -MAX_SPEED * 0.5;
             rightSpeed = MAX_SPEED * 0.5;
         }
         else if (leftDsValue < 300) {
-            cout << "turn right" << endl;
+            //cout << "turn right" << endl;
             rightSpeed = -MAX_SPEED * 0.5;
             leftSpeed = MAX_SPEED * 0.5;
         }
@@ -203,14 +239,14 @@ void wallFollowing() {
     }
 
     else if (rightWall) {
-        cout << "right wall" << endl;
+        //cout << "right wall" << endl;
         if (rightDsValue > 400) {
-            cout << "turn right" << endl;
+            //cout << "turn right" << endl;
             rightSpeed = -MAX_SPEED * 0.5;
             leftSpeed = MAX_SPEED * 0.5;
         }
         else if (rightDsValue < 300) {
-            cout << "turn left" << endl;
+            //cout << "turn left" << endl;
             leftSpeed = -MAX_SPEED * 0.5;
             rightSpeed = MAX_SPEED * 0.5;
         }
@@ -224,7 +260,7 @@ void wallFollowing() {
 
 //No line
 void noLine() {
-    cout << "no line" << endl;
+    //cout << "no line" << endl;
     leftSpeed = MAX_SPEED * 0.5;
     rightSpeed = MAX_SPEED * 0.5;
 }
@@ -233,8 +269,8 @@ void wall() {
     leftDsValue = ds[0]->getValue();
     rightDsValue = ds[1]->getValue();
 
-    cout << "left ds: " << leftDsValue << endl;
-    cout << "right ds: " << rightDsValue << endl;
+    //cout << "left ds: " << leftDsValue << endl;
+    //cout << "right ds: " << rightDsValue << endl;
 
     leftWall = leftDsValue < 1000;
     rightWall = rightDsValue < 1000;
@@ -249,7 +285,7 @@ void wall() {
         }
     }
 
-    cout << "cond" << cond << endl;
+    //cout << "cond" << cond << endl;
 
     //condition for wall following
     if ((leftWall or rightWall) && !cond) {
@@ -260,8 +296,8 @@ void wall() {
     }
 
 
-    cout << leftSpeed << endl;
-    cout << rightSpeed << endl;
+    //cout << leftSpeed << endl;
+    //cout << rightSpeed << endl;
 }
 
 //junction identificationh
@@ -312,7 +348,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 1) {
-        hardLength = 5.0;
+        hardLength = 8.0;
         std::cout << "going forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -322,6 +358,24 @@ void sharpTurn(int turn) {
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
+    }
+    else if (turn == -1){
+        hardLength = 37.0;
+        std::cout << "turning back"<<std::endl;
+        leftSpeed = -0.5 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
+    }
+    else if (turn == 20){
+        hardLength = 19.0;
+        std::cout << "ramp right"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = -0.5 * MAX_SPEED;
+    }
+    else if (turn == 41){
+        hardLength = 8.0;
+        std::cout << "quad 4 forward"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
     }
     else {
         cout << "wrong input. enter a value from 0-2";
@@ -340,6 +394,11 @@ void sharpTurn(int turn) {
             pos_lst={};
             turn_command = false;
             direct_count += 1;
+            if (safety){go=false;}
+            canUpdateStates = true;
+            //canUpdateLoc=true;
+            //remove this at final stage. This only for safety
+            //depends on final robot speed
         }
     }
 };
@@ -365,6 +424,263 @@ void brakes() {
     }
 };
 ////////////////////////////////////////////////////////////////////////////////////
+
+void pillarCnt() {
+
+  led->set(0);
+   
+  //counting pillars
+  for (int j = 0; j < 2; j++) {
+    if ((ds[j]->getValue())>100 && (ds[j]->getValue())<250){
+      pj=j;
+      cs=1;
+      if (ps==0 && state[direct_count]=="pillar") {
+          count += 1; 
+          led->set(1);
+          ps=cs;   
+          //std::cout << "No. of pillars: " << count << std::endl; 
+      } else {
+          led->set(0);
+        }     
+    } else { 
+      if (pj==j) {
+        ps=0;
+        cs=0;
+      }
+      }
+
+    if (ts[j]->getValue() < 400) {
+      if (count%2 == 1) {  //wrong path
+        reverse = true; 
+        pc = 0;
+      }
+      
+    }
+   }
+
+}
+//////////////////////////////////////////////////////////////////////////////////////
+void gatesync(){
+    const double value = fds->getValue();
+    //std::cout << "Sensor value is : " << value << std::endl;
+    if (value <= 750){
+      gatePrev=gateCur;
+      gateCur=true;
+    }
+    else{
+      gatePrev=gateCur;
+      gateCur=false;  
+    }
+    if (gateCur==false && gatePrev==true){
+      go=true;
+    }
+    else if (gateCur==true && gatePrev==false){
+      go=false;
+    }
+    
+    
+    //std::cout << "gatePrev = " << gatePrev << " gateCur = " << gateCur  <<std::endl;
+    if ( go && (state[direct_count]=="gate1" or state[direct_count]=="gate2")){
+      std::cout << "go" <<std::endl;  
+    }
+    else if(state[direct_count]=="gate1" or state[direct_count]=="gate2"){
+      std::cout << "stop" <<std::endl;
+      leftSpeed=0;
+      rightSpeed=0;
+      //rightMotor->setPosition(0.0);
+      //leftMotor->setPosition(0.0);
+    }
+    //else{
+      //pid();
+      //rightMotor->setPosition(INFINITY);
+      //leftMotor->setPosition(INFINITY);
+      //rightMotor->setVelocity(10.0);
+      //leftMotor->setVelocity(10.0);
+    //}
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+int quadUpdate(int cur, int add){
+    cur+=add;
+    if (cur>4){
+        cur=cur%4;
+    }
+    return cur;
+}
+
+int radUpdate(int cur,int add){
+    cur+=add;
+    if (cur<1){
+        cur=4;
+    }
+    if (cur>4){
+      cur=cur%4;
+    }
+    return cur;
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+void mazeLoc(){
+    if (true){
+        //...............................................quad and rad Updating
+        //Initial quad
+        if (state[direct_count-1]=="enterMaze"){
+            quad=1;
+        }
+        //....................................................
+        //circle to (circle or rad)
+        if (state[direct_count-1]=="circlePath" && direct[direct_count-1]==1){
+            quad = quadUpdate(quad, 1);
+        }
+        else if (state[direct_count-1]=="circlePath"){
+            if (direct[direct_count-1]==2){
+                rad=quad;
+            }
+            else if (direct[direct_count-1]==0){
+                rad=radUpdate(quad,-1);
+            }
+        }
+        //............................................
+        //rad to circle
+        if (state[direct_count-1]=="radiusOut"){
+            if (direct[direct_count-1]==2){
+                quad = quadUpdate(rad, 1);
+            }
+            else if (direct[direct_count-1]==0){
+                quad=rad;
+            }
+        }
+        //.................................................
+        //rad to rad
+        if (state[direct_count-1]=="radiusIn"){
+            rad=radUpdate(rad,direct[direct_count-1]+1);
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+void maze(){
+    //maze entrance
+    if (state[direct_count]=="enterMaze" && canUpdateStates){
+          mazeIn=true;
+          vector<int> mazeStates{0,2,1,2,2, 1,0,2};
+          direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+          vector<string> stateNames{"circlePath","radiusIn","radiusOut","circlePath","radiusIn","radiusOut","circlePath"};
+          state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+          
+      }
+    //maze location finder
+    if (canUpdateStates && mazeIn){
+        mazeLoc();
+    }
+    
+    //box check
+    const double value = fds->getValue();
+    if (value<400 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
+        boxFound=true;
+        colorChecked=true;
+        junc=9;
+        //direct_count=direct.size();
+        //direct.insert(direct.begin()+direct_count,-1);
+        checked=true;
+        //canUpdateStates=true;
+        direct[direct_count]=-1;
+        
+    }
+    else if (value<400 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
+        boxFound=true;
+        //direct_count=direct.size();
+        //direct_count+=1;
+        junc=9;
+        found=true;
+        direct[direct_count]=-1;
+        //canUpdateStates=true;
+        //direct.insert(direct.begin()+direct_count,-1);
+    }
+    
+    if (boxFound && colorChecked && canUpdateStates && checked){//exit path
+        direct_count=direct.size();
+        if (rad==1){
+            vector<int> mazeStates{0,0,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==2){
+            vector<int> mazeStates{2,2,0};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==3){
+            vector<int> mazeStates{2,0,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        if (rad==4){
+            vector<int> mazeStates{0,2,0};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        
+        if (even){
+            vector<int> mazeStates{0,0,1,1};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        else{
+            vector<int> mazeStates{2,2,1,1};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        checked=false;
+        
+        
+    }
+    else if (boxFound && canUpdateStates && found){
+        direct_count=direct.size() ;
+        if (rad==1 or rad==4){
+            vector<int> mazeStates{2,41,2,2,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusOut","circlePath","circlePath","radiusIn","radiusOut"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        else {
+            vector<int> mazeStates{2,2,2,2};
+            direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
+            vector<string> stateNames{"radiusOut","circlePath","radiusIn","radiusOut"};
+            state.insert(state.end(),stateNames.begin(),stateNames.end());
+        }
+        found = false;
+        
+        
+    }
+    
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+void correct(){
+    if (state[direct_count]=="counted" && canUpdateStates){
+          if (reverse && !even){
+              vector<int> mazeStates{-1,0,1,0};
+              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
+              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+              //canUpdateStates = false;
+          }
+          else if(reverse && even){
+              vector<int> mazeStates{-1,2,1,2};
+              direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
+              vector<string> stateNames{"reverse","reverse","reverse","reverse"};
+              state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
+          }
+      }    
+}
+
 
 
 int main(int argc, char **argv) {
@@ -393,6 +709,9 @@ int main(int argc, char **argv) {
       ts[i]->enable(TIME_STEP);
   }
   //....................................................
+  
+  fds = robot->getDistanceSensor("fds");
+  fds->enable(TIME_STEP);
 
   //brakes
   left_brk = robot->getBrake("brake_left");
@@ -424,26 +743,58 @@ int main(int argc, char **argv) {
 
   // Main loop:
   while (robot->step(TIME_STEP) != -1) {
-      std::cout<<"junc"<<junc<<std::endl;
+      //std::cout<<"junc"<<junc<<std::endl;
       //turning code
+      //......................................................
       if (junc != -1 && turn_command) {
           sharpTurn(direct[direct_count]);
-          std::cout << "turn"<< std::endl;
+          std::cout << "Motor state = turn"<< std::endl;
        }
       //for brakes
       else if (junc != -1) {
           brakes();
-          std::cout<< "brake" << std::endl;
+          std::cout<< "Motor state = brake" << std::endl;
       }
       //for line following pid
       else {
           dc = 0;
-          std::cout << "pid"<< std::endl;
+          std::cout << "Motor state = line follow"<< std::endl;
           pid();
           wall();
           junc = juncFind();
       }
+      //......................................................
+      maze();
+      pillarCnt();
+      correct();
+      gatesync();
       setMotors();
+      canUpdateStates=false;
+      
+      cout << "quad = "<< quad << " rad = " << rad<< endl;
+      
+      cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
+      std::cout << "No. of pillars: " << count << std::endl; 
+      
+      for(int i=0; i<direct.size(); ++i){
+        if (i==direct_count){
+              std::cout << '*';
+        }
+        std::cout << direct[i] <<" ";
+      }
+      std::cout<< " " << std::endl; 
+      
+      
+      
+      for(int i=0; i<state.size(); ++i){
+        if (i==direct_count){
+              std::cout << '*';
+        }
+        std::cout << state[i] <<" ";
+      }
+      std::cout<< " " << std::endl; 
+      
+      
   };
 
   // Enter here exit cleanup code.

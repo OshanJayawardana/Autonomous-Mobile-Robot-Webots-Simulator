@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.10599065825899752 0.9296059300514979 0.3529855452775853 3.6859998167584807
-  position 2.0586077939270315 2.476789371362136 -1.0525620089085352
+  orientation 0.5776567755050875 -0.5771969549958955 -0.5771969549958931 4.189249903239785
+  position 2.8562550596519034 6.114985978365761 2.506179629427814
 }
 TexturedBackground {
 }
@@ -32,6 +32,25 @@ RectangleArena {
         "textures/parquetry/chequered_parquetry_occlusion.jpg"
       ]
     }
+  }
+}
+DEF box Solid {
+  translation 2.92295 0.025 3.05121
+  rotation 0 1 0 2.3562
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  name "box"
+  boundingObject USE box
+  physics Physics {
   }
 }
 DEF path Solid {
@@ -67,17 +86,17 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation 3.54964 0.0297617 0.341802
-  rotation 0.7022633033568287 1.3267905731340067e-06 -0.711917307527071 -3.141555307179586
+  translation 1.91585 0.0382718 3.09216
+  rotation -0.008561672976374281 -3.404801183642812e-05 -0.999963347626591 -3.136745307179586
   children [
     DEF caster_left BallJoint {
       jointParameters BallJointParameters {
-        position -0.00032939747741569096
+        position 1.99649170651632
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.056007918235323 0.015974770995267347 -0.1500273277284272
-        rotation -0.3605393835252863 0.7585616178667559 -0.5427666393825029 1.1748756897796353
+        translation 0.05602011285746816 0.0160169022072933 -0.15002749171192384
+        rotation 0.7965606317937157 0.2169095987254251 -0.564306110065425 3.2865224638215706
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -96,12 +115,12 @@ Robot {
     }
     DEF caster_right BallJoint {
       jointParameters BallJointParameters {
-        position -0.0003363251328220703
+        position -2.597211360714269
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.055999961485533135 0.016000034466618664 -0.15000004011013168
-        rotation 0.44629569625623544 -0.4818264422359911 -0.7540977596209718 3.372184195234703
+        translation -0.05600002383005311 0.015999940868077208 -0.15000001468601054
+        rotation -0.15433194939279182 -0.9754749319959424 -0.15694045509087845 2.6389060589344817
         children [
           USE caster
         ]
@@ -177,7 +196,7 @@ Robot {
       }
     }
     DEF ts_panel Solid {
-      translation 0 0 -0.075
+      translation 0 0 -0.095
       rotation 0 0 1 1.5708
       scale 2 2 2
       children [
@@ -234,7 +253,7 @@ Robot {
       translation 0 -0.02 0
       rotation 1 0 0 3.14159
       children [
-        Shape {
+        DEF led Shape {
           appearance PBRAppearance {
             metalness 0
             emissiveIntensity 20
@@ -248,7 +267,7 @@ Robot {
     }
     DEF leftwheel HingeJoint {
       jointParameters HingeJointParameters {
-        position 167.19061165517985
+        position 588.8368686904379
         anchor 0.075 0 0
       }
       device [
@@ -264,7 +283,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.0750045 0 0
-        rotation 0.6936378840009004 -0.6931447137620115 -0.19600227463611786 3.5315584804655495
+        rotation -0.6333690593299395 0.6333972785985138 0.4445801639159178 2.302104160129423
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -286,7 +305,7 @@ Robot {
     }
     DEF rightwheel HingeJoint {
       jointParameters HingeJointParameters {
-        position 173.77985016356604
+        position 595.0203503993541
         anchor -0.075 0 0
       }
       device [
@@ -301,8 +320,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.07500442134343432 -4.417691655115363e-06 1.0235807375651496e-06
-        rotation 0.6795960781389815 -0.6723065668261673 -0.2935183993901019 3.712065288113054
+        translation -0.07500442134343432 -4.5312038322329386e-06 -1.786306713526023e-07
+        rotation -0.6541810969282129 0.6466931391365547 0.39221814875845423 2.3928054440068247
         children [
           USE wheel
         ]
@@ -312,6 +331,7 @@ Robot {
       }
     }
     DEF DS Solid {
+      translation 0 0 0.01
       children [
         DEF ds0 Solid {
           translation 0.055 -0.008 -0.09
@@ -356,6 +376,21 @@ Robot {
           ]
           name "ds1"
         }
+      ]
+    }
+    DEF fds DistanceSensor {
+      translation 0 -0.008 -0.08
+      rotation 0 1 0 1.5708
+      children [
+        USE ds0
+      ]
+      name "fds"
+      boundingObject USE ds0
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.4 1000 0
       ]
     }
   ]
@@ -460,7 +495,7 @@ DEF path1 Solid {
   name "solid(1)"
 }
 DEF ramp Transform {
-  translation 2.87 0 0.339996
+  translation 2.867 0 0.339996
   rotation 0 1 0 1.01503e-06
   children [
     DEF rtop1 Solid {
@@ -643,7 +678,7 @@ DEF wall Solid {
   name "<STL_BINARY>"
 }
 DEF arena1 Solid {
-  translation 1.69 -0.0999 0.33
+  translation 1.69 -0.0999 0.325
   scale 0.001 0.001 0.001
   children [
     Solid {
@@ -677,7 +712,7 @@ DEF arena1 Solid {
   ]
   name "<STL_BINARY>(2)"
 }
-Robot {
+DEF Gate1 Robot {
   translation 2.05 0 0.95
   children [
     Solid {
@@ -697,6 +732,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -1.4171963267948964
         axis 0 0 1
         anchor 0 0.025 0
       }
@@ -706,8 +742,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.25 0.025 0
-        rotation 0 0 1 0
+        translation -0.03824918307685946 0.27205667364787606 0
+        rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
             appearance PBRAppearance {
@@ -727,7 +763,7 @@ Robot {
   name "gate1"
   controller "gate1"
 }
-Robot {
+DEF Gate2 Robot {
   translation 2.05 0 1.55
   children [
     Solid {
@@ -747,6 +783,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -1.5707963267948966
         axis 0 0 1
         anchor 0 0.025 0
       }
@@ -756,8 +793,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.25 0.025 0
-        rotation 0 0 1 0
+        translation -5.551115123125783e-17 0.275 0
+        rotation 0 0 -1 1.5707963267948966
         children [
           DEF gate Shape {
             appearance PBRAppearance {
@@ -777,7 +814,7 @@ Robot {
   name "gate2"
   controller "gate2"
 }
-Robot {
+DEF Gate3 Robot {
   translation 4.16 0 0.95
   children [
     Solid {
@@ -797,6 +834,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -1.4171963267948964
         axis 0 0 1
         anchor 0 0.025 0
       }
@@ -806,8 +844,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.25 0.025 0
-        rotation 0 0 1 0
+        translation -0.03824918307685946 0.27205667364787606 0
+        rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
             appearance PBRAppearance {
@@ -827,7 +865,7 @@ Robot {
   name "gate3"
   controller "gate1"
 }
-Robot {
+DEF Gate4 Robot {
   translation 4.16 0 1.55
   children [
     Solid {
@@ -847,6 +885,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -1.5707963267948966
         axis 0 0 1
         anchor 0 0.025 0
       }
@@ -856,8 +895,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.25 0.025 0
-        rotation 0 0 1 0
+        translation -5.551115123125783e-17 0.275 0
+        rotation 0 0 -1 1.5707963267948966
         children [
           DEF gate Shape {
             appearance PBRAppearance {
@@ -876,4 +915,58 @@ Robot {
   ]
   name "gate4"
   controller "gate2"
+}
+DEF L1Pillar Solid {
+  translation 3.59 0.0499649 0.49
+  rotation -0.16802285603270725 0.9830069514371157 -0.0739300566543828 -8.082656194526293e-16
+  children [
+    DEF pillar Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.03 0.1 0.03
+      }
+    }
+  ]
+  name "L1Pillar"
+  boundingObject USE pillar
+  physics Physics {
+  }
+}
+DEF L2Pillar Solid {
+  translation 2.015 0.049964926975821 0.49
+  rotation -0.016978716528859076 0.9867597177804746 0.16129780702424626 -6.398933515737107e-16
+  children [
+    DEF pillar Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.03 0.1 0.03
+      }
+    }
+  ]
+  name "L2Pillar"
+  boundingObject USE pillar
+  physics Physics {
+  }
+}
+DEF R1Pillar Solid {
+  translation 3.72 0.049964926975821 0.49
+  rotation -0.016978716528859076 0.9867597177804746 0.16129780702424626 -6.398933515737107e-16
+  children [
+    DEF pillar Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.03 0.1 0.03
+      }
+    }
+  ]
+  name "R1Pillar"
+  boundingObject USE pillar
+  physics Physics {
+  }
 }
