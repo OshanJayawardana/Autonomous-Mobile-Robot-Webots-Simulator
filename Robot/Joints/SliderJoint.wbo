@@ -1,0 +1,92 @@
+#VRML_OBJ R2021a utf8
+SliderJoint {
+  jointParameters JointParameters {
+    axis 0 1 0
+  }
+  device [
+    LinearMotor {
+      name "slider_motor"
+    }
+  ]
+  endPoint Solid {
+    translation 0.1 0.09 0.2
+    children [
+      DEF slider Shape {
+        appearance PBRAppearance {
+          baseColor 0 0 1
+          roughness 1
+          metalness 0
+        }
+        geometry Box {
+          size 0.06 0.15 0.01
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 1
+          anchor 0.03 0 0
+        }
+        device [
+          RotationalMotor {
+            name "left_arm_motor"
+          }
+        ]
+        endPoint Solid {
+          translation 0.03 -0.04000000000000001 0.03999999999999982
+          rotation 0 0 1 0
+          children [
+            DEF LEFT_ARM Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 1
+                metalness 0
+              }
+              geometry DEF left_arm Box {
+                size 0.01 0.07 0.05
+              }
+            }
+          ]
+          name "left_arm"
+          boundingObject USE left_arm
+          physics Physics {
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 1
+          anchor -0.03 0 0
+        }
+        device [
+          RotationalMotor {
+            name "right_arm_motor"
+          }
+        ]
+        endPoint Solid {
+          translation -0.030000000000000002 -0.039999999999999626 0.03999999999999936
+          rotation 0 0 1 0
+          children [
+            DEF RIGHT_ARM Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 1
+                metalness 0
+              }
+              geometry DEF right_arm Box {
+                size 0.01 0.07 0.05
+              }
+            }
+          ]
+          name "right_arm"
+          boundingObject USE right_arm
+          physics Physics {
+          }
+        }
+      }
+    ]
+    name "solid(5)"
+    boundingObject USE slider
+    physics Physics {
+    }
+  }
+}
