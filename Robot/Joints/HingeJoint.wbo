@@ -1,0 +1,29 @@
+#VRML_OBJ R2021a utf8
+HingeJoint {
+  jointParameters HingeJointParameters {
+    anchor 0.1 0.05 0.17
+  }
+  device [
+    RotationalMotor {
+      name "sensor_motor"
+    }
+  ]
+  endPoint Solid {
+    translation 0.1 0.02 0.17
+    rotation 1 0 0 0
+    children [
+      Shape {
+        appearance PBRAppearance {
+          baseColor 0 1 0
+          roughness 1
+          metalness 0
+        }
+        geometry DEF sensor_platform Box {
+          size 0.05 0.06 0.01
+        }
+      }
+    ]
+    name "solid(6)"
+    boundingObject USE sensor_platform
+  }
+}
