@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9008149748499105 -0.42018488779287533 -0.10943966902656488 0.6140630914137496
-  position -0.19713814698949125 0.5141343085953454 0.8526891042559853
+  orientation -0.3816303558973275 -0.8994445240512476 -0.21297375334041432 1.1386140586211742
+  position -0.7553844132922921 0.453662122869433 0.6374654207215232
 }
 TexturedBackground {
 }
@@ -23,7 +23,7 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.08129961264302839 0.101385
+        translation 0 0.08129982211505826 0.101385
         children [
           DEF slider Shape {
             appearance Appearance {
@@ -107,8 +107,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.059999999999997444 -0.0104 0.07000000000150228
-        rotation 0.010036175923973824 0.9999381139447853 0.004800359712433039 3.0449985831947517
+        translation -0.05999999999999099 -0.0104 0.070000000001502
+        rotation 0.010045446671472854 0.9999381265105634 0.004778300086346841 3.0492954506156815
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -131,8 +131,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06000000000026026 -0.0104 0.07000000000388448
-        rotation -0.010770806037764891 -0.9999373347242675 -0.003052271584466627 2.898208978905321
+        translation 0.06000000000027885 -0.0104 0.07000000000387976
+        rotation -0.010781275317078435 -0.9999372976352372 -0.0030273586632984253 2.893418619585119
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -244,6 +244,4 @@ Robot {
   boundingObject USE chasis
   physics Physics {
   }
-}
-Transform {
 }
