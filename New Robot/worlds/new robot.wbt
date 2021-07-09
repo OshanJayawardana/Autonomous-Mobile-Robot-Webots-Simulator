@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.3816303558973275 -0.8994445240512476 -0.21297375334041432 1.1386140586211742
-  position -0.7553844132922921 0.453662122869433 0.6374654207215232
+  orientation -0.9268513191146425 -0.3734214830958886 -0.03876890787621318 0.32970488839107615
+  position -0.011838241055008882 0.27134454279985104 0.7499370592418784
 }
 TexturedBackground {
 }
@@ -20,10 +20,11 @@ Robot {
       }
       device [
         LinearMotor {
+          name "slider_motor"
         }
       ]
       endPoint Solid {
-        translation 0 0.08129982211505826 0.101385
+        translation 0 0.0512998 0.101385
         children [
           DEF slider Shape {
             appearance Appearance {
@@ -54,8 +55,18 @@ Robot {
             }
           }
           HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 1
+              anchor 0.03 0 0
+            }
+            device [
+              RotationalMotor {
+                name "left_arm_motor"
+              }
+            ]
             endPoint Solid {
               translation 0.03 -0.01 0.0165
+              rotation 0 0 1 0
               children [
                 DEF clamp Shape {
                   appearance Appearance {
@@ -107,8 +118,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.05999999999999099 -0.0104 0.070000000001502
-        rotation 0.010045446671472854 0.9999381265105634 0.004778300086346841 3.0492954506156815
+        translation -0.059999999999362445 -0.0104 0.07000000000136002
+        rotation 0.010983428905735521 0.9999364383066497 0.0025462985064769405 3.4816421517542446
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -131,8 +142,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06000000000027885 -0.0104 0.07000000000387976
-        rotation -0.010781275317078435 -0.9999372976352372 -0.0030273586632984253 2.893418619585119
+        translation 0.06000000000216396 -0.0104 0.07000000000323232
+        rotation -0.011979660753075149 -0.9999282258850772 -0.00017551798547634626 2.3752568166387578
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -244,4 +255,5 @@ Robot {
   boundingObject USE chasis
   physics Physics {
   }
+  controller "cpp_controller"
 }
