@@ -35,7 +35,7 @@ int main(){
     }
     else if(2<temp_time && temp_time<=5){
       motor->setVelocity(3);
-      motor->setPosition(0.12);
+      motor->setPosition(0.10);
     }
     else if(5<temp_time && temp_time<=10){
       //motor4->setPosition(-M_PI/2);
