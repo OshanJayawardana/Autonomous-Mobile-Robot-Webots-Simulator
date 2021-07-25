@@ -14,7 +14,7 @@ int main(){
   Robot *robot = new Robot();
   Motor *motor = robot->getMotor("slider_motor");
   Motor *motor3 = robot->getMotor("left_arm_motor");
-  //Motor *motor4 = robot->getMotor("sensor_motor");
+  Motor *motor4 = robot->getMotor("sensor_motor");
   std::time_t initial_time = time(NULL);
   std::cout << "Initial time : " << initial_time << std::endl;
   while(robot->step(32)!=-1){
@@ -22,7 +22,7 @@ int main(){
     current_time = time(NULL);
     std::time_t temp_time = current_time - initial_time;
     std::cout << temp_time << std::endl;
-    //motor4->setPosition(0);
+    motor4->setPosition(0);
     if(0<=temp_time && temp_time<=1){
       motor3->setPosition(M_PI/6);
       motor3->setVelocity(3);
@@ -38,10 +38,10 @@ int main(){
       motor->setPosition(0.10);
     }
     else if(5<temp_time && temp_time<=10){
-      //motor4->setPosition(-M_PI/2);
+      motor4->setPosition(-M_PI/2);
     }
     else if(10<temp_time && temp_time<=15){
-      //motor4->setPosition(0);
+      motor4->setPosition(0);
     }
     else if(15<temp_time && temp_time<18){
       motor->setVelocity(2);
