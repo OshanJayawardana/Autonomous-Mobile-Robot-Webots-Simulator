@@ -1,0 +1,29 @@
+#VRML_OBJ R2021a utf8
+DEF wheel_left HingeJoint {
+  jointParameters HingeJointParameters {
+    anchor 0 0.018 0.03
+  }
+  device [
+    RotationalMotor {
+      name "wheel_left"
+    }
+  ]
+  endPoint Solid {
+    translation 0.18899999426258093 0.019225617083202966 0.030000009367746057
+    rotation -7.475574913083479e-08 7.410392351195825e-08 0.9999999999999944 1.578000168740522
+    children [
+      DEF WHEEL Shape {
+        geometry Cylinder {
+          height 0.025
+          radius 0.04
+        }
+      }
+    ]
+    name "solid(2)"
+    boundingObject USE WHEEL
+    physics Physics {
+      density -1
+      mass 0.05
+    }
+  }
+}
