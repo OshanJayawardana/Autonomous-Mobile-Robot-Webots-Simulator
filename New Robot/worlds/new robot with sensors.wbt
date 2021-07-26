@@ -14,7 +14,7 @@ RectangleArena {
 }
 Robot {
   children [
-    Solid {
+    DEF juction_sensor Solid {
       translation 0 -0.01 0.035
       children [
         DEF junction_sensor_panel Shape {
@@ -41,7 +41,7 @@ Robot {
               }
             }
           ]
-          name "ds0"
+          name "ts0"
           lookupTable [
             0 0 0
             0.05 100000 0.1
@@ -62,7 +62,7 @@ Robot {
               }
             }
           ]
-          name "ds1"
+          name "ts1"
           lookupTable [
             0 0 0
             0.05 100000 0.1
@@ -414,8 +414,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.05997969018423808 -0.010576085059894094 0.06993836741896828
-        rotation 0.5786841408514594 0.32545654254138834 -0.7477985718387097 3.35039377323974
+        translation -0.05995750720959726 -0.010584808852955761 0.06996834844041566
+        rotation 0.764670514422507 0.270294168169665 -0.5849957837679579 3.1144063552743857
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -438,8 +438,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.059979956863054795 -0.010410874938019366 0.06995931835809185
-        rotation -0.23612688755310063 0.9635077725448175 -0.12608277130603315 1.9783451094510263
+        translation 0.06001872993317586 -0.010413352547182661 0.06995372464453413
+        rotation -0.2509362108973517 0.9045968549705592 -0.3445802490536173 1.2457380159136269
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
