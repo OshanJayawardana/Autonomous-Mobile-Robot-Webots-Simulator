@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.032162888622141166 0.9962364829558594 0.0804886241851564 3.0280331407136454
-  position 0.015243663803721096 0.1811326775334292 -0.7149498754760015
+  orientation -0.9201899346242555 -0.3914458947210253 -0.00453825101380327 0.6606194685505395
+  position 0.027634842234473378 0.5480895118149689 0.8545265657766139
 }
 TexturedBackground {
 }
@@ -66,6 +66,7 @@ Robot {
     }
     DistanceSensor {
       translation -0.1 0.018 0.04
+      rotation 0 1 0 3.14
       children [
         DEF ultra_sonic Shape {
           appearance Appearance {
@@ -80,14 +81,14 @@ Robot {
           geometry IndexedFaceSet {
             coord Coordinate {
               point [
+                -0.02 -0.015 -0.025
+                -0.02 -0.015 0.025
+                -0.02 0.015 -0.025
+                -0.02 0.015 0.025
                 0 -0.015 -0.025
                 0 -0.015 0.025
                 0 0.015 -0.025
                 0 0.015 0.025
-                0.02 -0.015 -0.025
-                0.02 -0.015 0.025
-                0.02 0.015 -0.025
-                0.02 0.015 0.025
               ]
             }
             normal Normal {
@@ -124,11 +125,12 @@ Robot {
             metalness 0
           }
           geometry Box {
-            size 0.08 0.003 0.015
+            size 0.18 0.003 0.015
           }
         }
         DistanceSensor {
-          translation 0.03 -0.004 0
+          translation 0.08 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -149,7 +151,8 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.03 -0.004 0
+          translation -0.08 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -180,6 +183,7 @@ Robot {
       children [
         DistanceSensor {
           translation 0.07 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -201,6 +205,7 @@ Robot {
         }
         DistanceSensor {
           translation 0.05 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -222,6 +227,7 @@ Robot {
         }
         DistanceSensor {
           translation 0.03 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -243,6 +249,7 @@ Robot {
         }
         DistanceSensor {
           translation 0.01 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -264,6 +271,7 @@ Robot {
         }
         DistanceSensor {
           translation -0.01 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -285,6 +293,7 @@ Robot {
         }
         DistanceSensor {
           translation -0.03 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -306,6 +315,7 @@ Robot {
         }
         DistanceSensor {
           translation -0.05 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -327,6 +337,7 @@ Robot {
         }
         DistanceSensor {
           translation -0.07 -0.004 0
+          rotation 0 0 1 -1.571
           children [
             Shape {
               appearance PBRAppearance {
@@ -421,7 +432,8 @@ Robot {
         translation 0 0.0292956 0.101385
         children [
           DistanceSensor {
-            translation -0.03 0.006731 0.0365
+            translation 0 0.006731 0.0365
+            rotation 0 1 0 -1.571
             children [
               DEF shapr_ir Shape {
                 appearance Appearance {
@@ -435,14 +447,14 @@ Robot {
                 geometry IndexedFaceSet {
                   coord Coordinate {
                     point [
-                      -0.022225 -0.006731 -0.01905
-                      -0.022225 -0.006731 0
-                      -0.022225 0.006731 -0.01905
-                      -0.022225 0.006731 0
-                      0.022225 -0.006731 -0.01905
-                      0.022225 -0.006731 0
-                      0.022225 0.006731 -0.01905
-                      0.022225 0.006731 0
+                      -0.01905 -0.006731 -0.022225
+                      -0.01905 -0.006731 0.022225
+                      -0.01905 0.006731 -0.022225
+                      -0.01905 0.006731 0.022225
+                      0 -0.006731 -0.022225
+                      0 -0.006731 0.022225
+                      0 0.006731 -0.022225
+                      0 0.006731 0.022225
                     ]
                   }
                   normal Normal {
