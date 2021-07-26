@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5776567755050875 -0.5771969549958955 -0.5771969549958931 4.189249903239785
-  position 2.8562550596519034 6.114985978365761 2.506179629427814
+  orientation 0.8927479350276144 0.4359416637505099 0.11382438363710876 5.714120736470268
+  position 1.7468998667529627 0.3815866613849236 5.150122189720388
 }
 TexturedBackground {
 }
@@ -35,7 +35,7 @@ RectangleArena {
   }
 }
 DEF box Solid {
-  translation 2.92295 0.025 3.05121
+  translation 3.45322 0.025 3.10072
   rotation 0 1 0 2.3562
   children [
     DEF box Shape {
@@ -86,8 +86,8 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation 1.91585 0.0382718 3.09216
-  rotation -0.008561672976374281 -3.404801183642812e-05 -0.999963347626591 -3.136745307179586
+  translation 1.74154 0.039282 4.59538
+  rotation -0.7010257985167543 0.0017378695005154043 0.7131337950367704 3.13821
   children [
     DEF caster_left BallJoint {
       jointParameters BallJointParameters {
@@ -95,8 +95,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.05602011285746816 0.0160169022072933 -0.15002749171192384
-        rotation 0.7965606317937157 0.2169095987254251 -0.564306110065425 3.2865224638215706
+        translation 0.05602351391603455 0.015998091257607042 -0.15002982378793214
+        rotation 0.816959098790044 -0.20634571128419923 -0.5385158106674091 4.183067573574327
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -119,8 +119,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05600002383005311 0.015999940868077208 -0.15000001468601054
-        rotation -0.15433194939279182 -0.9754749319959424 -0.15694045509087845 2.6389060589344817
+        translation -0.055999987418467054 0.01599993637184314 -0.14999999143861503
+        rotation -0.04573183886088697 0.9867316587799433 -0.15578585454329053 4.556299148644679
         children [
           USE caster
         ]
@@ -196,7 +196,7 @@ Robot {
       }
     }
     DEF ts_panel Solid {
-      translation 0 0 -0.095
+      translation 0 0 -0.085
       rotation 0 0 1 1.5708
       scale 2 2 2
       children [
@@ -283,7 +283,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.0750045 0 0
-        rotation -0.6333690593299395 0.6333972785985138 0.4445801639159178 2.302104160129423
+        rotation -0.6333690593299395 0.6333972785985139 0.44458016391591787 2.302104160129423
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -742,7 +742,7 @@ DEF Gate1 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.03824918307685946 0.27205667364787606 0
+        translation -0.03824918307685946 0.2720566736478761 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
@@ -844,7 +844,7 @@ DEF Gate3 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.03824918307685946 0.27205667364787606 0
+        translation -0.03824918307685946 0.2720566736478761 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
