@@ -72,12 +72,12 @@ double dc = 0; //damping coeficient
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-vector<int> direct{0, 2, 2}; //direct = [1, 0];
-vector<string> state{"startingPath","wallFollow","straighPath","enterMaze"};
+vector<int> direct{100,0, 2, 2}; //direct = [1, 0];
+vector<string> state{"starting","startingPath","wallFollow","straighPath","enterMaze"};
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 2;
+int direct_count = 0;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -377,8 +377,14 @@ void sharpTurn(int turn) {
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
+    else if (turn == 100){
+        hardLength = 20.0;
+        std::cout << "start forward"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
+    }
     else {
-        cout << "wrong input. enter a value from 0-2";
+        cout << "wrong input";
     }
     
     
@@ -625,15 +631,15 @@ void maze(){
         }
         
         if (even){
-            vector<int> mazeStates{0,0,1,1};
+            vector<int> mazeStates{0,0,1,1,100};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            vector<string> stateNames{"pillar","counted","gate1","gate2","complete"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         else{
-            vector<int> mazeStates{2,2,1,1};
+            vector<int> mazeStates{2,2,1,1,100};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"pillar","counted","gate1","gate2"};
+            vector<string> stateNames{"pillar","counted","gate1","gate2","complete"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         checked=false;
@@ -680,8 +686,28 @@ void correct(){
           }
       }    
 }
+///////////////////////////////////////////////////////////////////////////////////////////
+void start(){
+    if (state[direct_count]=="starting"){
+        if (junc!=-1){
+            junc=-1;
+            leftSpeed = 0.5 * MAX_SPEED;
+            rightSpeed = 0.5 * MAX_SPEED;
+        }
+    }
 
+}
+void stop(){
+    if (state[direct_count]=="complete"){
+        
+        if (junc!=-1){
+            junc=-1;
+            leftSpeed = 0;
+            rightSpeed = 0;
+        }
+    }
 
+}
 
 int main(int argc, char **argv) {
   // create the Robot instance.
@@ -764,10 +790,12 @@ int main(int argc, char **argv) {
           junc = juncFind();
       }
       //......................................................
+      //start();
       maze();
       pillarCnt();
       correct();
       gatesync();
+      stop();
       setMotors();
       canUpdateStates=false;
       
