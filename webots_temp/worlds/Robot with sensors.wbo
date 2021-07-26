@@ -1,17 +1,4 @@
-#VRML_SIM R2021a utf8
-WorldInfo {
-  coordinateSystem "NUE"
-}
-Viewpoint {
-  orientation 0.032162888622141166 0.9962364829558594 0.0804886241851564 3.0280331407136454
-  position 0.015243663803721096 0.1811326775334292 -0.7149498754760015
-}
-TexturedBackground {
-}
-TexturedBackgroundLight {
-}
-RectangleArena {
-}
+#VRML_OBJ R2021a utf8
 Robot {
   children [
     DistanceSensor {
@@ -716,18 +703,4 @@ Robot {
   physics Physics {
   }
   controller "cpp_controller"
-}
-Solid {
-  translation -0.005 -0.01 0.12
-  children [
-    DEF colour_box Shape {
-      geometry Box {
-        size 0.05 0.05 0.05
-      }
-    }
-  ]
-  contactMaterial "10"
-  boundingObject USE colour_box
-  physics Physics {
-  }
 }
