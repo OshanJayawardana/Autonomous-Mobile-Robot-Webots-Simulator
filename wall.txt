@@ -1,0 +1,85 @@
+//Wall following
+void wallFollowing() {
+    
+    if (leftWall) {
+        cout << "left wall" << endl;
+        if (leftDsValue > 550) {
+            //cout << "turn left" << endl;
+            leftSpeed = MAX_SPEED * 0.3;
+            rightSpeed = MAX_SPEED * 0.5;
+        }
+        else if (leftDsValue < 500) {
+            //cout << "turn right" << endl;
+            rightSpeed = MAX_SPEED * 0.3;
+            leftSpeed = MAX_SPEED * 0.5;
+        }
+        else {
+            leftSpeed = MAX_SPEED * 0.5;
+            rightSpeed = MAX_SPEED * 0.5;
+        }
+    }
+
+    else if (rightWall) {
+        cout << "right wall" << endl;
+        if (rightDsValue > 550) {
+            //cout << "turn right" << endl;
+            rightSpeed = MAX_SPEED * 0.3;
+            leftSpeed = MAX_SPEED * 0.5;
+        }
+        else if (rightDsValue < 450) {
+            //cout << "turn left" << endl;
+            leftSpeed = MAX_SPEED * 0.3;
+            rightSpeed = MAX_SPEED * 0.5;
+        }
+        else {
+            leftSpeed = MAX_SPEED * 0.5;
+            rightSpeed = MAX_SPEED * 0.5;
+        }
+    }
+    
+    
+}
+//No line
+void noLine() {
+    //cout << "no line" << endl;
+    leftSpeed = MAX_SPEED * 0.5;
+    rightSpeed = MAX_SPEED * 0.5;
+}
+
+void wall() {
+    leftDsValue = ds[0]->getValue();
+    rightDsValue = ds[1]->getValue();
+
+    cout << "left ds: " << leftDsValue << endl;
+    cout << "right ds: " << rightDsValue << endl;
+    
+    //cout << "hey" << endl;
+
+    leftWall = leftDsValue < 1000;
+    rightWall = rightDsValue < 1000;
+
+    ///////////////////////////////
+    //for checking whether there is a line
+    bool cond = false;
+    for (int j = 0; j < 8; j++) {
+        //cout << junValues[j] << endl;
+        if (junValues[j] < 75000) {
+            cond = true;
+            //cout << "hey" << endl;
+        }
+    }
+
+    //cout << "cond" << cond << endl;
+
+    //condition for wall following
+    if ((leftWall or rightWall) && !cond) {
+        wallFollowing();
+    }
+    else if (!cond) {
+        noLine();
+    }
+
+
+    //cout << leftSpeed << endl;
+    //cout << rightSpeed << endl;
+}
