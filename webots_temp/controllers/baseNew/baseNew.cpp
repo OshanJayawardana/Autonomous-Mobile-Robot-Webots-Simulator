@@ -353,7 +353,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 35.0;
+        hardLength = 28.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -365,13 +365,13 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 35.0;
+        hardLength = 28.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 37.0;
+        hardLength = 34.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -593,7 +593,7 @@ void maze(){
     //box check
     const double value = fds->getValue();
     std::cout << "fds"<< value << std::endl;
-    if (value<400 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
+    if (value<500 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
         boxFound=true;
         colorChecked=true;
         junc=9;
@@ -604,7 +604,7 @@ void maze(){
         direct[direct_count]=-1;
         
     }
-    else if (value<400 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
+    else if (value<500 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
         boxFound=true;
         //direct_count=direct.size();
         //direct_count+=1;
