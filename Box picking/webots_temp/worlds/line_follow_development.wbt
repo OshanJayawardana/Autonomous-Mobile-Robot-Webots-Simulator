@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.04488675162951533 0.9983212898184457 0.03660303024866807 1.3698313377684732
-  position 0.7232903961590971 0.20314818004423815 0.09175924484598758
+  orientation 0.2044806818605955 0.9410713711401312 0.26939251134034775 4.382129444867232
+  position -1.8296303173931234 0.7686712914794704 -4.913932368872962
 }
 TexturedBackground {
 }
@@ -35,7 +35,7 @@ RectangleArena {
   }
 }
 DEF box Solid {
-  translation -0.0175922 0.025 0.201604
+  translation -0.547592 0.025 -4.7284
   children [
     DEF box Shape {
       appearance PBRAppearance {
@@ -427,7 +427,7 @@ DEF Gate1 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.03824918307685946 0.2720566736478762 0
+        translation -0.03824918307685946 0.2720566736478764 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
@@ -529,7 +529,7 @@ DEF Gate3 Robot {
         }
       ]
       endPoint Solid {
-        translation -0.03824918307685946 0.2720566736478762 0
+        translation -0.03824918307685946 0.2720566736478764 0
         rotation 0 0 -1 1.4171963267948964
         children [
           DEF gate Shape {
@@ -656,7 +656,8 @@ DEF R1Pillar Solid {
   }
 }
 Robot {
-  translation -0.02 0.0207204 0.02
+  translation -0.55 0.0207204 -4.31
+  rotation 0 1 0 3.14159
   children [
     DistanceSensor {
       translation 0 0.006731 0.0365
@@ -707,6 +708,15 @@ Robot {
       boundingObject USE shapr_ir
       physics Physics {
       }
+      lookupTable [
+        0 0 0
+        0.03 3000 0.1
+        0.06 2000 0.1
+        0.12 1050 0.1
+        0.25 525 0.1
+        0.4 300 0.1
+        0.8 150 0.1
+      ]
       type "laser"
     }
     DistanceSensor {
@@ -1078,7 +1088,7 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.016 0.0199984 0.0620031
+        translation -0.016 0.0199984 0.06200309999999999
         rotation -4.52716999091886e-05 -0.9999999979940803 4.429799991114177e-05 1.5708
         children [
           DEF colorsensor Shape {
@@ -1112,6 +1122,8 @@ Robot {
         ]
         name "solid(5)"
         boundingObject USE colorsensor
+        physics Physics {
+        }
       }
     }
     SliderJoint {
@@ -1220,8 +1232,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.060081277078417726 -0.010520666433827094 0.0700544695790029
-        rotation -0.3118788488514006 -0.1975592927112151 -0.9293556420997129 4.432900213335847
+        translation -0.06000916482307911 -0.010520660331874114 0.07009741230263568
+        rotation -0.6177933407813319 -0.4555526185109053 -0.6409393105857208 4.133531210592253
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1244,8 +1256,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06004569234170725 -0.010413686601714394 0.06997850099570453
-        rotation -0.2386853992580868 0.5487670754554412 -0.8011766204009512 0.6129237911181566
+        translation 0.05993140098321856 -0.010427239075053392 0.07000015065700473
+        rotation -0.3579370981605201 0.926077366617855 0.11942254727883296 2.5979287501055173
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1276,7 +1288,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.086 0.0192256 -0.06
-        rotation -1.7569230654015369e-07 1.762560708153945e-07 0.999999999999969 1.5740000000000312
+        rotation -1.7569230646117443e-07 1.7625607076529665e-07 0.999999999999969 1.5740000000000312
         children [
           Shape {
             geometry DEF wheel Cylinder {
@@ -1308,7 +1320,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.08599999999999997 0.019225578849270303 -0.060000006777253694
-        rotation -1.7569230654015369e-07 1.762560708153945e-07 0.999999999999969 1.5740000000000312
+        rotation -1.756923063827953e-07 1.7625607076529668e-07 0.999999999999969 1.574000000000031
         children [
           Shape {
             geometry DEF wheel Cylinder {
