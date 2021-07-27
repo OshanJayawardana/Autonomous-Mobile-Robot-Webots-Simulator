@@ -30,6 +30,8 @@ PositionSensor* pos_right;
 LED* led;
 Motor* leftMotor;
 Motor* rightMotor;
+Motor* sensorMotor;
+Motor* sliderMotor;
 
 //initial pid values
 double p = 0;
@@ -104,6 +106,7 @@ double junValues[8];
 // pid controll
 void pido() {
     // initializing the pid coefficients
+    // 0.14 0.001 0.0001
     float kp = 0.14;
     float ki = 0.001;
     float kd = 0.0001;
@@ -150,10 +153,12 @@ void pido() {
 };
 //..........................................................................
 
+// Aruna check this
 void pid() {
     // initializing the PID coefficients
     //float kp = 0.14;
     //float ki = 0.001;
+    // 0.0001
     float kp = 0.14;
     float ki = 0.001;
     float kd = 0.0001;
@@ -168,6 +173,7 @@ void pid() {
         junValues[j] = irVal;
         irSum += irVal;
     }
+    
 
     //for (double item : junValues)
         //std::cout << item << ", ";
@@ -302,10 +308,13 @@ void wall() {
 
 //junction identificationh
 int juncFind() {
+    
     double ir_left = ts[0]->getValue();
     double ir_right = ts[1]->getValue();
-    bool left = ir_left < 250;
-    bool right = ir_right < 250;
+    std::cout << "ir val "<< ir_left  <<std::endl;
+    //250 was the previous threshold
+    bool left = ir_left < 60000;
+    bool right = ir_right < 60000;
     if (left && !right) {
         junc = 0;
     }
@@ -765,7 +774,12 @@ int main(int argc, char **argv) {
   leftMotor->setVelocity(0.1 * MAX_SPEED);
   rightMotor->setVelocity(0.1 * MAX_SPEED);
   //....................................................
-
+  sensorMotor = robot->getMotor("sensor_motor");
+  sliderMotor = robot->getMotor("slider_motor");
+  sensorMotor->setPosition(INFINITY);
+  sliderMotor->setPosition(INFINITY);
+  sensorMotor->setVelocity(0);
+  sliderMotor->setVelocity(0);
 
   // Main loop:
   while (robot->step(TIME_STEP) != -1) {
