@@ -159,9 +159,9 @@ void pid() {
     //float kp = 0.14;
     //float ki = 0.001;
     // 0.0001
-    float kp = 0.14;
+    float kp = 0.1;
     float ki = 0.001;
-    float kd = 0.0001;
+    float kd = 0.005;
 
     // initializing the array to store IR sensor values
     double irValues[8];
@@ -207,17 +207,22 @@ void pid() {
     p = error;
     i = i + p;
 
-    if (i > 100) {
-        i = 100;
+    if (i > 200) {
+        i = 200;
     }
-    else if (i < -100) {
-        i = -100;
+    else if (i < -200) {
+        i = -200;
     }
 
     d = error - lastError;
     lastError = error;
+    
+    cout << "p: " << p << endl;
+    cout << "i: " << i << endl;
+    cout << "d: " << d << endl;
+    
     double motorSpeed = kp * p + ki * i + kd * d;
-    //cout << "motor speed: " << motorSpeed << endl;
+    cout << "motor speed: " << motorSpeed << endl;
 
     leftSpeed = 0.5 * MAX_SPEED - motorSpeed;
     rightSpeed = 0.5 * MAX_SPEED + motorSpeed;
@@ -742,14 +747,14 @@ int main(int argc, char **argv) {
   //....................................................
 
   //two irs to detect junctions
-  for (int i = 0; i < 2; i++) {
-      ts[i] = robot->getDistanceSensor("ts" + to_string(i));
-      ts[i]->enable(TIME_STEP);
-  }
+  // for (int i = 0; i < 2; i++) {
+      // ts[i] = robot->getDistanceSensor("ts" + to_string(i));
+      // ts[i]->enable(TIME_STEP);
+  // }
   //....................................................
   
-  fds = robot->getDistanceSensor("fds");
-  fds->enable(TIME_STEP);
+  // fds = robot->getDistanceSensor("fds");
+  // fds->enable(TIME_STEP);
 
   //brakes
   left_brk = robot->getBrake("brake_left");
@@ -759,14 +764,14 @@ int main(int argc, char **argv) {
   //....................................................
 
   //encorders
-  pos_left = robot->getPositionSensor("pos_left");
-  pos_right = robot->getPositionSensor("pos_right");
-  pos_left->enable(TIME_STEP);
-  pos_right->enable(TIME_STEP);
-  //....................................................
+  // pos_left = robot->getPositionSensor("pos_left");
+  // pos_right = robot->getPositionSensor("pos_right");
+  // pos_left->enable(TIME_STEP);
+  // pos_right->enable(TIME_STEP);
+  // //....................................................
 
   //led
-  led = robot->getLED("led");
+  // led = robot->getLED("led");
   //....................................................
 
   //motors
@@ -777,70 +782,73 @@ int main(int argc, char **argv) {
   leftMotor->setVelocity(0.1 * MAX_SPEED);
   rightMotor->setVelocity(0.1 * MAX_SPEED);
   //....................................................
-  sensorMotor = robot->getMotor("sensor_motor");
-  sliderMotor = robot->getMotor("slider_motor");
-  sensorMotor->setPosition(INFINITY);
-  sliderMotor->setPosition(INFINITY);
-  sensorMotor->setVelocity(0);
-  sliderMotor->setVelocity(0);
+  // sensorMotor = robot->getMotor("sensor_motor");
+  // sliderMotor = robot->getMotor("slider_motor");
+  // sensorMotor->setPosition(INFINITY);
+  // sliderMotor->setPosition(INFINITY);
+  // sensorMotor->setVelocity(0);
+  // sliderMotor->setVelocity(0);
 
   // Main loop:
   while (robot->step(TIME_STEP) != -1) {
       //std::cout<<"junc"<<junc<<std::endl;
       //turning code
       //......................................................
-      if (junc != -1 && turn_command) {
-          sharpTurn(direct[direct_count]);
-          std::cout << "Motor state = turn"<< std::endl;
-       }
-      //for brakes
-      else if (junc != -1) {
-          brakes();
-          std::cout<< "Motor state = brake" << std::endl;
-      }
-      //for line following pid
-      else {
-          dc = 0;
+      // if (junc != -1 && turn_command) {
+          // sharpTurn(direct[direct_count]);
+          // std::cout << "Motor state = turn"<< std::endl;
+       // }
+      // //for brakes
+      // else if (junc != -1) {
+          // brakes();
+          // std::cout<< "Motor state = brake" << std::endl;
+      // }
+      // //for line following pid
+      // else {
+          //dc = 0;
           //std::cout << "Motor state = line follow"<< std::endl;
           pid();
           //std::cout <<"pid_left"<< leftSpeed<< std::endl;
-          wall();
+          //wall();
           //std::cout <<"wall_left"<< leftSpeed<< std::endl;
-          junc = juncFind();
-      }
+          //junc = juncFind();
+      //}
       //......................................................
       //start();
-      maze();
-      pillarCnt();
-      correct();
-      gatesync();
-      stop();
+      // maze();
+      // pillarCnt();
+      // correct();
+      // gatesync();
+      // stop();
       //std::cout <<"final_left"<< leftSpeed<< std::endl;
       setMotors();
-      canUpdateStates=false;
+      std::cout << "leftspeed: " << leftSpeed << std::endl; 
+      std::cout << "rightspeed: " << rightSpeed << std::endl; 
+      std::cout << "############################################################" << std::endl;
+      //canUpdateStates=false;
       
-      cout << "quad = "<< quad << " rad = " << rad<< endl;
+      // cout << "quad = "<< quad << " rad = " << rad<< endl;
       
-      cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
-      std::cout << "No. of pillars: " << count << std::endl; 
+      // cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
+      // std::cout << "No. of pillars: " << count << std::endl; 
       
-      for(int i=0; i<direct.size(); ++i){
-        if (i==direct_count){
-              std::cout << '*';
-        }
-        std::cout << direct[i] <<" ";
-      }
-      std::cout<< " " << std::endl; 
+      // for(int i=0; i<direct.size(); ++i){
+        // if (i==direct_count){
+              // std::cout << '*';
+        // }
+        // std::cout << direct[i] <<" ";
+      // }
+      // std::cout<< " " << std::endl; 
       
       
       
-      for(int i=0; i<state.size(); ++i){
-        if (i==direct_count){
-              std::cout << '*';
-        }
-        std::cout << state[i] <<" ";
-      }
-      std::cout<< " " << std::endl; 
+      // for(int i=0; i<state.size(); ++i){
+        // if (i==direct_count){
+              // std::cout << '*';
+        // }
+        // std::cout << state[i] <<" ";
+      // }
+      // std::cout<< " " << std::endl; 
       
       
   };

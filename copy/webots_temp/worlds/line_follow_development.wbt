@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.41079756305528226 -0.7618006966605101 -0.5009042430998194 2.0247365440802225
-  position 0.3969099483699041 2.22276345051479 3.5851794964257953
+  orientation 0.13393344466715226 0.9159537219415812 0.3782731971220741 3.7688035225495966
+  position 3.002187212732679 0.6914993377218349 3.505629667500397
 }
 TexturedBackground {
 }
@@ -35,8 +35,8 @@ RectangleArena {
   }
 }
 DEF Fin Robot {
-  translation 1.92 0.02 3.41
-  rotation 0 1 0 -3.1415853071795863
+  translation 3.9158 0.0202489 4.49753
+  rotation 8.728804596479875e-05 0.9999998262909329 0.0005829227228593672 -3.0897265907697036
   children [
     LED {
       translation 0 0.05 0
@@ -469,6 +469,7 @@ DEF Fin Robot {
     }
     SliderJoint {
       jointParameters JointParameters {
+        position -9.448611205411393e-07
         axis 0 1 0
       }
       device [
@@ -477,7 +478,7 @@ DEF Fin Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.0292956 0.101385
+        translation 0 0.02929465513887946 0.101385
         children [
           DistanceSensor {
             translation 0 0.006731 0.0365
@@ -560,6 +561,7 @@ DEF Fin Robot {
           }
           HingeJoint {
             jointParameters HingeJointParameters {
+              position 1.5743239721568343e-09
               axis 0 0 1
               anchor 0.03 0 0
             }
@@ -569,7 +571,7 @@ DEF Fin Robot {
               }
             ]
             endPoint Solid {
-              translation 0.03 -0.01 0.0165
+              translation 0.030000000015582173 -0.01 0.0165
               rotation 0 0 1 0
               children [
                 DEF clamp Shape {
@@ -617,11 +619,12 @@ DEF Fin Robot {
     }
     DEF right_caster BallJoint {
       jointParameters BallJointParameters {
+        position -1.4327391452545633
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.06000683563018415 -0.010509972416744442 0.0700992664347313
-        rotation -0.004459784999487234 -0.6667054556621675 -0.7453079536057962 3.2145815213436224
+        translation -0.05998321364004943 -0.01045037337003511 0.07008517872808359
+        rotation -0.02356899677312395 -0.8601475065622863 -0.5095005096619534 2.8431788988959714
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -638,11 +641,12 @@ DEF Fin Robot {
     }
     DEF left_caster BallJoint {
       jointParameters BallJointParameters {
+        position -0.28412246189178414
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.059974133775019596 -0.010529115949836321 0.07009210428801305
-        rotation -0.09821935898118028 -0.5601485873140568 -0.8225487934775617 3.5794486699032277
+        translation 0.059996137369508734 -0.010459069262948645 0.06990884214323433
+        rotation -0.07690852867827791 -0.8368917527752302 0.5419384396343789 2.8746588962940502
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -659,6 +663,7 @@ DEF Fin Robot {
     }
     DEF right_wheel HingeJoint {
       jointParameters HingeJointParameters {
+        position 34.59185571118524
         anchor -0.086 0.0192256 -0.06
       }
       device [
@@ -673,8 +678,8 @@ DEF Fin Robot {
         }
       ]
       endPoint Solid {
-        translation -0.086 0.0192256 -0.06
-        rotation -1.7569230654015369e-07 1.762560708153945e-07 0.999999999999969 1.5740000000000312
+        translation -0.08600539722740441 0.019226558208088503 -0.06000419497572196
+        rotation 0.705751298897485 -0.7083947861262047 -0.009588070385737746 -3.1223023356730746
         children [
           Shape {
             geometry DEF wheel Cylinder {
@@ -691,6 +696,7 @@ DEF Fin Robot {
     }
     DEF left_wheel HingeJoint {
       jointParameters HingeJointParameters {
+        position 28.545261050994053
         anchor 0.08599999999999997 0.019225578849270303 -0.060000006777253694
       }
       device [
@@ -705,8 +711,8 @@ DEF Fin Robot {
         }
       ]
       endPoint Solid {
-        translation 0.08599999999999997 0.019225578849270303 -0.060000006777253694
-        rotation -1.7569230654015369e-07 1.762560708153945e-07 0.999999999999969 1.5740000000000312
+        translation 0.08600527479955788 0.0192261109109332 -0.060004019075497794
+        rotation -0.7025965611305319 0.7053605961351732 0.09393881895885275 2.9546744602729476
         children [
           Shape {
             geometry DEF wheel Cylinder {
@@ -773,8 +779,8 @@ DEF Fin Robot {
   controller "baseNew"
 }
 DEF box Solid {
-  translation 3.45322 0.024949915275412803 3.10072
-  rotation 7.046998482533887e-18 0.9999999999999999 -6.080479904215923e-17 2.3562
+  translation 3.45322 0.024950949999989234 3.10072
+  rotation 1.1175932238290317e-17 1 -2.3932297663405425e-17 2.3562
   children [
     DEF box Shape {
       appearance PBRAppearance {
@@ -824,17 +830,17 @@ DEF path1 Solid {
   name "solid(3)"
 }
 Robot {
-  translation 1.11134 0.029925 4.58643
-  rotation 0.7010268083506999 7.37475032781542e-05 -0.7131349160817588 3.1415639824419586
+  translation 1.1113402522120481 0.029972021018864693 4.586429823757549
+  rotation 0.701026813562233 6.867990856770836e-05 -0.713134911464761 3.141565863142086
   children [
     DEF caster_left BallJoint {
       jointParameters BallJointParameters {
-        position 1.9964835563803431
+        position 1.996484913912043
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.056018913891673024 0.016023806179687333 -0.15002268770275962
-        rotation -0.7079577293363202 -0.18358218475914087 0.6819775912095808 2.0904160632793247
+        translation 0.05601891382710475 0.016023688998212212 -0.1500226874461315
+        rotation -0.7079617057332935 -0.18358756969892115 0.6819720136979592 2.090437153479863
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -853,12 +859,12 @@ Robot {
     }
     DEF caster_right BallJoint {
       jointParameters BallJointParameters {
-        position -2.5972421484140535
+        position -2.5972415125276784
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05600001330447299 0.01599997872185722 -0.14999999937118438
-        rotation -0.07350617981984144 -0.9969385187830604 -0.02665391706542622 2.2717957263575
+        translation -0.056000013306956746 0.016000011337247808 -0.14999999936744118
+        rotation -0.07351143230138668 -0.9969381451526759 -0.0266534061714613 2.2718015504063946
         children [
           USE caster
         ]
@@ -1005,7 +1011,7 @@ Robot {
     }
     DEF leftwheel HingeJoint {
       jointParameters HingeJointParameters {
-        position 588.8368686905886
+        position 588.836868690137
         anchor 0.075 0 0
       }
       device [
@@ -1021,7 +1027,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.0750045 0 0
-        rotation -0.633369059309796 0.6333972785784981 0.4445801639731313 2.3021041600339434
+        rotation -0.6333690593701501 0.6333972786384695 0.44458016380170656 2.302104160320022
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -1043,7 +1049,7 @@ Robot {
     }
     DEF rightwheel HingeJoint {
       jointParameters HingeJointParameters {
-        position 595.0203503984942
+        position 595.0203503959037
         anchor -0.075 0 0
       }
       device [
@@ -1058,8 +1064,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.07500442134343432 -4.531203832386548e-06 -1.78630667456097e-07
-        rotation -0.6541810970248568 0.6466931392337214 0.3922181484370517 2.392805444569373
+        translation -0.07500442134343432 -4.53120383284929e-06 -1.7863065571815498e-07
+        rotation -0.6541810973159898 0.6466931395264299 0.39221814746885053 2.392805446264008
         children [
           USE wheel
         ]
@@ -1655,8 +1661,8 @@ DEF Gate4 Robot {
   controller "gate2"
 }
 DEF L1Pillar Solid {
-  translation 3.59 0.04996468421366191 0.49
-  rotation 0.13363152051314864 0.9674344753871871 -0.21497244604288682 -9.349779865454876e-16
+  translation 3.59 0.04996468399999024 0.49
+  rotation 0.1003703613641868 0.9949501447608431 7.871339351084748e-15 -8.659582512137479e-16
   children [
     DEF pillar Shape {
       appearance PBRAppearance {
@@ -1673,8 +1679,8 @@ DEF L1Pillar Solid {
   }
 }
 DEF L2Pillar Solid {
-  translation 2.015 0.049964684240346946 0.49
-  rotation -0.1796316913693485 0.9671943501238873 -0.1796316913693632 -7.862720695291986e-16
+  translation 2.015 0.04996468399999024 0.49
+  rotation -0.21841294679347448 0.9758564365074357 -5.276980555921899e-15 -9.451215768434604e-16
   children [
     DEF pillar Shape {
       appearance PBRAppearance {
@@ -1691,8 +1697,8 @@ DEF L2Pillar Solid {
   }
 }
 DEF R1Pillar Solid {
-  translation 3.72 0.049964684240346946 0.49
-  rotation -0.1796316913693485 0.9671943501238873 -0.1796316913693632 -7.862720695291986e-16
+  translation 3.72 0.04996468399999024 0.49
+  rotation -0.21841294679347448 0.9758564365074357 -5.276980555921899e-15 -9.451215768434604e-16
   children [
     DEF pillar Shape {
       appearance PBRAppearance {
