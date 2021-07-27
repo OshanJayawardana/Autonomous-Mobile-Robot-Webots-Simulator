@@ -79,7 +79,7 @@ vector<string> state{"starting","startingPath","wallFollow","straighPath","enter
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 0;
+int direct_count = 3;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -221,11 +221,13 @@ void pid() {
 
     leftSpeed = 0.5 * MAX_SPEED - motorSpeed;
     rightSpeed = 0.5 * MAX_SPEED + motorSpeed;
+    //std::cout <<"left"<< leftSpeed<< std::endl;
 };
 //..........................................................................
 
 //Wall following
 void wallFollowing() {
+    std::cout << "wall following"<<std::endl;
     if (leftWall) {
         //cout << "left wall" << endl;
         if (leftDsValue > 400) {
@@ -285,7 +287,7 @@ void wall() {
     //for checking whether there is a line
     bool cond = false;
     for (int j = 0; j < 8; j++) {
-        if (junValues[j] < 400) {
+        if (junValues[j] < 60000) {
             cond = true;
             //cout << "hey" << endl;
         }
@@ -311,7 +313,7 @@ int juncFind() {
     
     double ir_left = ts[0]->getValue();
     double ir_right = ts[1]->getValue();
-    std::cout << "ir val "<< ir_left  <<std::endl;
+    //std::cout << "ir val "<< ir_left  <<std::endl;
     //250 was the previous threshold
     bool left = ir_left < 60000;
     bool right = ir_right < 60000;
@@ -590,6 +592,7 @@ void maze(){
     
     //box check
     const double value = fds->getValue();
+    std::cout << "fds"<< value << std::endl;
     if (value<400 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
         boxFound=true;
         colorChecked=true;
@@ -798,9 +801,11 @@ int main(int argc, char **argv) {
       //for line following pid
       else {
           dc = 0;
-          std::cout << "Motor state = line follow"<< std::endl;
+          //std::cout << "Motor state = line follow"<< std::endl;
           pid();
+          //std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
+          //std::cout <<"wall_left"<< leftSpeed<< std::endl;
           junc = juncFind();
       }
       //......................................................
@@ -810,6 +815,7 @@ int main(int argc, char **argv) {
       correct();
       gatesync();
       stop();
+      //std::cout <<"final_left"<< leftSpeed<< std::endl;
       setMotors();
       canUpdateStates=false;
       
