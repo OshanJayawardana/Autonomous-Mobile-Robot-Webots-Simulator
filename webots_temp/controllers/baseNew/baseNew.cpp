@@ -10,12 +10,18 @@
 #include<string> 
 #include <webots/LED.hpp>
 #include <string>
+#include <cmath>
+#include <ctime>
+#include <chrono>
+#include <thread>
 
 
 #define TIME_STEP 64
 #define MAX_SPEED 6.28
 using namespace webots;
 using namespace std;
+using namespace std::this_thread;
+using namespace std::chrono;
 
 ////////////////////////////////////////////////////////////////////////////////////
 //Global Variables
@@ -32,6 +38,7 @@ Motor* leftMotor;
 Motor* rightMotor;
 Motor* sensorMotor;
 Motor* sliderMotor;
+Motor* leftArmMotor; = robot->getMotor("left_arm_motor");
 
 //initial pid values
 double p = 0;
@@ -104,11 +111,11 @@ double junValues[8];
 ////////////////////////////////////////////////////////////////////////////////////
 
 // pid controll
-void pido() {
+void pid() {
     // initializing the pid coefficients
     // 0.14 0.001 0.0001
-    float kp = 0.14;
-    float ki = 0.001;
+    float kp = 0.07;
+    float ki = 0.005;
     float kd = 0.0001;
 
     // initializing the array to store ir sensor values
@@ -154,14 +161,14 @@ void pido() {
 //..........................................................................
 
 // Aruna check this
-void pid() {
+void pido() {
     // initializing the PID coefficients
     //float kp = 0.14;
     //float ki = 0.001;
     // 0.0001
-    float kp = 0.14;
+    float kp = 0.1;
     float ki = 0.001;
-    float kd = 0.0001;
+    float kd = 0.005;
 
     // initializing the array to store IR sensor values
     double irValues[8];
@@ -207,11 +214,11 @@ void pid() {
     p = error;
     i = i + p;
 
-    if (i > 100) {
-        i = 100;
+    if (i > 200) {
+        i = 200;
     }
-    else if (i < -100) {
-        i = -100;
+    else if (i < -200) {
+        i = -200;
     }
 
     d = error - lastError;
@@ -229,15 +236,15 @@ void pid() {
 void wallFollowing() {
     std::cout << "wall following"<<std::endl;
     if (leftWall) {
-        //cout << "left wall" << endl;
-        if (leftDsValue > 400) {
+        cout << "left wall" << endl;
+        if (leftDsValue > 550) {
             //cout << "turn left" << endl;
-            leftSpeed = -MAX_SPEED * 0.5;
+            leftSpeed = MAX_SPEED * 0.3;
             rightSpeed = MAX_SPEED * 0.5;
         }
-        else if (leftDsValue < 300) {
+        else if (leftDsValue < 450) {
             //cout << "turn right" << endl;
-            rightSpeed = -MAX_SPEED * 0.5;
+            rightSpeed = MAX_SPEED * 0.3;
             leftSpeed = MAX_SPEED * 0.5;
         }
         else {
@@ -247,15 +254,15 @@ void wallFollowing() {
     }
 
     else if (rightWall) {
-        //cout << "right wall" << endl;
-        if (rightDsValue > 400) {
+        cout << "right wall" << endl;
+        if (rightDsValue > 550) {
             //cout << "turn right" << endl;
-            rightSpeed = -MAX_SPEED * 0.5;
+            rightSpeed = MAX_SPEED * 0.3;
             leftSpeed = MAX_SPEED * 0.5;
         }
-        else if (rightDsValue < 300) {
+        else if (rightDsValue < 450) {
             //cout << "turn left" << endl;
-            leftSpeed = -MAX_SPEED * 0.5;
+            leftSpeed = MAX_SPEED * 0.3;
             rightSpeed = MAX_SPEED * 0.5;
         }
         else {
@@ -277,8 +284,10 @@ void wall() {
     leftDsValue = ds[0]->getValue();
     rightDsValue = ds[1]->getValue();
 
-    //cout << "left ds: " << leftDsValue << endl;
-    //cout << "right ds: " << rightDsValue << endl;
+    cout << "left ds: " << leftDsValue << endl;
+    cout << "right ds: " << rightDsValue << endl;
+    
+    //cout << "hey" << endl;
 
     leftWall = leftDsValue < 1000;
     rightWall = rightDsValue < 1000;
@@ -287,7 +296,8 @@ void wall() {
     //for checking whether there is a line
     bool cond = false;
     for (int j = 0; j < 8; j++) {
-        if (junValues[j] < 60000) {
+        //cout << junValues[j] << endl;
+        if (junValues[j] < 75000) {
             cond = true;
             //cout << "hey" << endl;
         }
@@ -302,6 +312,10 @@ void wall() {
     else if (!cond) {
         noLine();
     }
+
+
+    //cout << leftSpeed << endl;
+    //cout << rightSpeed << endl;
 
 
     //cout << leftSpeed << endl;
@@ -353,7 +367,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 28.0;
+        hardLength = 38.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -365,7 +379,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 28.0;
+        hardLength = 38.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
@@ -381,6 +395,18 @@ void sharpTurn(int turn) {
         std::cout << "ramp right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
+    }
+    else if (turn == 52){
+        hardLength = 29.0;
+        std::cout << "mid right"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = 0 * MAX_SPEED;
+    }
+    else if (turn == 50){
+        hardLength = 29.0;
+        std::cout << "mid left"<<std::endl;
+        leftSpeed = 0 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;;
     }
     else if (turn == 41){
         hardLength = 8.0;
@@ -618,25 +644,25 @@ void maze(){
     if (boxFound && colorChecked && canUpdateStates && checked){//exit path
         direct_count=direct.size();
         if (rad==1){
-            vector<int> mazeStates{0,0,2};
+            vector<int> mazeStates{50,0,2};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==2){
-            vector<int> mazeStates{2,2,0};
+            vector<int> mazeStates{52,2,0};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==3){
-            vector<int> mazeStates{2,0,2};
+            vector<int> mazeStates{52,0,2};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==4){
-            vector<int> mazeStates{0,2,0};
+            vector<int> mazeStates{50,2,0};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
@@ -720,6 +746,86 @@ void stop(){
     }
 
 }
+////////////////////////////////////////////////////
+void expose_sharpir(){
+  sliderMotor->setVelocity(1);
+  sliderMotor->setPosition(0.09);
+  sensorMotor->setPosition(-M_PI/2);
+}
+void detect_color(){
+  const unsigned char *image = cm->getImage();
+  width = cm->getWidth();
+  height = cm->getHeight();
+  
+  r = cm->imageGetRed(image, width, (int)(width/2), (int)(height/2));
+  g = cm->imageGetGreen(image, width, (int)(width/2), (int)(height/2));
+  b = cm->imageGetBlue(image, width, (int)(width/2), (int)(height/2));
+
+  int m = std::max({r, g, b});
+
+  if (m==r) {
+    return 1;
+  }
+  if (m==g) {
+    return 2;
+  }
+  if (m==b) {
+    return 3;
+  }
+}
+void pickup(){
+  std::time_t initial_time = time(NULL);
+  while(robot->step(32)!=-1){
+    std::cout << "Initial time : " << initial_time << std::endl;
+    std::time_t current_time;
+    current_time = time(NULL);
+    std::time_t temp_time = current_time - initial_time;
+    std::cout << "temp_time :" << temp_time << std::endl;
+    if(0<=temp_time && temp_time<=3){
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.09);
+      leftArmMotor->setPosition(M_PI/24);
+      leftArmMotor->setVelocity(3.0);
+    }
+    else if(3<temp_time && temp_time<5){
+      rightMotor->setVelocity(1.0);
+      leftMotor->setVelocity(1.0);
+      //rightMotor->setPosition(INFINITY);
+      //leftMotor->setPosition(INFINITY);
+    }
+    else if(5<=temp_time && temp_time<=7){
+      rightMotor->setVelocity(0.0);
+      leftMotor->setVelocity(0.0);
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.0);
+    }
+    else if(7<temp_time && temp_time<=9){
+      leftArmMotor->setVelocity(1.0);
+      leftArmMotor->setPosition(-M_PI/24);
+      
+    }
+    else if(9<temp_time && temp_time<=12){
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.09);
+    }
+    else if(12<temp_time && temp_time<=16){
+      sensorMotor->setPosition(-M_PI/2);
+    }
+    else if(16<temp_time && temp_time<=18){
+      sensorMotor->setPosition(0);
+    }
+    else if(18<temp_time && temp_time<=20){
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.0);
+    }
+    else if(20<temp_time && temp_time<=21){
+      leftArmMotor->setPosition(M_PI/24);
+      leftArmMotor->setVelocity(3.0);
+    }
+    if(temp_time > 20){
+      break;
+    }
+  }
 
 int main(int argc, char **argv) {
   // create the Robot instance.
@@ -779,10 +885,11 @@ int main(int argc, char **argv) {
   //....................................................
   sensorMotor = robot->getMotor("sensor_motor");
   sliderMotor = robot->getMotor("slider_motor");
-  sensorMotor->setPosition(INFINITY);
-  sliderMotor->setPosition(INFINITY);
-  sensorMotor->setVelocity(0);
-  sliderMotor->setVelocity(0);
+  //sensorMotor->setPosition(INFINITY);
+  //sliderMotor->setPosition(INFINITY);
+  //sensorMotor->setVelocity(0);
+  //sliderMotor->setVelocity(0);
+  leftArmMotor = robot->getMotor("left_arm_motor");
 
   // Main loop:
   while (robot->step(TIME_STEP) != -1) {
