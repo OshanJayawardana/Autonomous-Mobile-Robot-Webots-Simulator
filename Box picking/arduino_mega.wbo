@@ -1,0 +1,21 @@
+#VRML_OBJ R2021a utf8
+DEF arduino_mega Solid {
+  translation 0 0.051 0
+  children [
+    DEF arduino_mega Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.101 0.01 0.054
+      }
+    }
+  ]
+  name "solid(10)"
+  boundingObject USE arduino_mega
+  physics Physics {
+    density 692
+  }
+}
