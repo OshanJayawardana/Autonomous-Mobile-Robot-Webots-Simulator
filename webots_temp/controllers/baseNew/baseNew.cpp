@@ -47,6 +47,9 @@ Motor* rightArmMotor;
 Camera *cm;
 
 //initial pid values
+float kp = 0.07;
+float ki = 0.005;
+float kd = 0.0001;
 double p = 0;
 double i = 0;
 double d = 0;
@@ -97,7 +100,7 @@ vector<string> state{"starting","startingPath","wallFollow","straighPath","enter
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 3;
+int direct_count = 0;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -132,9 +135,7 @@ int height;
 void pid() {
     // initializing the pid coefficients
     // 0.14 0.001 0.0001
-    float kp = 0.07;
-    float ki = 0.005;
-    float kd = 0.0001;
+    
 
     // initializing the array to store ir sensor values
     double ir_values[8];
@@ -184,7 +185,7 @@ void pido() {
     //float kp = 0.14;
     //float ki = 0.001;
     // 0.0001
-    float kp = 0.1;
+    float kp = 0.11;
     float ki = 0.001;
     float kd = 0.005;
 
@@ -385,7 +386,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 70.0;
+        hardLength = 72.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -397,7 +398,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 70.0;
+        hardLength = 72.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
@@ -427,13 +428,13 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 52){
-        hardLength = 70.0;
+        hardLength = 80.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 50){
-        hardLength = 70.0;
+        hardLength = 80.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
@@ -445,7 +446,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 100){
-        hardLength = 20.0;
+        hardLength = 30.0;
         std::cout << "start forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -469,6 +470,9 @@ void sharpTurn(int turn) {
             direct_count += 1;
             if (safety){go=false;}
             canUpdateStates = true;
+            //p=0;
+            //i=0;
+            //d=0;
             //canUpdateLoc=true;
             //remove this at final stage. This only for safety
             //depends on final robot speed
@@ -548,11 +552,25 @@ void pickup(){
       rightArmMotor->setVelocity(3.0);
       leftSpeed=0;
       rightSpeed=0;
+      p=0;
+      i=0;
+      d=0;
     }
     else if(1<temp_time && temp_time<6){
-      pid();
-      leftSpeed=leftSpeed/4.5;
-      rightSpeed=rightSpeed/4.5;
+      double value = fds->getValue();
+      if (value<1600){
+        kp=0.08;
+        ki=0;
+        pid();
+        leftSpeed=leftSpeed/2.5;
+        rightSpeed=rightSpeed/2.5;
+        //leftSpeed=0.5;
+        //rightSpeed=0.5;
+      }
+      else{
+        leftSpeed=0;
+        rightSpeed=0;
+      }
       //leftSpeed=1;
       //rightSpeed=1;
     }
@@ -611,15 +629,22 @@ void pickup(){
       rightSpeed=0;
     }
     else if(27<temp_time && temp_time<=29){
+      double value = fds->getValue();
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
       leftArmMotor->setVelocity(0.75);
       leftArmMotor->setPosition(0);
       rightArmMotor->setVelocity(0.75);
       rightArmMotor->setPosition(0);
-      pid();
-      leftSpeed=-0.5;
-      rightSpeed=-0.5;
+      if (value>1500){
+        leftSpeed=-0.5;
+        rightSpeed=-0.5;
+      }
+      else{
+        leftSpeed=0;
+        rightSpeed=0;
+      }
+      
     }
     if(temp_time > 29){
       if (abs(colorfront-colorbottom)%2==0){
@@ -810,7 +835,7 @@ void maze(){
         direct[direct_count]=-1;
         
     }
-    else if (value>850 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
+    else if (value>1000 && mazeIn && state[direct_count]=="radiusIn" && !boxFound){
         boxFound=true;
         //direct_count=direct.size();
         //direct_count+=1;
@@ -1018,6 +1043,9 @@ int main(int argc, char **argv) {
           dc = 0;
           std::cout << "Motor state = line follow"<< std::endl;
           if (pidOn){
+            kp = 0.07;
+            ki = 0.005;
+            kd = 0.0001;
             pid();
           }
           pidOn=true;
@@ -1034,7 +1062,7 @@ int main(int argc, char **argv) {
       correct();
       gatesync();
       stop();
-      std::cout <<"final_left"<< leftSpeed<< std::endl;
+      //std::cout <<"final_left"<< leftSpeed<< std::endl;
       setMotors();
       canUpdateStates=false;
       

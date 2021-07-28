@@ -3,16 +3,16 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.06756465321885634 0.9630502972126161 0.2607089232728864 3.6307623920119334
-  position 1.2277447535356685 2.22429948829299 -1.50745236883388
+  orientation 0.1925522550982794 0.9316648540383089 0.30809775852210236 4.196144805363742
+  position -0.04618672392680506 2.170919290952975 2.97201449686649
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 DEF Fin Robot {
-  translation 1.91 0.02 3.64
-  rotation 0 1 0 -3.1415853071795863
+  translation 1.77 0.02 4.56
+  rotation 0 1 0 1.5708
   children [
     SliderJoint {
       jointParameters JointParameters {
@@ -740,8 +740,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.060078486221900845 -0.010461835031299053 0.06995118045334311
-        rotation -0.14730601273562016 -0.4959142532653725 0.8557861835880393 1.412242235296283
+        translation -0.05998350975725925 -0.010487274337424052 0.06990219340816514
+        rotation 0.9633605074490981 -0.11471282649033808 0.24244071466239697 4.827188293963141
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -762,8 +762,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.06006572099135739 -0.010566792073126292 0.06996507765382327
-        rotation 0.5269423869827407 0.01886954688386998 0.8496915093146036 3.992146300315109
+        translation 0.060030325538471756 -0.010553822379061176 0.07007863531794675
+        rotation 0.1370974575719886 0.46696968056052424 0.8735809089972715 3.3666850662599117
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1320,8 +1320,7 @@ DEF Gate4 Robot {
   controller "gate2"
 }
 DEF L1Pillar Solid {
-  translation 3.59 0.0499647 0.49
-  rotation 0.13363152051314864 0.9674344753871871 -0.21497244604288682 -9.349779865454876e-16
+  translation 2.12 0.0499647 0.49
   children [
     DEF pillar Shape {
       appearance PBRAppearance {
@@ -1382,7 +1381,7 @@ Floor {
   }
 }
 DEF CUBE Solid {
-  translation 2.90561 0.02 3.07465
+  translation 2.91267 0.02 2.55851
   rotation 0 1 0 0.785398
   children [
     DEF Cube_faces Group {
