@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.20863050706076697 0.8405150660479385 0.5000077352101637 3.8162048073707067
-  position 2.255463853498874 1.8893743955244664 3.2915704894584206
+  orientation -0.32142158746038735 -0.826144284074803 -0.46278913665402316 2.099754050249139
+  position 1.8793792876876203 2.1739167417037253 3.8781826759066234
 }
 TexturedBackground {
 }
@@ -35,9 +35,69 @@ RectangleArena {
   }
 }
 DEF Fin Robot {
-  translation 3.91 0.02 4.48
+  translation 3.91 0.02 4.51
   rotation 0 1 0 -3.1415853071795863
   children [
+    DistanceSensor {
+      translation -2.19762e-09 0.01 0.035
+      rotation 2.45113e-07 -1 -2.54035e-08 1.57101
+      children [
+        DEF shapr_ir Shape {
+          appearance Appearance {
+            material Material {
+              ambientIntensity 1
+              diffuseColor 0 0 0
+              shininess 0
+              specularColor 0.396078 0.409804 0.466667
+            }
+          }
+          geometry IndexedFaceSet {
+            coord Coordinate {
+              point [
+                -0.01905 -0.006731 -0.022225
+                -0.01905 -0.006731 0.022225
+                -0.01905 0.006731 -0.022225
+                -0.01905 0.006731 0.022225
+                0 -0.006731 -0.022225
+                0 -0.006731 0.022225
+                0 0.006731 -0.022225
+                0 0.006731 0.022225
+              ]
+            }
+            normal Normal {
+              vector [
+                -1 0 0
+                0 -1 0
+                0 0 -1
+                0 0 1
+                0 1 0
+                1 0 0
+              ]
+            }
+            coordIndex [
+              6, 7, 4, -1, 4, 7, 5, -1, 2, 6, 0, -1, 0, 6, 4, -1, 3, 2, 1, -1, 1, 2, 0, -1, 7, 3, 5, -1, 5, 3, 1, -1, 2, 3, 6, -1, 6, 3, 7, -1, 1, 0, 5, -1, 5, 0, 4, -1
+            ]
+            normalIndex [
+              5, 5, 5, -1, 5, 5, 5, -1, 2, 2, 2, -1, 2, 2, 2, -1, 0, 0, 0, -1, 0, 0, 0, -1, 3, 3, 3, -1, 3, 3, 3, -1, 4, 4, 4, -1, 4, 4, 4, -1, 1, 1, 1, -1, 1, 1, 1, -1
+            ]
+          }
+        }
+      ]
+      name "fds"
+      boundingObject USE shapr_ir
+      physics Physics {
+      }
+      lookupTable [
+        0 0 0
+        0.03 3000 0.1
+        0.06 2000 0.1
+        0.12 1050 0.1
+        0.25 525 0.1
+        0.4 300 0.1
+        0.8 150 0.1
+      ]
+      type "laser"
+    }
     LED {
       translation 0 0.05 0
       children [
@@ -442,6 +502,13 @@ DEF Fin Robot {
         translation -0.016 0.0199984 0.0620031
         rotation -4.52716999091886e-05 -0.9999999979940803 4.429799991114177e-05 1.5708
         children [
+          Camera {
+            translation 0.015 0 -0.015
+            rotation 0 -1 0 1.57079
+            fieldOfView 1
+            width 640
+            height 640
+          }
           DEF colorsensor Shape {
             appearance Appearance {
               material Material {
@@ -487,57 +554,6 @@ DEF Fin Robot {
       endPoint Solid {
         translation 0 0.0292956 0.101385
         children [
-          DistanceSensor {
-            translation 0 0.006731 0.0365
-            rotation -0.12942901354325853 0.9831091028710673 0.12940101354032865 -1.588045307179586
-            children [
-              DEF shapr_ir Shape {
-                appearance Appearance {
-                  material Material {
-                    ambientIntensity 1
-                    diffuseColor 0 0 0
-                    shininess 0
-                    specularColor 0.396078 0.409804 0.466667
-                  }
-                }
-                geometry IndexedFaceSet {
-                  coord Coordinate {
-                    point [
-                      -0.01905 -0.006731 -0.022225
-                      -0.01905 -0.006731 0.022225
-                      -0.01905 0.006731 -0.022225
-                      -0.01905 0.006731 0.022225
-                      0 -0.006731 -0.022225
-                      0 -0.006731 0.022225
-                      0 0.006731 -0.022225
-                      0 0.006731 0.022225
-                    ]
-                  }
-                  normal Normal {
-                    vector [
-                      -1 0 0
-                      0 -1 0
-                      0 0 -1
-                      0 0 1
-                      0 1 0
-                      1 0 0
-                    ]
-                  }
-                  coordIndex [
-                    6, 7, 4, -1, 4, 7, 5, -1, 2, 6, 0, -1, 0, 6, 4, -1, 3, 2, 1, -1, 1, 2, 0, -1, 7, 3, 5, -1, 5, 3, 1, -1, 2, 3, 6, -1, 6, 3, 7, -1, 1, 0, 5, -1, 5, 0, 4, -1
-                  ]
-                  normalIndex [
-                    5, 5, 5, -1, 5, 5, 5, -1, 2, 2, 2, -1, 2, 2, 2, -1, 0, 0, 0, -1, 0, 0, 0, -1, 3, 3, 3, -1, 3, 3, 3, -1, 4, 4, 4, -1, 4, 4, 4, -1, 1, 1, 1, -1, 1, 1, 1, -1
-                  ]
-                }
-              }
-            ]
-            name "fds"
-            boundingObject USE shapr_ir
-            physics Physics {
-            }
-            type "laser"
-          }
           DEF slider Shape {
             appearance Appearance {
               material Material {
@@ -628,8 +644,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.05998520084272672 -0.010404941578392068 0.07002729251592309
-        rotation -0.08539562548589359 -0.9861401153764134 -0.1422506941749915 3.144668542514421
+        translation -0.060038938844435036 -0.010585365937870315 0.0699654106512697
+        rotation -0.7880406390036087 0.27921548181989553 -0.5486626158130948 3.073214698493755
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -649,8 +665,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.06009358168940021 -0.010496619983985081 0.07003508622095263
-        rotation -0.48334479212232556 -0.6612735471949528 -0.5736681163429169 2.4012421659444216
+        translation 0.060014402172322914 -0.010509655880377274 0.07009848523445938
+        rotation 0.9447185015471106 -0.15217116480677248 -0.2904322458611167 1.676325214674371
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -841,8 +857,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.05601891317780685 0.01602380543743582 -0.1500226890766619
-        rotation -0.7079638501184476 -0.18357661133428652 0.6819727375023759 2.0905107973625894
+        translation 0.05601891287582164 0.01602380492120555 -0.15002268986999934
+        rotation -0.7079677282628085 -0.18357087973982847 0.6819702543732707 2.0905571847723285
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -865,8 +881,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05600001330578199 0.01599997872301265 -0.14999999935988695
-        rotation -0.07366908295027527 -0.9969339021208055 -0.026375386621802173 2.2719373106124245
+        translation -0.056000013311384426 0.01599997872811279 -0.14999999930889274
+        rotation -0.07439441822879188 -0.996912420355157 -0.02512163764610885 2.2725517691036443
         children [
           USE caster
         ]

@@ -6,4 +6,6 @@ build/release/baseNew.o: baseNew.cpp \
  F:\Installed_Software\Webots/include/controller/cpp/webots/Brake.hpp \
  F:\Installed_Software\Webots/include/controller/cpp/webots/DistanceSensor.hpp \
  F:\Installed_Software\Webots/include/controller/cpp/webots/PositionSensor.hpp \
- F:\Installed_Software\Webots/include/controller/cpp/webots/LED.hpp
+ F:\Installed_Software\Webots/include/controller/cpp/webots/LED.hpp \
+ F:\Installed_Software\Webots/include/controller/cpp/webots/Camera.hpp \
+ F:/Installed_Software/Webots/include/controller/c/webots/camera_recognition_object.h
