@@ -747,85 +747,85 @@ void stop(){
 
 }
 ////////////////////////////////////////////////////
-void expose_sharpir(){
-  sliderMotor->setVelocity(1);
-  sliderMotor->setPosition(0.09);
-  sensorMotor->setPosition(-M_PI/2);
-}
-void detect_color(){
-  const unsigned char *image = cm->getImage();
-  width = cm->getWidth();
-  height = cm->getHeight();
+// void expose_sharpir(){
+  // sliderMotor->setVelocity(1);
+  // sliderMotor->setPosition(0.09);
+  // sensorMotor->setPosition(-M_PI/2);
+// }
+// void detect_color(){
+  // const unsigned char *image = cm->getImage();
+  // width = cm->getWidth();
+  // height = cm->getHeight();
   
-  r = cm->imageGetRed(image, width, (int)(width/2), (int)(height/2));
-  g = cm->imageGetGreen(image, width, (int)(width/2), (int)(height/2));
-  b = cm->imageGetBlue(image, width, (int)(width/2), (int)(height/2));
+  // r = cm->imageGetRed(image, width, (int)(width/2), (int)(height/2));
+  // g = cm->imageGetGreen(image, width, (int)(width/2), (int)(height/2));
+  // b = cm->imageGetBlue(image, width, (int)(width/2), (int)(height/2));
 
-  int m = std::max({r, g, b});
+  // int m = std::max({r, g, b});
 
-  if (m==r) {
-    return 1;
-  }
-  if (m==g) {
-    return 2;
-  }
-  if (m==b) {
-    return 3;
-  }
-}
-void pickup(){
-  std::time_t initial_time = time(NULL);
-  while(robot->step(32)!=-1){
-    std::cout << "Initial time : " << initial_time << std::endl;
-    std::time_t current_time;
-    current_time = time(NULL);
-    std::time_t temp_time = current_time - initial_time;
-    std::cout << "temp_time :" << temp_time << std::endl;
-    if(0<=temp_time && temp_time<=3){
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.09);
-      leftArmMotor->setPosition(M_PI/24);
-      leftArmMotor->setVelocity(3.0);
-    }
-    else if(3<temp_time && temp_time<5){
-      rightMotor->setVelocity(1.0);
-      leftMotor->setVelocity(1.0);
-      //rightMotor->setPosition(INFINITY);
-      //leftMotor->setPosition(INFINITY);
-    }
-    else if(5<=temp_time && temp_time<=7){
-      rightMotor->setVelocity(0.0);
-      leftMotor->setVelocity(0.0);
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.0);
-    }
-    else if(7<temp_time && temp_time<=9){
-      leftArmMotor->setVelocity(1.0);
-      leftArmMotor->setPosition(-M_PI/24);
+  // if (m==r) {
+    // return 1;
+  // }
+  // if (m==g) {
+    // return 2;
+  // }
+  // if (m==b) {
+    // return 3;
+  // }
+// }
+// void pickup(){
+  // std::time_t initial_time = time(NULL);
+  // while(robot->step(32)!=-1){
+    // std::cout << "Initial time : " << initial_time << std::endl;
+    // std::time_t current_time;
+    // current_time = time(NULL);
+    // std::time_t temp_time = current_time - initial_time;
+    // std::cout << "temp_time :" << temp_time << std::endl;
+    // if(0<=temp_time && temp_time<=3){
+      // sliderMotor->setVelocity(0.1);
+      // sliderMotor->setPosition(0.09);
+      // leftArmMotor->setPosition(M_PI/24);
+      // leftArmMotor->setVelocity(3.0);
+    // }
+    // else if(3<temp_time && temp_time<5){
+      // rightMotor->setVelocity(1.0);
+      // leftMotor->setVelocity(1.0);
+      // //rightMotor->setPosition(INFINITY);
+      // //leftMotor->setPosition(INFINITY);
+    // }
+    // else if(5<=temp_time && temp_time<=7){
+      // rightMotor->setVelocity(0.0);
+      // leftMotor->setVelocity(0.0);
+      // sliderMotor->setVelocity(0.1);
+      // sliderMotor->setPosition(0.0);
+    // }
+    // else if(7<temp_time && temp_time<=9){
+      // leftArmMotor->setVelocity(1.0);
+      // leftArmMotor->setPosition(-M_PI/24);
       
-    }
-    else if(9<temp_time && temp_time<=12){
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.09);
-    }
-    else if(12<temp_time && temp_time<=16){
-      sensorMotor->setPosition(-M_PI/2);
-    }
-    else if(16<temp_time && temp_time<=18){
-      sensorMotor->setPosition(0);
-    }
-    else if(18<temp_time && temp_time<=20){
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.0);
-    }
-    else if(20<temp_time && temp_time<=21){
-      leftArmMotor->setPosition(M_PI/24);
-      leftArmMotor->setVelocity(3.0);
-    }
-    if(temp_time > 20){
-      break;
-    }
-  }
+    // }
+    // else if(9<temp_time && temp_time<=12){
+      // sliderMotor->setVelocity(0.1);
+      // sliderMotor->setPosition(0.09);
+    // }
+    // else if(12<temp_time && temp_time<=16){
+      // sensorMotor->setPosition(-M_PI/2);
+    // }
+    // else if(16<temp_time && temp_time<=18){
+      // sensorMotor->setPosition(0);
+    // }
+    // else if(18<temp_time && temp_time<=20){
+      // sliderMotor->setVelocity(0.1);
+      // sliderMotor->setPosition(0.0);
+    // }
+    // else if(20<temp_time && temp_time<=21){
+      // leftArmMotor->setPosition(M_PI/24);
+      // leftArmMotor->setVelocity(3.0);
+    // }
+    // if(temp_time > 20){
+      // break;
+    // }
+  // }
 
 int main(int argc, char **argv) {
   // create the Robot instance.
@@ -909,12 +909,13 @@ int main(int argc, char **argv) {
       else {
           dc = 0;
           //std::cout << "Motor state = line follow"<< std::endl;
-          pid();
+          pido();
           //std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
           //std::cout <<"wall_left"<< leftSpeed<< std::endl;
           junc = juncFind();
       }
+      std::cout << "hey" << std::endl;
       //......................................................
       //start();
       maze();
