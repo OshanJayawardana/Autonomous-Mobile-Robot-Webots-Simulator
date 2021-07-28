@@ -50,6 +50,7 @@ double p = 0;
 double i = 0;
 double d = 0;
 double lastError = 0;
+bool pidOn=true;
 //....................................................
 //global variables for maze
 bool mazeIn=false;
@@ -57,11 +58,13 @@ int quad;
 int rad;
 bool boxFound=false;
 bool colorChecked=false;
+bool armDone=false;
 
 bool even=true; //path check parameter
 
 bool found=false;
 bool checked=false;
+std::time_t initial_time;
 //....................................................
 
 //global variables for pillar counting
@@ -296,8 +299,8 @@ void wall() {
     leftDsValue = ds[0]->getValue();
     rightDsValue = ds[1]->getValue();
 
-    cout << "left ds: " << leftDsValue << endl;
-    cout << "right ds: " << rightDsValue << endl;
+    //cout << "left ds: " << leftDsValue << endl;
+    //cout << "right ds: " << rightDsValue << endl;
     
     //cout << "hey" << endl;
 
@@ -379,7 +382,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 38.0;
+        hardLength = 34.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -391,16 +394,22 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 38.0;
+        hardLength = 34.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 34.0;
+        hardLength = 33.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
+    }
+    else if (turn == -2){
+        hardLength = 33.0;
+        std::cout << "turning back 2"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 20){
         hardLength = 19.0;
@@ -409,13 +418,13 @@ void sharpTurn(int turn) {
         rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 52){
-        hardLength = 29.0;
+        hardLength = 35.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 50){
-        hardLength = 29.0;
+        hardLength = 35.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
@@ -485,6 +494,12 @@ void expose_sharpir(){
   sensorMotor->setPosition(-M_PI/2);
 }
 
+void cover_sharpir(){
+  sensorMotor->setPosition(0);
+  sliderMotor->setVelocity(1);
+  sliderMotor->setPosition(0);
+}
+
 int detect_color(){
   const unsigned char *image = cm->getImage();
   width = cm->getWidth();
@@ -508,61 +523,75 @@ int detect_color(){
 }
 
 void pickup(){
-  std::time_t initial_time = time(NULL);
-  while(robot->step(TIME_STEP)!=-1){
+  
+    //std::time_t initial_time = time(NULL);
     std::cout << "Initial time : " << initial_time << std::endl;
     std::time_t current_time;
     current_time = time(NULL);
     std::time_t temp_time = current_time - initial_time;
     std::cout << "temp_time :" << temp_time << std::endl;
-    if(0<=temp_time && temp_time<=3){
+    if(0<=temp_time && temp_time<=1){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
-      leftArmMotor->setPosition(M_PI/24);
+      leftArmMotor->setPosition(M_PI/12);
       leftArmMotor->setVelocity(3.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
-    //else if(3<temp_time && temp_time<3){
-      //rightMotor->setVelocity(1.0);
-      //leftMotor->setVelocity(1.0);
-      //rightMotor->setPosition(INFINITY);
-      //leftMotor->setPosition(INFINITY);
-    //}
+    else if(1<temp_time && temp_time<5){
+      leftSpeed=1;
+      rightSpeed=1;
+    }
     else if(5<=temp_time && temp_time<=7){
-      rightMotor->setVelocity(0.0);
-      leftMotor->setVelocity(0.0);
-      sliderMotor->setVelocity(0.1);
+      sliderMotor->setVelocity(0.2);
       sliderMotor->setPosition(0.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(7<temp_time && temp_time<=9){
       leftArmMotor->setVelocity(1.0);
-      leftArmMotor->setPosition(-M_PI/24);
+      leftArmMotor->setPosition(-M_PI/12);
+      leftSpeed=0;
+      rightSpeed=0;
       
     }
     else if(9<temp_time && temp_time<=12){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(12<temp_time && temp_time<=16){
       sensorMotor->setPosition(-M_PI/2);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(16<temp_time && temp_time<=18){
       sensorMotor->setPosition(0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(18<temp_time && temp_time<=20){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(20<temp_time && temp_time<=21){
       leftArmMotor->setPosition(M_PI/24);
       leftArmMotor->setVelocity(3.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     if(temp_time > 20){
       
       colorChecked=true;
       junc=9;
-      break;
+      std::cout << "here wrong" << std::endl;
+      armDone=true;
+      
     }
-  }
+  
  }
 ///////////////////////////////////////////////////////////////////
 void pillarCnt() {
@@ -591,7 +620,7 @@ void pillarCnt() {
       }
       }
 
-    if (ts[j]->getValue() < 400) {
+    if (ts[j]->getValue() < 60000) {
       if (pilcount%2 == 1) {  //wrong path
         pilreverse = true; 
         pc = 0;
@@ -605,7 +634,7 @@ void pillarCnt() {
 void gatesync(){
     const double value = fds->getValue();
     //std::cout << "Sensor value is : " << value << std::endl;
-    if (value <= 750){
+    if (value > 500){
       gatePrev=gateCur;
       gateCur=true;
     }
@@ -627,6 +656,7 @@ void gatesync(){
     }
     else if(state[direct_count]=="gate1" or state[direct_count]=="gate2"){
       std::cout << "stop" <<std::endl;
+      pidOn=false;
       leftSpeed=0;
       rightSpeed=0;
       //rightMotor->setPosition(0.0);
@@ -703,6 +733,7 @@ void mazeLoc(){
 void maze(){
     //maze entrance
     if (state[direct_count]=="enterMaze" && canUpdateStates){
+          expose_sharpir();
           mazeIn=true;
           vector<int> mazeStates{0,2,1,2,2, 1,0,2};
           direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
@@ -710,28 +741,28 @@ void maze(){
           state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
           
       }
+    
     //maze location finder
     if (canUpdateStates && mazeIn){
         mazeLoc();
     }
-    if (mazeIn){
-      // expose_sharpir();
-    }
-    if (boxFound && checked){
+    if (boxFound && checked && !armDone){
+      pidOn=false;
       pickup();
-      leftSpeed=0;
-      rightSpeed=0;
+      
     }
     //box check
     const double value = fds->getValue();
-    std::cout << "fds"<< value << std::endl;
-    if (value>850 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
+    std::cout << "fds val : "<< value << std::endl;
+    if (value>850 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked && !checked) {
         boxFound=true;
         //colorChecked=true;
         //junc=9;
         //direct_count=direct.size();
         //direct.insert(direct.begin()+direct_count,-1);
+        cover_sharpir();
         checked=true;
+        initial_time = time(NULL);
         //canUpdateStates=true;
         direct[direct_count]=-1;
         
@@ -787,6 +818,7 @@ void maze(){
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         checked=false;
+        expose_sharpir();
         
         
     }
@@ -823,7 +855,7 @@ void correct(){
               //canUpdateStates = false;
           }
           else if(pilreverse && even){
-              vector<int> mazeStates{-1,2,1,2};
+              vector<int> mazeStates{-2,2,1,2};
               direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
               vector<string> stateNames{"reverse","reverse","reverse","reverse"};
               state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
@@ -846,6 +878,7 @@ void stop(){
         
         if (junc!=-1){
             junc=-1;
+            cover_sharpir();
             leftSpeed = 0;
             rightSpeed = 0;
         }
@@ -939,11 +972,15 @@ int main(int argc, char **argv) {
       //for line following pid
       else {
           dc = 0;
-          //std::cout << "Motor state = line follow"<< std::endl;
-          pid();
-          //std::cout <<"pid_left"<< leftSpeed<< std::endl;
+          std::cout << "Motor state = line follow"<< std::endl;
+          if (pidOn){
+            pid();
+          }
+          pidOn=true;
+          //pid();
+          std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
-          //std::cout <<"wall_left"<< leftSpeed<< std::endl;
+          std::cout <<"wall_left"<< leftSpeed<< std::endl;
           junc = juncFind();
       }
       //......................................................
@@ -953,13 +990,14 @@ int main(int argc, char **argv) {
       correct();
       gatesync();
       stop();
-      //std::cout <<"final_left"<< leftSpeed<< std::endl;
+      std::cout <<"final_left"<< leftSpeed<< std::endl;
       setMotors();
       canUpdateStates=false;
       
       cout << "quad = "<< quad << " rad = " << rad<< endl;
       
       cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
+      std::cout << "junc: " << junc << std::endl; 
       std::cout << "No. of pillars: " << pilcount << std::endl; 
       
       for(int i=0; i<direct.size(); ++i){

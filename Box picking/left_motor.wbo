@@ -1,0 +1,21 @@
+#VRML_OBJ R2021a utf8
+DEF left_motor Solid {
+  translation 0.038 0.0155 -0.06
+  children [
+    DEF motor_left Shape {
+      appearance PBRAppearance {
+        baseColor 1 1 0
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.064 0.025 0.025
+      }
+    }
+  ]
+  name "solid(8)"
+  boundingObject USE motor_left
+  physics Physics {
+    density 2525
+  }
+}
