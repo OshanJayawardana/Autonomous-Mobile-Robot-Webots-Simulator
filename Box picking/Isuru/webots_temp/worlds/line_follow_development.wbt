@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.07993448601946342 -0.9836681780820593 -0.16126807921447472 2.2342888282408437
-  position 0.9196057683289325 0.6981805446564134 2.8274030869625784
+  orientation 0.014397981718104354 0.9989934482203662 0.04248280281746805 3.7945085762976407
+  position 1.4059421766022262 0.14659979558304895 3.122071062856237
 }
 TexturedBackground {
 }
@@ -38,66 +38,6 @@ DEF Fin Robot {
   translation 1.91 0.02 3.64
   rotation 0 1 0 -3.1415853071795863
   children [
-    DEF arduino_mega Solid {
-      translation 0 0.051 0
-      children [
-        DEF arduino_mega Shape {
-          appearance PBRAppearance {
-            baseColor 0 0 1
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.101 0.01 0.054
-          }
-        }
-      ]
-      name "solid(10)"
-      boundingObject USE arduino_mega
-      physics Physics {
-        density 692
-      }
-    }
-    DEF left_motor Solid {
-      translation 0.038 0.0155 -0.06
-      children [
-        DEF motor_left Shape {
-          appearance PBRAppearance {
-            baseColor 1 1 0
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.064 0.025 0.025
-          }
-        }
-      ]
-      name "solid(8)"
-      boundingObject USE motor_left
-      physics Physics {
-        density 2525
-      }
-    }
-    DEF right_motor Solid {
-      translation -0.038 0.0155 -0.06
-      children [
-        DEF motor_right Shape {
-          appearance PBRAppearance {
-            baseColor 1 1 0
-            roughness 1
-            metalness 0
-          }
-          geometry Box {
-            size 0.064 0.025 0.025
-          }
-        }
-      ]
-      name "solid(9)"
-      boundingObject USE motor_right
-      physics Physics {
-        density 2525
-      }
-    }
     DistanceSensor {
       translation -2.19762e-09 0.01 0.035
       rotation 2.45113e-07 -1 -2.54035e-08 1.57101
@@ -703,7 +643,7 @@ DEF Fin Robot {
             ]
             endPoint Solid {
               translation -0.025 -0.009999999999999998 0.04
-              rotation 0 0.9999999999999999 0 3.14
+              rotation 0 1 0 3.14
               children [
                 DEF right_clamp Shape {
                   appearance Appearance {
@@ -754,8 +694,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.06004532096204209 -0.010586177312456422 0.0699772078693982
-        rotation -0.9660776917565782 0.2526389225316526 -0.05354874706589714 2.939545716491067
+        translation -0.05999366805370139 -0.010597049715786134 0.06997673502370723
+        rotation 0.8916201555485144 -0.03588622715568926 0.4513598087116014 3.381606740336933
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -775,8 +715,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.060013283112274905 -0.010526960794753674 0.06990462351194061
-        rotation 0.17687127001382139 0.6045192226740632 -0.7767065490011296 3.2173226906058794
+        translation 0.0600938366845902 -0.010513596963495294 0.07003177733797576
+        rotation -0.7441977211499267 -0.4730899924938486 0.47154597955811967 4.239953504071424
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -967,8 +907,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.05601891249554709 0.016023804293107152 -0.15002269084590497
-        rotation -0.7079724713823982 -0.1835640302639623 0.6819671741058733 2.090614914289825
+        translation 0.0560189125321413 0.016023804327317863 -0.15002269077951463
+        rotation -0.7079721821777127 -0.18356425160842033 0.6819674147596557 2.0906101774981165
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -991,8 +931,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05600001331825676 0.015999978734501773 -0.14999999924740898
-        rotation -0.07527143551160805 -0.9968835538518309 -0.02360913077107636 2.2733012890625606
+        translation -0.05600001331825076 0.015999978734497503 -0.1499999992474235
+        rotation -0.0752710949574772 -0.9968835700593188 -0.02360953217854486 2.2733007715225138
         children [
           USE caster
         ]
@@ -1155,7 +1095,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.0750045 0 0
-        rotation -0.633369059309796 0.6333972785784981 0.4445801639731313 2.3021041600339434
+        rotation -0.633369059309796 0.6333972785784983 0.4445801639731314 2.3021041600339434
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
