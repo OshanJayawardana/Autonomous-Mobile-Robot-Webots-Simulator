@@ -1,0 +1,9 @@
+#VRML_OBJ R2021a utf8
+Floor {
+  translation 1 0 -2.5
+  size 4 6
+  appearance Parquetry {
+    type "dark strip"
+    colorOverride 0 0 0
+  }
+}
