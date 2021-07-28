@@ -19,7 +19,7 @@
 #include <initializer_list>
 
 
-#define TIME_STEP 64
+#define TIME_STEP 16
 #define MAX_SPEED 6.28
 using namespace webots;
 using namespace std;
@@ -43,6 +43,7 @@ Motor* rightMotor;
 Motor* sensorMotor;
 Motor* sliderMotor;
 Motor* leftArmMotor;
+Motor* rightArmMotor;
 Camera *cm;
 
 //initial pid values
@@ -60,7 +61,9 @@ bool boxFound=false;
 bool colorChecked=false;
 bool armDone=false;
 
-bool even=true; //path check parameter
+int colorfront;
+int colorbottom;
+bool even; //path check parameter
 
 bool found=false;
 bool checked=false;
@@ -382,7 +385,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 34.0;
+        hardLength = 70.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -394,37 +397,43 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 34.0;
+        hardLength = 70.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 33.0;
+        hardLength = 67.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == -2){
-        hardLength = 33.0;
+        hardLength = 67.0;
         std::cout << "turning back 2"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
     }
-    else if (turn == 20){
-        hardLength = 19.0;
+    else if (turn == 22){
+        hardLength = 61.0;
         std::cout << "ramp right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
-        rightSpeed = -0.5 * MAX_SPEED;
+        rightSpeed = 0 * MAX_SPEED;
+    }
+    else if (turn == 20){
+        hardLength = 61.0;
+        std::cout << "ramp left"<<std::endl;
+        leftSpeed = 0 * MAX_SPEED;
+        rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 52){
-        hardLength = 35.0;
+        hardLength = 70.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 50){
-        hardLength = 35.0;
+        hardLength = 70.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
@@ -533,58 +542,92 @@ void pickup(){
     if(0<=temp_time && temp_time<=1){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
-      leftArmMotor->setPosition(M_PI/12);
+      leftArmMotor->setPosition(M_PI/3);
       leftArmMotor->setVelocity(3.0);
+      rightArmMotor->setPosition(-M_PI/3);
+      rightArmMotor->setVelocity(3.0);
       leftSpeed=0;
       rightSpeed=0;
     }
-    else if(1<temp_time && temp_time<5){
-      leftSpeed=1;
-      rightSpeed=1;
+    else if(1<temp_time && temp_time<6){
+      pid();
+      leftSpeed=leftSpeed/4.5;
+      rightSpeed=rightSpeed/4.5;
+      //leftSpeed=1;
+      //rightSpeed=1;
     }
-    else if(5<=temp_time && temp_time<=7){
-      sliderMotor->setVelocity(0.2);
-      sliderMotor->setPosition(0.0);
+    else if(6<=temp_time && temp_time<=8){
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.01);
       leftSpeed=0;
       rightSpeed=0;
     }
-    else if(7<temp_time && temp_time<=9){
-      leftArmMotor->setVelocity(1.0);
-      leftArmMotor->setPosition(-M_PI/12);
+    else if(8<temp_time && temp_time<=12){
+      leftArmMotor->setVelocity(0.5);
+      leftArmMotor->setPosition(-M_PI/90);
       leftSpeed=0;
       rightSpeed=0;
       
     }
-    else if(9<temp_time && temp_time<=12){
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.09);
+    else if(12<temp_time && temp_time<=16){
+      rightArmMotor->setVelocity(0.5);
+      rightArmMotor->setPosition(M_PI/90);
+      leftSpeed=0;
+      rightSpeed=0;
+      colorfront = detect_color();
+
+    }
+    else if(16<temp_time && temp_time<=19){
+      std::cout << "front color code : "<< colorfront << std::endl;
+      sliderMotor->setVelocity(0.075);
+      sliderMotor->setPosition(0.1);
       leftSpeed=0;
       rightSpeed=0;
     }
-    else if(12<temp_time && temp_time<=16){
+    else if(19<temp_time && temp_time<=21){
       sensorMotor->setPosition(-M_PI/2);
       leftSpeed=0;
       rightSpeed=0;
+      colorbottom = detect_color();
     }
-    else if(16<temp_time && temp_time<=18){
+    else if(21<temp_time && temp_time<=23){
+      std::cout << "bottom color code : "<< colorbottom << std::endl;
       sensorMotor->setPosition(0);
       leftSpeed=0;
       rightSpeed=0;
     }
-    else if(18<temp_time && temp_time<=20){
-      sliderMotor->setVelocity(0.1);
-      sliderMotor->setPosition(0.0);
+    else if(23<temp_time && temp_time<=25){
+      sliderMotor->setVelocity(0.05);
+      sliderMotor->setPosition(0.03);
       leftSpeed=0;
       rightSpeed=0;
     }
-    else if(20<temp_time && temp_time<=21){
-      leftArmMotor->setPosition(M_PI/24);
+    else if(25<temp_time && temp_time<=27){
+      leftArmMotor->setPosition(M_PI/3);
       leftArmMotor->setVelocity(3.0);
+      rightArmMotor->setPosition(-M_PI/3);
+      rightArmMotor->setVelocity(3.0);
       leftSpeed=0;
       rightSpeed=0;
     }
-    if(temp_time > 20){
-      
+    else if(27<temp_time && temp_time<=29){
+      sliderMotor->setVelocity(0.1);
+      sliderMotor->setPosition(0.09);
+      leftArmMotor->setVelocity(0.75);
+      leftArmMotor->setPosition(0);
+      rightArmMotor->setVelocity(0.75);
+      rightArmMotor->setPosition(0);
+      pid();
+      leftSpeed=-0.5;
+      rightSpeed=-0.5;
+    }
+    if(temp_time > 29){
+      if (abs(colorfront-colorbottom)%2==0){
+        even=true;
+      }
+      else{
+        even=false;
+      }
       colorChecked=true;
       junc=9;
       std::cout << "here wrong" << std::endl;
@@ -806,13 +849,13 @@ void maze(){
         }
         
         if (even){
-            vector<int> mazeStates{0,0,1,1,100};
+            vector<int> mazeStates{20,0,1,1,100};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"pillar","counted","gate1","gate2","complete"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         else{
-            vector<int> mazeStates{2,2,1,1,100};
+            vector<int> mazeStates{22,2,1,1,100};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
             vector<string> stateNames{"pillar","counted","gate1","gate2","complete"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
@@ -951,6 +994,7 @@ int main(int argc, char **argv) {
   //sensorMotor->setVelocity(0);
   //sliderMotor->setVelocity(0);
   leftArmMotor = robot->getMotor("left_arm_motor");
+  rightArmMotor = robot->getMotor("right_arm_motor");
   //...................................................
   cm = robot->getCamera("camera");
   cm->enable(TIME_STEP);
@@ -978,9 +1022,9 @@ int main(int argc, char **argv) {
           }
           pidOn=true;
           //pid();
-          std::cout <<"pid_left"<< leftSpeed<< std::endl;
+          //std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
-          std::cout <<"wall_left"<< leftSpeed<< std::endl;
+          //std::cout <<"wall_left"<< leftSpeed<< std::endl;
           junc = juncFind();
       }
       //......................................................

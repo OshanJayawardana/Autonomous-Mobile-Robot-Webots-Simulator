@@ -3,36 +3,12 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.15520703863755766 0.9582312183101994 0.24021595994669148 4.250322678312685
-  position 0.18810965471480845 1.4008007570364152 2.7877929310729597
+  orientation 0.06756465321885634 0.9630502972126161 0.2607089232728864 3.6307623920119334
+  position 1.2277447535356685 2.22429948829299 -1.50745236883388
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
-}
-RectangleArena {
-  translation -3.91938 -9.76996e-15 0.078644
-  floorSize 10 10
-  floorAppearance PBRAppearance {
-    baseColor 0 0 0
-    roughness 1
-    roughnessMap ImageTexture {
-      url [
-        "textures/parquetry/chequered_parquetry_occlusion.jpg"
-      ]
-    }
-    metalness 0
-    normalMap ImageTexture {
-      url [
-        "textures/parquetry/chequered_parquetry_normal.jpg"
-      ]
-    }
-    occlusionMap ImageTexture {
-      url [
-        "textures/parquetry/chequered_parquetry_occlusion.jpg"
-      ]
-    }
-  }
 }
 DEF Fin Robot {
   translation 1.91 0.02 3.64
@@ -140,7 +116,7 @@ DEF Fin Robot {
             ]
             endPoint Solid {
               translation -0.025 -0.009999999999999998 0.04
-              rotation 0 0.9999999999999999 0 3.14
+              rotation -3.033130264986589e-13 1 -3.810132433896394e-10 3.1399999986645457
               children [
                 DEF right_clamp Shape {
                   appearance Appearance {
@@ -308,6 +284,7 @@ DEF Fin Robot {
         0.8 150 0.1
       ]
       type "laser"
+      aperture 0.0001
     }
     LED {
       translation 0 0.05 0
@@ -763,8 +740,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.05992360731160949 -0.010500680319145647 0.07006452669468002
-        rotation 0.2417738136122871 0.6399306808135996 0.7294067087742023 3.9221310805183176
+        translation -0.060078486221900845 -0.010461835031299053 0.06995118045334311
+        rotation -0.14730601273562016 -0.4959142532653725 0.8557861835880393 1.412242235296283
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -785,8 +762,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.060078768597123695 -0.010509154569448984 0.06993907626106874
-        rotation 0.4014766531137565 -0.22096522207327088 0.8888143043621016 4.583983808447959
+        translation 0.06006572099135739 -0.010566792073126292 0.06996507765382327
+        rotation 0.5269423869827407 0.01886954688386998 0.8496915093146036 3.992146300315109
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -919,466 +896,6 @@ DEF Fin Robot {
     density 1180
   }
   controller "baseNew"
-}
-DEF box Solid {
-  translation 3.45322 0.024949915275412803 3.10072
-  rotation 7.046998482533887e-18 0.9999999999999999 -6.080479904215923e-17 2.3562
-  children [
-    DEF box Shape {
-      appearance PBRAppearance {
-        baseColor 0 0 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.05 0.05 0.05
-      }
-    }
-  ]
-  name "box"
-  boundingObject USE box
-  physics Physics {
-  }
-}
-DEF path Solid {
-  translation 0.527 0 0.3
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "path(4)"
-  boundingObject USE road
-}
-DEF path1 Solid {
-  translation -0.017 0 -0.129999
-  rotation 0 1 0 -1.5707953071795862
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "solid(3)"
-}
-Robot {
-  translation 1.25133 0.0299428 4.58404
-  rotation 0.7010268083506999 7.37475032781542e-05 -0.7131349160817588 3.1415639824419586
-  children [
-    DEF caster_left BallJoint {
-      jointParameters BallJointParameters {
-        position 1.9964835563803431
-        anchor 0.056 0.016 -0.15
-      }
-      endPoint DEF left_caster Solid {
-        translation 0.056018912454495653 0.01602380437962088 -0.15002269078936156
-        rotation -0.7079719996499971 -0.18356586585215892 0.6819671697417198 2.090616329873422
-        children [
-          DEF caster Shape {
-            appearance PBRAppearance {
-            }
-            geometry Sphere {
-              radius 0.014
-              subdivision 4
-            }
-          }
-        ]
-        name "caster_left"
-        boundingObject USE caster
-        physics Physics {
-        }
-      }
-    }
-    DEF caster_right BallJoint {
-      jointParameters BallJointParameters {
-        position -2.5972421484140535
-        anchor -0.056 0.016 -0.15
-      }
-      endPoint DEF right_caster Solid {
-        translation -0.05600001331489474 0.01599997873135527 -0.14999999927743513
-        rotation -0.07484316188145079 -0.9968980357344908 -0.024347637838216054 2.2729354134652975
-        children [
-          USE caster
-        ]
-        name "caster_right"
-        boundingObject USE caster
-        physics Physics {
-        }
-      }
-    }
-    DEF body Shape {
-      appearance PBRAppearance {
-      }
-      geometry Box {
-        size 0.1 0.003 0.1
-      }
-    }
-    DEF ir_panel Solid {
-      translation -5.10335e-14 0 -0.075
-      rotation 0 0 1 1.5708
-      scale 1.5 1.5 1.5
-      children [
-        DistanceSensor {
-          translation 0 -0.0275 0
-          name "ir0"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 -0.025 0
-          name "ir1"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 -0.02 0
-          name "ir2"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 -0.0075 0
-          name "ir3"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 0.0075 0
-          name "ir4"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 0.02 0
-          name "ir5"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 0.025 0
-          name "ir6"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 0.0275 0
-          name "ir7"
-          type "infra-red"
-        }
-        DEF ir_panel Shape {
-          appearance PBRAppearance {
-          }
-          geometry Box {
-            size 0.003 0.06 0.01
-          }
-        }
-      ]
-      name "ir_panel"
-      boundingObject USE ir_panel
-      physics Physics {
-      }
-    }
-    DEF ts_panel Solid {
-      translation 0 0 -0.085
-      rotation 0 0 1 1.5708
-      scale 2 2 2
-      children [
-        DistanceSensor {
-          translation 0 -0.03 0
-          name "ts0"
-          type "infra-red"
-        }
-        DistanceSensor {
-          translation 0 0.03 0
-          name "ts1"
-          type "infra-red"
-        }
-        USE ir_panel
-      ]
-      name "ts_pane;"
-    }
-    DEF axel_rear Solid {
-      rotation 0 0 1 1.5708
-      children [
-        DEF axel Shape {
-          appearance PBRAppearance {
-          }
-          geometry Cylinder {
-            height 0.145
-            radius 0.002
-          }
-        }
-      ]
-      name "axel"
-      boundingObject USE axel
-      physics Physics {
-      }
-    }
-    DEF axel_front Solid {
-      translation 0 0 -0.15
-      rotation 0 0 1 1.5708
-      children [
-        DEF axel Shape {
-          appearance PBRAppearance {
-          }
-          geometry Cylinder {
-            height 0.145
-            radius 0.002
-          }
-        }
-      ]
-      name "axel(1)"
-      boundingObject USE axel
-      physics Physics {
-      }
-    }
-    LED {
-      translation 0 -0.02 0
-      rotation 1 0 0 3.14159
-      children [
-        DEF led Shape {
-          appearance PBRAppearance {
-            metalness 0
-            emissiveIntensity 20
-          }
-          geometry Sphere {
-            radius 0.005
-            subdivision 3
-          }
-        }
-      ]
-    }
-    DEF leftwheel HingeJoint {
-      jointParameters HingeJointParameters {
-        position 588.8368686905886
-        anchor 0.075 0 0
-      }
-      device [
-        PositionSensor {
-          name "pos_left"
-        }
-        RotationalMotor {
-          name "left wheel motor"
-        }
-        Brake {
-          name "brake_left"
-        }
-      ]
-      endPoint Solid {
-        translation 0.0750045 0 0
-        rotation -0.633369059309796 0.6333972785784981 0.4445801639731313 2.3021041600339434
-        children [
-          DEF wheel Shape {
-            appearance PBRAppearance {
-              baseColor 1 0.980392 0.403922
-              roughness 1
-              metalness 0
-            }
-            geometry Cylinder {
-              height 0.005
-              radius 0.03
-            }
-          }
-        ]
-        name "left_wheel"
-        boundingObject USE wheel
-        physics DEF physics_wh Physics {
-        }
-      }
-    }
-    DEF rightwheel HingeJoint {
-      jointParameters HingeJointParameters {
-        position 595.0203503984942
-        anchor -0.075 0 0
-      }
-      device [
-        PositionSensor {
-          name "pos_right"
-        }
-        Brake {
-          name "brake_right"
-        }
-        RotationalMotor {
-          name "right wheel motor"
-        }
-      ]
-      endPoint Solid {
-        translation -0.07500442134343432 -4.531203832386548e-06 -1.78630667456097e-07
-        rotation -0.6541810970248568 0.6466931392337214 0.3922181484370517 2.392805444569373
-        children [
-          USE wheel
-        ]
-        name "right_wheel"
-        boundingObject USE wheel
-        physics USE physics_wh
-      }
-    }
-    DEF DS Solid {
-      translation 0 0 0.01
-      children [
-        DEF ds0 Solid {
-          translation 0.055 -0.008 -0.09
-          children [
-            DistanceSensor {
-              name "ds0"
-              lookupTable [
-                0 0 0
-                0.4 1000 0
-              ]
-            }
-            DEF ds0 Shape {
-              appearance PBRAppearance {
-                baseColor 0 0.6 1
-              }
-              geometry Box {
-                size 0.01 0.01 0.01
-              }
-            }
-          ]
-          name "ds0"
-        }
-        DEF ds1 Solid {
-          translation -0.055 -0.008 -0.09
-          children [
-            DistanceSensor {
-              rotation 0 0 1 3.14159
-              name "ds1"
-              lookupTable [
-                0 0 0
-                0.4 1000 0
-              ]
-            }
-            DEF ds1 Shape {
-              appearance PBRAppearance {
-                baseColor 0 0.6 1
-              }
-              geometry Box {
-                size 0.01 0.01 0.01
-              }
-            }
-          ]
-          name "ds1"
-        }
-      ]
-    }
-    DEF fds DistanceSensor {
-      translation 0 -0.008 -0.08
-      rotation 0 1 0 1.5708
-      children [
-        USE ds0
-      ]
-      name "fds"
-      boundingObject USE ds0
-      physics Physics {
-      }
-      lookupTable [
-        0 0 0
-        0.4 1000 0
-      ]
-    }
-  ]
-  boundingObject USE body
-  physics Physics {
-  }
-  controller ""
-}
-DEF path Solid {
-  translation -0.093 0 -0.58
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "path"
-  boundingObject USE road
-}
-DEF path Solid {
-  translation -0.093 0 -1.47
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "path(1)"
-  boundingObject USE road
-}
-DEF path Solid {
-  translation 0.427 0 0.3
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "path(3)"
-  boundingObject USE road
-}
-DEF path Solid {
-  translation 0.527 0 -1.47
-  children [
-    DEF road Shape {
-      appearance PBRAppearance {
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.0001 0.03
-      }
-    }
-  ]
-  name "path(2)"
-  boundingObject USE road
-}
-DEF path1 Solid {
-  translation -0.527 0 -0.129999
-  rotation 0 1 0 -1.5707953071795862
-  children [
-    USE road
-  ]
-}
-DEF path1 Solid {
-  translation 0.943 0 0.450001
-  rotation 0 1 0 -1.5707953071795862
-  children [
-    USE road
-  ]
-  name "solid(4)"
-}
-DEF path1 Solid {
-  translation 0.943 0 -1.61
-  rotation 0 1 0 -1.5707953071795862
-  children [
-    USE road
-  ]
-  name "solid(2)"
-}
-DEF path1 Solid {
-  translation -0.527 0 -1.03
-  rotation 0 1 0 -1.5707953071795862
-  children [
-    USE road
-  ]
-  name "solid(1)"
 }
 DEF ramp Transform {
   translation 2.867 0 0.339996
@@ -1803,7 +1320,7 @@ DEF Gate4 Robot {
   controller "gate2"
 }
 DEF L1Pillar Solid {
-  translation 3.59 0.04996468421366191 0.49
+  translation 3.59 0.0499647 0.49
   rotation 0.13363152051314864 0.9674344753871871 -0.21497244604288682 -9.349779865454876e-16
   children [
     DEF pillar Shape {
@@ -1862,5 +1379,135 @@ Floor {
   appearance Parquetry {
     type "dark strip"
     colorOverride 0 0 0
+  }
+}
+DEF CUBE Solid {
+  translation 2.90561 0.02 3.07465
+  rotation 0 1 0 0.785398
+  children [
+    DEF Cube_faces Group {
+      children [
+        DEF Blue_1 Transform {
+          translation -0.025 0.025 0.025
+          rotation 1 0 0 3.14159
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Green_1 Transform {
+          translation 0.025 0.025 -0.025
+          rotation -0.5773509358554485 0.5773489358556708 0.5773509358554485 -2.094395307179586
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 1 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Green_2 Transform {
+          translation -0.025 -0.025 -0.025
+          rotation 0.5773509358554485 0.5773489358556708 0.5773509358554485 2.0944
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 1 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Red_2 Transform {
+          translation -0.025 -0.025 0.025
+          rotation 1 0 0 -1.5707953071795862
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Red_1 Transform {
+          translation -0.025 0.025 -0.025
+          rotation 1 0 0 1.5708
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Blue_2 Transform {
+          translation -0.025 -0.025 -0.025
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject Box {
+    size 0.05 0.05 0.05
+  }
+  physics Physics {
+    density -1
+    mass 0.1
   }
 }
