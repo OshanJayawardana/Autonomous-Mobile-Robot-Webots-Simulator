@@ -62,6 +62,7 @@ bool even=true; //path check parameter
 
 bool found=false;
 bool checked=false;
+std::time_t initial_time;
 //....................................................
 
 //global variables for pillar counting
@@ -397,7 +398,7 @@ void sharpTurn(int turn) {
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 34.0;
+        hardLength = 45.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -508,61 +509,73 @@ int detect_color(){
 }
 
 void pickup(){
-  std::time_t initial_time = time(NULL);
-  while(robot->step(TIME_STEP)!=-1){
+  
+    //std::time_t initial_time = time(NULL);
     std::cout << "Initial time : " << initial_time << std::endl;
     std::time_t current_time;
     current_time = time(NULL);
     std::time_t temp_time = current_time - initial_time;
     std::cout << "temp_time :" << temp_time << std::endl;
-    if(0<=temp_time && temp_time<=3){
+    if(0<=temp_time && temp_time<=1){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
-      leftArmMotor->setPosition(M_PI/24);
+      leftArmMotor->setPosition(M_PI/12);
       leftArmMotor->setVelocity(3.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
-    //else if(3<temp_time && temp_time<3){
-      //rightMotor->setVelocity(1.0);
-      //leftMotor->setVelocity(1.0);
-      //rightMotor->setPosition(INFINITY);
-      //leftMotor->setPosition(INFINITY);
-    //}
+    else if(1<temp_time && temp_time<5){
+      leftSpeed=1;
+      rightSpeed=1;
+    }
     else if(5<=temp_time && temp_time<=7){
-      rightMotor->setVelocity(0.0);
-      leftMotor->setVelocity(0.0);
-      sliderMotor->setVelocity(0.1);
+      sliderMotor->setVelocity(0.2);
       sliderMotor->setPosition(0.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(7<temp_time && temp_time<=9){
       leftArmMotor->setVelocity(1.0);
-      leftArmMotor->setPosition(-M_PI/24);
+      leftArmMotor->setPosition(-M_PI/12);
+      leftSpeed=0;
+      rightSpeed=0;
       
     }
     else if(9<temp_time && temp_time<=12){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.09);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(12<temp_time && temp_time<=16){
       sensorMotor->setPosition(-M_PI/2);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(16<temp_time && temp_time<=18){
       sensorMotor->setPosition(0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(18<temp_time && temp_time<=20){
       sliderMotor->setVelocity(0.1);
       sliderMotor->setPosition(0.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     else if(20<temp_time && temp_time<=21){
       leftArmMotor->setPosition(M_PI/24);
       leftArmMotor->setVelocity(3.0);
+      leftSpeed=0;
+      rightSpeed=0;
     }
     if(temp_time > 20){
       
       colorChecked=true;
       junc=9;
-      break;
+      
     }
-  }
+  
  }
 ///////////////////////////////////////////////////////////////////
 void pillarCnt() {
@@ -714,24 +727,21 @@ void maze(){
     if (canUpdateStates && mazeIn){
         mazeLoc();
     }
-    if (mazeIn){
-      // expose_sharpir();
-    }
     if (boxFound && checked){
       pickup();
-      leftSpeed=0;
-      rightSpeed=0;
+      
     }
     //box check
     const double value = fds->getValue();
     std::cout << "fds"<< value << std::endl;
-    if (value>850 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked) {
+    if (value>850 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked && !checked) {
         boxFound=true;
         //colorChecked=true;
         //junc=9;
         //direct_count=direct.size();
         //direct.insert(direct.begin()+direct_count,-1);
         checked=true;
+        initial_time = time(NULL);
         //canUpdateStates=true;
         direct[direct_count]=-1;
         
