@@ -50,6 +50,7 @@ double p = 0;
 double i = 0;
 double d = 0;
 double lastError = 0;
+bool pidOn=true;
 //....................................................
 //global variables for maze
 bool mazeIn=false;
@@ -57,6 +58,7 @@ int quad;
 int rad;
 bool boxFound=false;
 bool colorChecked=false;
+bool armDone=false;
 
 bool even=true; //path check parameter
 
@@ -297,8 +299,8 @@ void wall() {
     leftDsValue = ds[0]->getValue();
     rightDsValue = ds[1]->getValue();
 
-    cout << "left ds: " << leftDsValue << endl;
-    cout << "right ds: " << rightDsValue << endl;
+    //cout << "left ds: " << leftDsValue << endl;
+    //cout << "right ds: " << rightDsValue << endl;
     
     //cout << "hey" << endl;
 
@@ -380,7 +382,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 38.0;
+        hardLength = 34.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -392,16 +394,22 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 38.0;
+        hardLength = 34.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 45.0;
+        hardLength = 33.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
+    }
+    else if (turn == -2){
+        hardLength = 33.0;
+        std::cout << "turning back 2"<<std::endl;
+        leftSpeed = 0.5 * MAX_SPEED;
+        rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 20){
         hardLength = 19.0;
@@ -410,13 +418,13 @@ void sharpTurn(int turn) {
         rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 52){
-        hardLength = 29.0;
+        hardLength = 35.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 50){
-        hardLength = 29.0;
+        hardLength = 35.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
@@ -484,6 +492,12 @@ void expose_sharpir(){
   sliderMotor->setVelocity(1);
   sliderMotor->setPosition(0.09);
   sensorMotor->setPosition(-M_PI/2);
+}
+
+void cover_sharpir(){
+  sensorMotor->setPosition(0);
+  sliderMotor->setVelocity(1);
+  sliderMotor->setPosition(0);
 }
 
 int detect_color(){
@@ -573,6 +587,8 @@ void pickup(){
       
       colorChecked=true;
       junc=9;
+      std::cout << "here wrong" << std::endl;
+      armDone=true;
       
     }
   
@@ -604,7 +620,7 @@ void pillarCnt() {
       }
       }
 
-    if (ts[j]->getValue() < 400) {
+    if (ts[j]->getValue() < 60000) {
       if (pilcount%2 == 1) {  //wrong path
         pilreverse = true; 
         pc = 0;
@@ -618,7 +634,7 @@ void pillarCnt() {
 void gatesync(){
     const double value = fds->getValue();
     //std::cout << "Sensor value is : " << value << std::endl;
-    if (value <= 750){
+    if (value > 500){
       gatePrev=gateCur;
       gateCur=true;
     }
@@ -640,6 +656,7 @@ void gatesync(){
     }
     else if(state[direct_count]=="gate1" or state[direct_count]=="gate2"){
       std::cout << "stop" <<std::endl;
+      pidOn=false;
       leftSpeed=0;
       rightSpeed=0;
       //rightMotor->setPosition(0.0);
@@ -716,6 +733,7 @@ void mazeLoc(){
 void maze(){
     //maze entrance
     if (state[direct_count]=="enterMaze" && canUpdateStates){
+          expose_sharpir();
           mazeIn=true;
           vector<int> mazeStates{0,2,1,2,2, 1,0,2};
           direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
@@ -723,23 +741,26 @@ void maze(){
           state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
           
       }
+    
     //maze location finder
     if (canUpdateStates && mazeIn){
         mazeLoc();
     }
-    if (boxFound && checked){
+    if (boxFound && checked && !armDone){
+      pidOn=false;
       pickup();
       
     }
     //box check
     const double value = fds->getValue();
-    std::cout << "fds"<< value << std::endl;
+    std::cout << "fds val : "<< value << std::endl;
     if (value>850 && mazeIn && state[direct_count]=="radiusOut" && !colorChecked && !checked) {
         boxFound=true;
         //colorChecked=true;
         //junc=9;
         //direct_count=direct.size();
         //direct.insert(direct.begin()+direct_count,-1);
+        cover_sharpir();
         checked=true;
         initial_time = time(NULL);
         //canUpdateStates=true;
@@ -797,6 +818,7 @@ void maze(){
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         checked=false;
+        expose_sharpir();
         
         
     }
@@ -833,7 +855,7 @@ void correct(){
               //canUpdateStates = false;
           }
           else if(pilreverse && even){
-              vector<int> mazeStates{-1,2,1,2};
+              vector<int> mazeStates{-2,2,1,2};
               direct.insert(direct.begin()+direct_count,mazeStates.begin(),mazeStates.end());
               vector<string> stateNames{"reverse","reverse","reverse","reverse"};
               state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
@@ -856,6 +878,7 @@ void stop(){
         
         if (junc!=-1){
             junc=-1;
+            cover_sharpir();
             leftSpeed = 0;
             rightSpeed = 0;
         }
@@ -949,11 +972,15 @@ int main(int argc, char **argv) {
       //for line following pid
       else {
           dc = 0;
-          //std::cout << "Motor state = line follow"<< std::endl;
-          pid();
-          //std::cout <<"pid_left"<< leftSpeed<< std::endl;
+          std::cout << "Motor state = line follow"<< std::endl;
+          if (pidOn){
+            pid();
+          }
+          pidOn=true;
+          //pid();
+          std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
-          //std::cout <<"wall_left"<< leftSpeed<< std::endl;
+          std::cout <<"wall_left"<< leftSpeed<< std::endl;
           junc = juncFind();
       }
       //......................................................
@@ -963,13 +990,14 @@ int main(int argc, char **argv) {
       correct();
       gatesync();
       stop();
-      //std::cout <<"final_left"<< leftSpeed<< std::endl;
+      std::cout <<"final_left"<< leftSpeed<< std::endl;
       setMotors();
       canUpdateStates=false;
       
       cout << "quad = "<< quad << " rad = " << rad<< endl;
       
       cout << "task state = "<< direct_count << " : " << state[direct_count]<< endl;
+      std::cout << "junc: " << junc << std::endl; 
       std::cout << "No. of pillars: " << pilcount << std::endl; 
       
       for(int i=0; i<direct.size(); ++i){
