@@ -38,6 +38,10 @@ Brake* right_brk;
 PositionSensor* pos_left;
 PositionSensor* pos_right;
 LED* led;
+LED* led1;
+LED* led2;
+LED* led3;
+LED* led4;
 Motor* leftMotor;
 Motor* rightMotor;
 Motor* sensorMotor;
@@ -132,7 +136,7 @@ int height;
 ////////////////////////////////////////////////////////////////////////////////////
 
 // pid controll
-void pid() {
+void pido() {
     // initializing the pid coefficients
     // 0.14 0.001 0.0001
     
@@ -180,14 +184,14 @@ void pid() {
 //..........................................................................
 
 // Aruna check this
-void pido() {
+void pid() {
     // initializing the PID coefficients
     //float kp = 0.14;
     //float ki = 0.001;
     // 0.0001
-    float kp = 0.11;
-    float ki = 0.001;
-    float kd = 0.005;
+    //float kp = 0.11;
+    //float ki = 0.001;
+    //float kd = 0.005;
 
     // initializing the array to store IR sensor values
     double irValues[8];
@@ -346,7 +350,7 @@ int juncFind() {
     
     double ir_left = ts[0]->getValue();
     double ir_right = ts[1]->getValue();
-    //std::cout << "ir val "<< ir_left  <<std::endl;
+    //std::cout << "junc val "<< ir_left  <<std::endl;
     //250 was the previous threshold
     bool left = ir_left < 60000;
     bool right = ir_right < 60000;
@@ -416,13 +420,13 @@ void sharpTurn(int turn) {
         rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 22){
-        hardLength = 61.0;
+        hardLength = 57.0;
         std::cout << "ramp right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 20){
-        hardLength = 61.0;
+        hardLength = 57.0;
         std::cout << "ramp left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -793,7 +797,7 @@ void mazeLoc(){
         //.................................................
         //rad to rad
         if (state[direct_count-1]=="radiusIn"){
-            rad=radUpdate(rad,direct[direct_count-1]+1);
+            rad=radUpdate(rad,(direct[direct_count-1]%50)+1);
         }
     }
 }
@@ -809,6 +813,11 @@ void maze(){
           state.insert(state.begin()+direct_count+1,stateNames.begin(),stateNames.end());
           
       }
+    if (state[direct_count]=="ramp"){
+        mazeIn=false;
+        quad=0;
+        rad=0;
+    }
     
     //maze location finder
     if (canUpdateStates && mazeIn){
@@ -954,6 +963,39 @@ void stop(){
 
 }
 ////////////////////////////////////////////////////
+void ledlit(){
+  
+  if (quad==1){
+      led1->set(1);
+      led2->set(0);
+      led3->set(0);
+      led4->set(0);
+  }
+  else if (quad==2){
+      led1->set(0);
+      led2->set(1);
+      led3->set(0);
+      led4->set(0);
+  }
+  else if (quad==3){
+      led1->set(0);
+      led2->set(0);
+      led3->set(1);
+      led4->set(0);
+  }
+  else if (quad==4){
+      led1->set(0);
+      led2->set(0);
+      led3->set(0);
+      led4->set(1);
+  }
+  else{
+      led1->set(0);
+      led2->set(0);
+      led3->set(0);
+      led4->set(0);
+  }
+}
 
 
 int main(int argc, char **argv) {
@@ -1002,6 +1044,10 @@ int main(int argc, char **argv) {
 
   //led
   led = robot->getLED("led");
+  led1 = robot->getLED("1");
+  led2 = robot->getLED("2");
+  led3 = robot->getLED("3");
+  led4 = robot->getLED("4");
   //....................................................
 
   //motors
@@ -1063,6 +1109,7 @@ int main(int argc, char **argv) {
       gatesync();
       stop();
       //std::cout <<"final_left"<< leftSpeed<< std::endl;
+      ledlit();
       setMotors();
       canUpdateStates=false;
       

@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.1925522550982794 0.9316648540383089 0.30809775852210236 4.196144805363742
-  position -0.04618672392680506 2.170919290952975 2.97201449686649
+  orientation 0.43859040362312457 0.8613218304037825 0.25644329260010357 5.090420692783328
+  position 0.6781969858206004 1.2943142162368362 4.811097170746601
 }
 TexturedBackground {
 }
@@ -14,6 +14,91 @@ DEF Fin Robot {
   translation 1.77 0.02 4.56
   rotation 0 1 0 1.5708
   children [
+    LED {
+      translation 0.04 0.05 -0.08
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0.8 0.8 0
+            metalness 0
+            emissiveIntensity 40
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "1"
+      boundingObject USE led
+      physics Physics {
+      }
+      color [
+        0.8 0.8 0
+      ]
+    }
+    LED {
+      translation 0.015 0.05 -0.08
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            metalness 0
+            emissiveIntensity 40
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "2"
+      boundingObject USE led
+      physics Physics {
+      }
+      color [
+        0 1 0
+      ]
+    }
+    LED {
+      translation -0.015 0.05 -0.08
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+            emissiveIntensity 40
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "3"
+      boundingObject USE led
+      physics Physics {
+      }
+      color [
+        0 0 1
+      ]
+    }
+    LED {
+      translation -0.04 0.05 -0.08
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            metalness 0
+            emissiveIntensity 40
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "4"
+      boundingObject USE led
+      physics Physics {
+      }
+    }
     SliderJoint {
       jointParameters JointParameters {
         axis 0 1 0
@@ -287,11 +372,12 @@ DEF Fin Robot {
       aperture 0.0001
     }
     LED {
-      translation 0 0.05 0
+      translation 0 0.05 -0.05
       children [
         Shape {
           appearance PBRAppearance {
             metalness 0
+            emissiveIntensity 40
           }
           geometry Box {
             size 0.01 0.01 0.01
@@ -740,8 +826,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.05998350975725925 -0.010487274337424052 0.06990219340816514
-        rotation 0.9633605074490981 -0.11471282649033808 0.24244071466239697 4.827188293963141
+        translation -0.05991254283529688 -0.010547666427063255 0.0699911030301163
+        rotation 0.8067253500190547 0.4886405489596812 -0.3323020065377509 2.829072250176611
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -762,8 +848,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.060030325538471756 -0.010553822379061176 0.07007863531794675
-        rotation 0.1370974575719886 0.46696968056052424 0.8735809089972715 3.3666850662599117
+        translation 0.05995742730751283 -0.010485961530913466 0.06991061047466235
+        rotation 0.32491558639469176 -0.7599330167807269 0.5629668478021924 3.2798610150283034
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1381,7 +1467,7 @@ Floor {
   }
 }
 DEF CUBE Solid {
-  translation 2.91267 0.02 2.55851
+  translation 2.92681 0.02 3.05341
   rotation 0 1 0 0.785398
   children [
     DEF Cube_faces Group {
