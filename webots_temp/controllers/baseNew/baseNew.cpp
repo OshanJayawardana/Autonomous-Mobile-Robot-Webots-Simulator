@@ -360,13 +360,13 @@ int juncFind() {
     }
     bool left = ir_left < 60000;
     bool right = ir_right < 60000;
-    if (left && !right && !climb) {
+    if (left && !right) {
         junc = 0;
     }
-    else if (left && right && !climb) {
+    else if (left && right) {
         junc = 1;
     }
-    else if (!left && right && !climb) {
+    else if (!left && right) {
         junc = 2;
     }
     else {
