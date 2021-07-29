@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.07993448601946342 -0.9836681780820593 -0.16126807921447472 2.2342888282408437
-  position 0.9196057683289325 0.6981805446564134 2.8274030869625784
+  orientation 0.06313647231635293 0.9593102295645505 0.2752047770592944 3.5748486222790103
+  position 1.012211915349182 1.1859452652367553 1.887140187725974
 }
 TexturedBackground {
 }
@@ -38,6 +38,145 @@ DEF Fin Robot {
   translation 1.91 0.02 3.64
   rotation 0 1 0 -3.1415853071795863
   children [
+    DEF DC_lifter_motor Solid {
+      translation -0.024 0.14052 0.08
+      children [
+        DEF lifter_motor Shape {
+          appearance PBRAppearance {
+            baseColor 1 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.012 0.026
+          }
+        }
+      ]
+      name "solid(16)"
+      boundingObject USE lifter_motor
+      physics Physics {
+        density 3000
+      }
+    }
+    DEF DC_lifter_motor Solid {
+      translation 0.024 0.14052 0.08
+      children [
+        DEF lifter_motor Shape {
+          appearance PBRAppearance {
+            baseColor 1 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.012 0.026
+          }
+        }
+      ]
+      name "solid(17)"
+      boundingObject USE lifter_motor
+      physics Physics {
+        density 3000
+      }
+    }
+    DEF L298n Solid {
+      translation 0.058 0.061 0.065
+      children [
+        DEF L298n Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.042 0.03 0.042
+          }
+        }
+      ]
+      name "solid(15)"
+      boundingObject USE L298n
+      physics Physics {
+      }
+    }
+    DEF buck_converter Solid {
+      translation -0.032 0.05 -0.06
+      children [
+        DEF buck_converter Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.02 0.014 0.045
+          }
+        }
+      ]
+      name "solid(13)"
+      boundingObject USE buck_converter
+      physics Physics {
+        density 800
+      }
+    }
+    DEF buck_converter Solid {
+      translation -0.057 0.05 -0.06
+      children [
+        DEF buck_converter Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.02 0.014 0.045
+          }
+        }
+      ]
+      name "solid(14)"
+      boundingObject USE buck_converter
+      physics Physics {
+        density 800
+      }
+    }
+    DEF battery Solid {
+      translation 0.02 0.059 -0.07
+      children [
+        DEF battery Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.074 0.026 0.033
+          }
+        }
+      ]
+      name "solid(12)"
+      boundingObject USE battery
+      physics Physics {
+        density 2130
+      }
+    }
+    DEF rear_wheels_motor_driver Solid {
+      translation 0 0.00682 -0.02
+      children [
+        DEF rear_wheels_motor_driver Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.0381 0.00764 0.02794
+          }
+        }
+      ]
+      name "solid(11)"
+      boundingObject USE rear_wheels_motor_driver
+      physics Physics {
+        density 800
+      }
+    }
     DEF arduino_mega Solid {
       translation 0 0.051 0
       children [
@@ -614,6 +753,46 @@ DEF Fin Robot {
       endPoint Solid {
         translation 0 0.0292956 0.101385
         children [
+          DEF servo Solid {
+            translation -0.035 0.018 0.019
+            children [
+              DEF servo Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 0
+                  roughness 1
+                  metalness 0
+                }
+                geometry Box {
+                  size 0.02 0.036 0.039
+                }
+              }
+            ]
+            name "solid(2)"
+            boundingObject USE servo
+            physics Physics {
+              density 1200
+            }
+          }
+          DEF servo Solid {
+            translation 0.035 0.018 0.019
+            children [
+              DEF servo Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 0
+                  roughness 1
+                  metalness 0
+                }
+                geometry Box {
+                  size 0.02 0.036 0.039
+                }
+              }
+            ]
+            name "solid(3)"
+            boundingObject USE servo
+            physics Physics {
+              density 1200
+            }
+          }
           DEF slider Shape {
             appearance Appearance {
               material Material {
@@ -703,7 +882,7 @@ DEF Fin Robot {
             ]
             endPoint Solid {
               translation -0.025 -0.009999999999999998 0.04
-              rotation 0 0.9999999999999999 0 3.14
+              rotation 0 1 0 3.14
               children [
                 DEF right_clamp Shape {
                   appearance Appearance {
@@ -754,8 +933,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.06004532096204209 -0.010586177312456422 0.0699772078693982
-        rotation -0.9660776917565782 0.2526389225316526 -0.05354874706589714 2.939545716491067
+        translation -0.0599759959858352 -0.010572358626087868 0.06993528495897665
+        rotation 0.797965731775843 -0.12286246916405813 0.5900470359067606 3.876379205025913
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -775,8 +954,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.060013283112274905 -0.010526960794753674 0.06990462351194061
-        rotation 0.17687127001382139 0.6045192226740632 -0.7767065490011296 3.2173226906058794
+        translation 0.05992906705539379 -0.010569769417983219 0.06998996278505878
+        rotation -0.5482169932931369 0.2861603623767457 -0.7858564597107045 3.7047657393555546
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -967,8 +1146,8 @@ Robot {
         anchor 0.056 0.016 -0.15
       }
       endPoint DEF left_caster Solid {
-        translation 0.05601891249554709 0.016023804293107152 -0.15002269084590497
-        rotation -0.7079724713823982 -0.1835640302639623 0.6819671741058733 2.090614914289825
+        translation 0.056018912453302684 0.01602380425263652 -0.1500226909235714
+        rotation -0.7079728114688392 -0.18356375843852446 0.6819668942176229 2.09062041296574
         children [
           DEF caster Shape {
             appearance PBRAppearance {
@@ -991,8 +1170,8 @@ Robot {
         anchor -0.056 0.016 -0.15
       }
       endPoint DEF right_caster Solid {
-        translation -0.05600001331825676 0.015999978734501773 -0.14999999924740898
-        rotation -0.07527143551160805 -0.9968835538518309 -0.02360913077107636 2.2733012890625606
+        translation -0.05600001331826425 0.015999978734507092 -0.1499999992473915
+        rotation -0.07527185418640077 -0.9968835337834991 -0.023608643304183278 2.273301932612607
         children [
           USE caster
         ]
@@ -1155,7 +1334,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.0750045 0 0
-        rotation -0.633369059309796 0.6333972785784981 0.4445801639731313 2.3021041600339434
+        rotation -0.633369059309796 0.6333972785784983 0.4445801639731314 2.3021041600339434
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
