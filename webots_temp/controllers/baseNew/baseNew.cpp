@@ -1,6 +1,7 @@
 #include <webots/Robot.hpp>
 #include <webots/Motor.hpp>
 #include <webots/Brake.hpp>
+#include <webots/Gyro.hpp>
 #include <webots/DistanceSensor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <tuple>
@@ -49,6 +50,7 @@ Motor* sliderMotor;
 Motor* leftArmMotor;
 Motor* rightArmMotor;
 Camera *cm;
+Gyro* gyro;
 
 //initial pid values
 float kp = 0.07;
@@ -104,7 +106,7 @@ vector<string> state{"starting","startingPath","wallFollow","straighPath","enter
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 0;
+int direct_count = 3;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -347,20 +349,24 @@ void wall() {
 
 //junction identificationh
 int juncFind() {
-    
+    const double* gyroVal = gyro->getValues();
     double ir_left = ts[0]->getValue();
     double ir_right = ts[1]->getValue();
-    //std::cout << "junc val "<< ir_left  <<std::endl;
+    std::cout << "jgyro val "<< gyroVal[1]  <<std::endl;
     //250 was the previous threshold
+    bool climb=true;
+    if (abs(gyroVal[1])<0.5){
+      climb=false;
+    }
     bool left = ir_left < 60000;
     bool right = ir_right < 60000;
-    if (left && !right) {
+    if (left && !right && !climb) {
         junc = 0;
     }
-    else if (left && right) {
+    else if (left && right && !climb) {
         junc = 1;
     }
-    else if (!left && right) {
+    else if (!left && right && !climb) {
         junc = 2;
     }
     else {
@@ -390,7 +396,7 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 72.0;
+        hardLength = 75.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -402,19 +408,19 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 72.0;
+        hardLength = 75.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 67.0;
+        hardLength = 75.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == -2){
-        hardLength = 67.0;
+        hardLength = 75.0;
         std::cout << "turning back 2"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
@@ -1048,6 +1054,8 @@ int main(int argc, char **argv) {
   led2 = robot->getLED("2");
   led3 = robot->getLED("3");
   led4 = robot->getLED("4");
+  gyro = robot->getGyro("gyro");
+  gyro->enable(16);
   //....................................................
 
   //motors
