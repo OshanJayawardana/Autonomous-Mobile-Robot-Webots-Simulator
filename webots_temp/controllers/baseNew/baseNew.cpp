@@ -107,7 +107,7 @@ double dc = 0; //damping coeficient
 bool turn_command = false;
 vector<double> pos_lst;
 int junc = -1;
-vector<int> direct{100,0, 2, 2}; //direct = [1, 0];
+vector<int> direct{100,404, 404, 404}; //direct = [1, 0];
 vector<string> state{"starting","startingPath","wallFollow","straighPath","enterMaze"};
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
@@ -314,6 +314,11 @@ void noLine() {
 void wall() {
     leftDsValue = ds[0]->getValue();
     rightDsValue = ds[1]->getValue();
+    
+    for (int j = 0; j < 8; j++) {
+        double irVal = ir[j]->getValue();
+        junValues[j] = irVal;
+    }
 
     //cout << "left ds: " << leftDsValue << endl;
     //cout << "right ds: " << rightDsValue << endl;
@@ -328,7 +333,7 @@ void wall() {
     bool cond = false;
     for (int j = 0; j < 8; j++) {
         //cout << junValues[j] << endl;
-        if (junValues[j] < 75000) {
+        if (junValues[j] < 70000) {
             cond = true;
             //cout << "hey" << endl;
         }
@@ -339,9 +344,11 @@ void wall() {
     //condition for wall following
     if ((leftWall or rightWall) && !cond) {
         wallFollowing();
+        pidOn=false;
     }
     else if (!cond) {
         noLine();
+        pidOn=false;
     }
 
 
@@ -365,12 +372,24 @@ int juncFind() {
     bool right = ir_right < 60000;
     if (left && !right && climb==0 && !dashFound) {
         junc = 0;
+        //std::cout<<"here detected"<<endl;
+        if (direct[direct_count]==404){
+            //std::cout<<"here changed"<<endl;
+            direct[direct_count]=0;
+            //std::cout<<"new direct"<<direct[direct_count] <<endl;
+        }
     }
     else if (left && right && climb==0 && !dashFound) {
         junc = 1;
+        if (direct[direct_count]==404){
+            direct[direct_count]=1;
+        }
     }
     else if (!left && right && climb==0 && !dashFound) {
         junc = 2;
+        if (direct[direct_count]==404){
+            direct[direct_count]=2;
+        }
     }
     else {
         junc = -1;
@@ -399,73 +418,73 @@ void setMotors() {
 void sharpTurn(int turn) {
     double hardLength;
     if (turn == 0) {
-        hardLength = 75.0;
+        hardLength = 125.0;
         std::cout << "turning left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 1) {
-        hardLength = 8.0;
+        hardLength = 16.0;
         std::cout << "going forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 2) {
-        hardLength = 75.0;
+        hardLength = 125.0;
         std::cout << "turning right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 71.0;
+        hardLength = 142.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == -2){
-        hardLength = 71.0;
+        hardLength = 142.0;
         std::cout << "turning back 2"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 22){
-        hardLength = 70.0;
+        hardLength = 133.0;
         std::cout << "ramp right"<<std::endl;
         leftSpeed = 0.25 * MAX_SPEED;
         rightSpeed = -0.25 * MAX_SPEED;
     }
     else if (turn == 20){
-        hardLength = 70.0;
+        hardLength = 133.0;
         std::cout << "ramp left"<<std::endl;
         leftSpeed = -0.25 * MAX_SPEED;
         rightSpeed = 0.25 * MAX_SPEED;
     }
     else if (turn == 21){
-        hardLength = 35.0;
+        hardLength = 80.0;
         std::cout << "ramp adjust"<<std::endl;
         leftSpeed = 0.25 * MAX_SPEED;
         rightSpeed = 0.25 * MAX_SPEED;
     }
     else if (turn == 52){
-        hardLength = 80.0;
+        hardLength = 100.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 50){
-        hardLength = 80.0;
+        hardLength = 100.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
     }
     else if (turn == 41){
-        hardLength = 8.0;
+        hardLength = 16.0;
         std::cout << "quad 4 forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == 100){
-        hardLength = 30.0;
+        hardLength = 100.0;
         std::cout << "start forward"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
@@ -590,7 +609,7 @@ void pickup(){
         kp = 0.07;
         ki = 0.005;
         kd = 0.0001;
-        M_SPEED=MAX_SPEED*0.2;
+        M_SPEED=MAX_SPEED*0.3;
         pid();
         //leftSpeed=0.5;
         //rightSpeed=0.5;
@@ -1070,14 +1089,14 @@ int isClimb(){
 void ramp(){
   if (climb==1){
     kp = 0.07;
-    ki = 0.005;
-    kd = 0.0001;
+    ki = 0.000;
+    kd = 0.0000;
     M_SPEED=MAX_SPEED*0.75;
     pid();
   }
   else if(climb==2){
     kp = 0.07;
-    ki = 0.005;
+    ki = 0.000;
     kd = 0.0001;
     M_SPEED=MAX_SPEED*0.25;
     pid();

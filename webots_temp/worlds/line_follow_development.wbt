@@ -1,10 +1,11 @@
 #VRML_SIM R2021a utf8
 WorldInfo {
+  basicTimeStep 16
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.589021485396606 -0.7760848508896934 -0.22526871500654128 5.367461786235299
-  position 6.065039394023728 2.8577753275043425 6.5274406782953625
+  orientation -0.053071960504947946 -0.9763915958075661 -0.20938676807409784 2.6563818525260445
+  position 1.4434971580182039 0.3279487887357006 3.9805936639655317
 }
 TexturedBackground {
 }
@@ -31,6 +32,7 @@ DEF Fin Robot {
       name "1"
       boundingObject USE led
       physics Physics {
+        mass 0.026
       }
       color [
         0.8 0.8 0
@@ -75,6 +77,7 @@ DEF Fin Robot {
       name "3"
       boundingObject USE led
       physics Physics {
+        mass 0.026
       }
       color [
         0 0 1
@@ -97,6 +100,7 @@ DEF Fin Robot {
       name "4"
       boundingObject USE led
       physics Physics {
+        mass 0.026
       }
     }
     SliderJoint {
@@ -310,9 +314,27 @@ DEF Fin Robot {
       }
     }
     DistanceSensor {
-      translation -2.19762e-09 0.01 0.035
-      rotation 2.45113e-07 -1 -2.54035e-08 1.57101
+      translation -2.19762e-09 0.015 0.035
+      rotation 2.451129999999925e-07 -0.9999999999999696 -2.5403499999999226e-08 1.5710100000000002
       children [
+        Solid {
+          translation -0.01 -0.009 0
+          children [
+            DEF sup Shape {
+              appearance PBRAppearance {
+                metalness 0
+              }
+              geometry Box {
+                size 0.02 0.005 0.05
+              }
+            }
+          ]
+          name "sup"
+          boundingObject USE sup
+          physics Physics {
+            density 350
+          }
+        }
         DEF shapr_ir Shape {
           appearance Appearance {
             material Material {
@@ -357,7 +379,7 @@ DEF Fin Robot {
       name "fds"
       boundingObject USE shapr_ir
       physics Physics {
-        density 350
+        density 1180
       }
       lookupTable [
         0 0 0
@@ -394,6 +416,7 @@ DEF Fin Robot {
         }
       }
       physics Physics {
+        mass 0.026
       }
     }
     DistanceSensor {
@@ -826,8 +849,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.0599907964533844 -0.010428078477610807 0.0699311335397533
-        rotation 0.3364743974814013 0.88508467931762 -0.32157439306753494 4.345038180403197
+        translation -0.06002867043740692 -0.01054391641167809 0.07008514314302522
+        rotation -0.4572155440546527 -0.37479772625298574 -0.8065237818380807 3.941085813777317
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -848,8 +871,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.059996695814304606 -0.01052907141567043 0.07009562392560338
-        rotation 0.3346006516115713 0.5487135692057625 0.7661304216062594 2.6373069592960428
+        translation 0.05990106340705452 -0.01048546619086193 0.07000056477276197
+        rotation 0.6090715245268393 -0.7210214355620439 0.33039365531226667 2.4068900413508523
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1236,7 +1259,7 @@ DEF Gate1 Robot {
         }
       ]
       endPoint Solid {
-        translation -1.355854680848614e-31 0.27500000000000063 0
+        translation 0.009999999999999952 0.25 0
         rotation 0 0 -1 1.5707963267948966
         children [
           DEF gate Shape {
@@ -1245,7 +1268,7 @@ DEF Gate1 Robot {
               metalness 0
             }
             geometry Box {
-              size 0.5 0.1 0.02
+              size 0.4 0.01 0.02
             }
           }
         ]
@@ -1287,7 +1310,7 @@ DEF Gate2 Robot {
         }
       ]
       endPoint Solid {
-        translation -5.551115123125783e-17 0.275 0
+        translation 0.009999999999999952 0.25 0
         rotation 0 0 -1 1.5707963267948966
         children [
           DEF gate Shape {
@@ -1296,7 +1319,7 @@ DEF Gate2 Robot {
               metalness 0
             }
             geometry Box {
-              size 0.5 0.1 0.02
+              size 0.4 0.01 0.02
             }
           }
         ]
