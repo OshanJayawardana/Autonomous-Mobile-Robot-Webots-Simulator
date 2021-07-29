@@ -2,6 +2,7 @@
 #include <webots/Motor.hpp>
 #include <webots/Brake.hpp>
 #include <webots/Gyro.hpp>
+#include <webots/InertialUnit.hpp>
 #include <webots/DistanceSensor.hpp>
 #include <webots/PositionSensor.hpp>
 #include <tuple>
@@ -50,7 +51,8 @@ Motor* sliderMotor;
 Motor* leftArmMotor;
 Motor* rightArmMotor;
 Camera *cm;
-Gyro* gyro;
+InertialUnit* gyroSens;
+
 
 //initial pid values
 float kp = 0.07;
@@ -61,6 +63,7 @@ double i = 0;
 double d = 0;
 double lastError = 0;
 bool pidOn=true;
+double M_SPEED=MAX_SPEED*0.5;
 //....................................................
 //global variables for maze
 bool mazeIn=false;
@@ -78,6 +81,9 @@ bool found=false;
 bool checked=false;
 std::time_t initial_time;
 //....................................................
+
+bool dashFound=false;
+int climb=0;
 
 //global variables for pillar counting
 bool pilreverse = false;
@@ -106,7 +112,7 @@ vector<string> state{"starting","startingPath","wallFollow","straighPath","enter
 int pillarLoc=10;
 int gate1Loc=pillarLoc+2;
 int gate2Loc=pillarLoc+3;
-int direct_count = 3;
+int direct_count = 0;
 bool canUpdateStates = true; //variable that enables updating the state vector(directions)
 ////////////////////////////////////////////////////////
 
@@ -251,8 +257,8 @@ void pid() {
     double motorSpeed = kp * p + ki * i + kd * d;
     //cout << "motor speed: " << motorSpeed << endl;
 
-    leftSpeed = 0.5 * MAX_SPEED - motorSpeed;
-    rightSpeed = 0.5 * MAX_SPEED + motorSpeed;
+    leftSpeed =  M_SPEED - motorSpeed;
+    rightSpeed = M_SPEED + motorSpeed;
     //std::cout <<"left"<< leftSpeed<< std::endl;
 };
 //..........................................................................
@@ -349,24 +355,21 @@ void wall() {
 
 //junction identificationh
 int juncFind() {
-    const double* gyroVal = gyro->getValues();
+    
     double ir_left = ts[0]->getValue();
     double ir_right = ts[1]->getValue();
-    std::cout << "jgyro val "<< gyroVal[1]  <<std::endl;
+    
     //250 was the previous threshold
-    bool climb=true;
-    if (abs(gyroVal[1])<0.5){
-      climb=false;
-    }
+    
     bool left = ir_left < 60000;
     bool right = ir_right < 60000;
-    if (left && !right) {
+    if (left && !right && climb==0 && !dashFound) {
         junc = 0;
     }
-    else if (left && right) {
+    else if (left && right && climb==0 && !dashFound) {
         junc = 1;
     }
-    else if (!left && right) {
+    else if (!left && right && climb==0 && !dashFound) {
         junc = 2;
     }
     else {
@@ -414,28 +417,34 @@ void sharpTurn(int turn) {
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == -1){
-        hardLength = 75.0;
+        hardLength = 71.0;
         std::cout << "turning back"<<std::endl;
         leftSpeed = -0.5 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;
     }
     else if (turn == -2){
-        hardLength = 75.0;
+        hardLength = 71.0;
         std::cout << "turning back 2"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = -0.5 * MAX_SPEED;
     }
     else if (turn == 22){
-        hardLength = 57.0;
+        hardLength = 70.0;
         std::cout << "ramp right"<<std::endl;
-        leftSpeed = 0.5 * MAX_SPEED;
-        rightSpeed = 0 * MAX_SPEED;
+        leftSpeed = 0.25 * MAX_SPEED;
+        rightSpeed = -0.25 * MAX_SPEED;
     }
     else if (turn == 20){
-        hardLength = 57.0;
+        hardLength = 70.0;
         std::cout << "ramp left"<<std::endl;
-        leftSpeed = 0 * MAX_SPEED;
-        rightSpeed = 0.5 * MAX_SPEED;
+        leftSpeed = -0.25 * MAX_SPEED;
+        rightSpeed = 0.25 * MAX_SPEED;
+    }
+    else if (turn == 21){
+        hardLength = 35.0;
+        std::cout << "ramp adjust"<<std::endl;
+        leftSpeed = 0.25 * MAX_SPEED;
+        rightSpeed = 0.25 * MAX_SPEED;
     }
     else if (turn == 52){
         hardLength = 80.0;
@@ -480,6 +489,9 @@ void sharpTurn(int turn) {
             direct_count += 1;
             if (safety){go=false;}
             canUpdateStates = true;
+            if (state[direct_count]=="ramp adjust"){
+               junc = 9;
+            }
             //p=0;
             //i=0;
             //d=0;
@@ -569,11 +581,17 @@ void pickup(){
     else if(1<temp_time && temp_time<6){
       double value = fds->getValue();
       if (value<1600){
-        kp=0.08;
-        ki=0;
+        //kp=0.08;
+        //ki=0;
+        //pid();
+        //M_SPEED=MAX_SPEED*0.5;
+        //leftSpeed=leftSpeed/2.5;
+        //rightSpeed=rightSpeed/2.5;
+        kp = 0.07;
+        ki = 0.005;
+        kd = 0.0001;
+        M_SPEED=MAX_SPEED*0.2;
         pid();
-        leftSpeed=leftSpeed/2.5;
-        rightSpeed=rightSpeed/2.5;
         //leftSpeed=0.5;
         //rightSpeed=0.5;
       }
@@ -864,27 +882,27 @@ void maze(){
     if (boxFound && colorChecked && canUpdateStates && checked){//exit path
         direct_count=direct.size();
         if (rad==1){
-            vector<int> mazeStates{50,0,2};
+            vector<int> mazeStates{50,0,2,21};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp","ramp adjust"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==2){
-            vector<int> mazeStates{52,2,0};
+            vector<int> mazeStates{52,2,0,21};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp","ramp adjust"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==3){
-            vector<int> mazeStates{52,0,2};
+            vector<int> mazeStates{52,0,2,21};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp","ramp adjust"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         if (rad==4){
-            vector<int> mazeStates{50,2,0};
+            vector<int> mazeStates{50,2,0,21};
             direct.insert(direct.end(),mazeStates.begin(),mazeStates.end());
-            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp"};
+            vector<string> stateNames{"radiusIn","radiusOut","circlePath","ramp","ramp adjust"};
             state.insert(state.end(),stateNames.begin(),stateNames.end());
         }
         
@@ -1003,6 +1021,70 @@ void ledlit(){
   }
 }
 
+void dash(){
+
+  bool cond = false;
+  for (int j = 0; j < 8; j++) {
+      //cout << junValues[j] << endl;
+    if (junValues[j] < 75000) {
+        cond = true;
+        //cout << "hey" << endl;
+    }
+  }
+  if (!cond && state[direct_count]=="ramp" && !dashFound ){
+    dashFound=true;
+  }
+  if (dashFound){
+    std::cout << "dash" << endl;
+    kp = 0.07;
+    ki = 0.006;
+    kd = 0.0001;
+    M_SPEED=MAX_SPEED*0.5;
+    pid();
+    pidOn=false;
+  }
+
+}
+
+
+
+int isClimb(){
+  const double* gyroVal = gyroSens->getRollPitchYaw();
+  std::cout << "jgyro val "<< gyroVal[0]  <<std::endl;
+  
+  
+  if (gyroVal[0]<-0.15){
+    climb=1;
+    dashFound=false;
+  }
+  else if(gyroVal[0]>0.15){
+    climb=2;
+    dashFound=false;
+  }
+  else{
+    climb=0;
+  }
+  return climb;  
+}
+
+void ramp(){
+  if (climb==1){
+    kp = 0.07;
+    ki = 0.005;
+    kd = 0.0001;
+    M_SPEED=MAX_SPEED*0.75;
+    pid();
+  }
+  else if(climb==2){
+    kp = 0.07;
+    ki = 0.005;
+    kd = 0.0001;
+    M_SPEED=MAX_SPEED*0.25;
+    pid();
+  
+  }
+}
+
 
 int main(int argc, char **argv) {
   // create the Robot instance.
@@ -1054,8 +1136,8 @@ int main(int argc, char **argv) {
   led2 = robot->getLED("2");
   led3 = robot->getLED("3");
   led4 = robot->getLED("4");
-  gyro = robot->getGyro("gyro");
-  gyro->enable(16);
+  gyroSens = robot->getInertialUnit("inertialUnit");
+  gyroSens->enable(TIME_STEP);
   //....................................................
 
   //motors
@@ -1100,6 +1182,7 @@ int main(int argc, char **argv) {
             kp = 0.07;
             ki = 0.005;
             kd = 0.0001;
+            M_SPEED=MAX_SPEED*0.5;
             pid();
           }
           pidOn=true;
@@ -1107,11 +1190,15 @@ int main(int argc, char **argv) {
           //std::cout <<"pid_left"<< leftSpeed<< std::endl;
           wall();
           //std::cout <<"wall_left"<< leftSpeed<< std::endl;
+          bool climb=isClimb();
+          std::cout << "climb = " << climb << endl;
           junc = juncFind();
       }
       //......................................................
       //start();
       maze();
+      dash();
+      ramp();
       pillarCnt();
       correct();
       gatesync();
@@ -1120,6 +1207,8 @@ int main(int argc, char **argv) {
       ledlit();
       setMotors();
       canUpdateStates=false;
+      
+      
       
       cout << "quad = "<< quad << " rad = " << rad<< endl;
       
