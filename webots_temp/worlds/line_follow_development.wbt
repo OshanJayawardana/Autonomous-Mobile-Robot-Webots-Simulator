@@ -4,15 +4,16 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.7597373034855744 -0.6281664440923946 -0.1679468612650577 0.6767537555893135
-  position -0.5357195759087272 3.827192255410689 9.443628119787935
+  orientation 0.4752528746009855 0.8234481196976534 0.3099482204335086 4.943491004621105
+  position -1.6123395065154489 4.0069330200684625 4.873883814726276
+  followType "None"
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Robot {
-  translation 1.76 0.02 4.57
+  translation 1.77 0.02 4.58
   rotation 0 1 0 1.5708
   children [
     DEF L298n Solid {
@@ -313,7 +314,7 @@ Robot {
               }
             ]
             endPoint Solid {
-              translation 0.025 -0.009999999999999998 0.04
+              translation 0.024999999990959566 -0.009999999999999998 0.04
               rotation 0 0 1 0
               children [
                 DEF left_clamp Shape {
@@ -703,7 +704,7 @@ Robot {
           }
         }
         DistanceSensor {
-          translation 0.06 -0.00399592 0
+          translation 0.045 -0.00399592 0
           rotation 0 0 1 -1.571
           children [
             Shape {
@@ -725,7 +726,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.06 -0.004 0
+          translation -0.045 -0.004 0
           rotation 0 0 1 -1.571
           children [
             Shape {
@@ -958,7 +959,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.016 0.0199984 0.0620031
-        rotation -4.52716999091886e-05 -0.9999999979940803 4.429799991114177e-05 1.5708
+        rotation -4.5271699909188604e-05 -0.9999999979940801 4.429799991114178e-05 1.5708
         children [
           Camera {
             translation 0.015 0 -0.015
@@ -1008,8 +1009,8 @@ Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.05997294855744906 -0.010582382254033363 0.06995018651110095
-        rotation -0.4119920350697438 0.19108752670368018 -0.8909254290777435 2.6464286734462483
+        translation -0.060093872466438894 -0.010533728284351191 0.07000709668087247
+        rotation 0.7999775189840518 -0.5644202749110108 0.20363133940899159 2.770973080336016
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1030,8 +1031,8 @@ Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.05996472589038387 -0.010406716060977107 0.06999266215895789
-        rotation -0.16215002672327833 0.9845949932270204 -0.06542222975352954 3.4742823152918643
+        translation 0.060074340001118096 -0.01056598155163687 0.06998904559096301
+        rotation 0.19602359444222117 0.015582945235943547 0.9804753552434275 4.009191647670706
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -1064,7 +1065,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.086 0.0192256 -0.06
-        rotation -1.7569230642198489e-07 1.7625607074570192e-07 0.999999999999969 1.574000000000031
+        rotation -1.7569230653955367e-07 1.7625607068691752e-07 0.999999999999969 1.5740000000000305
         children [
           Shape {
             geometry DEF wheel Cylinder {
@@ -1097,7 +1098,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.08599999999999997 0.019225578849270303 -0.060000006777253694
-        rotation -1.756923063827953e-07 1.7625607084367581e-07 0.999999999999969 1.574000000000031
+        rotation -1.7569230653955367e-07 1.7625607068691752e-07 0.999999999999969 1.5740000000000305
         children [
           Shape {
             geometry DEF wheel Cylinder {
@@ -2024,8 +2025,8 @@ DEF Fin Robot {
         anchor -0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation -0.06007168823676476 -0.010538183933080104 0.07005833338635885
-        rotation -0.21243764333074688 -0.27649920103342496 -0.9372397983034844 4.167794617941258
+        translation -0.06007075179223276 -0.010539095408805191 0.07005887047567501
+        rotation -0.22385781571925573 -0.27306900100683307 -0.9355859121590777 4.160042618282604
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -2046,8 +2047,8 @@ DEF Fin Robot {
         anchor 0.06 -0.0105 0.07
       }
       endPoint Solid {
-        translation 0.059901826231280424 -0.01048548133800395 0.06998770692921874
-        rotation 0.5788532703845377 -0.7336569665596794 0.35591620753145653 2.516908611214695
+        translation 0.059901508932792016 -0.010485302437775876 0.06999086264015741
+        rotation 0.5877656413908449 -0.7330820605672317 0.34223127162039163 2.504111114587618
         children [
           DEF caster Shape {
             geometry DEF caster Sphere {
@@ -2670,7 +2671,7 @@ Floor {
   }
 }
 DEF CUBE Solid {
-  translation 3.41464 0.02 3.06048
+  translation 3.40758 0.02 2.57264
   rotation 0 1 0 0.785398
   children [
     DEF Cube_faces Group {
