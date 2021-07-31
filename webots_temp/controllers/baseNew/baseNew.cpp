@@ -65,7 +65,7 @@ bool pidOn=true;
 double M_SPEED=MAX_SPEED*0.5;
 //....................................................
 //global variables for maze
-int mazeSide;
+int mazeSide=2;
 bool mazeIn=false;
 bool autoN=true;
 int quad;
@@ -580,7 +580,7 @@ void brakes() {
                       }
                       if (state[direct_count]=="straighPath"){
                           //std::cout<<"here changed"<<endl;
-                          mazeSide=junc;
+                          //mazeSide=junc;
                           //std::cout<<"new direct"<<direct[direct_count] <<endl;
                       }
                 
@@ -594,7 +594,7 @@ void brakes() {
                     if (state[direct_count]=="enterMaze"){
                         mazeIn=true;
                         autoN=false;
-                        mazeSide=direct[direct_count-1];
+                        //mazeSide=direct[direct_count-1];
                         expose_sharpir();
                         //mazeIn=true;
                         vector<int> mazeStates{0,2,1,2,2, 1,0,2};
@@ -619,10 +619,11 @@ void brakes() {
                     }
                     if (state[direct_count]=="straighPath"){
                         std::cout<<"here side"<<endl;
-                        mazeSide=junc;
+                        //mazeSide=junc;
                         //std::cout<<"new direct"<<direct[direct_count] <<endl;
                     }
                 }
+                
                     turn_command = true;
                     dc = 0;
                     leftV=false;
