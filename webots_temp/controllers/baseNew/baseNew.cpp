@@ -483,13 +483,13 @@ void sharpTurn(int turn) {
         rightSpeed = 0.5 * MAX_SPEED;;
     }
     else if (turn == 32){
-        hardLength = 110.0;
+        hardLength = 125.0;
         std::cout << "mid right"<<std::endl;
         leftSpeed = 0.5 * MAX_SPEED;
         rightSpeed = 0 * MAX_SPEED;
     }
     else if (turn == 30){
-        hardLength = 110.0;
+        hardLength = 125.0;
         std::cout << "mid left"<<std::endl;
         leftSpeed = 0 * MAX_SPEED;
         rightSpeed = 0.5 * MAX_SPEED;;
