@@ -15,6 +15,8 @@ In this repository you will be able to find all project files of the Autonomous 
 
 You can run the simulation by yourself by cloning the repository and opening the world file `line_follow_development.wbproj` in the directory `/webots_temp/worlds/`.
 
+Watch the full video of the simulation [`here`](https://drive.google.com/file/d/1SAQ8gB5RU__DB5VPznns0tzTERWij3Cl/view?usp=sharing)
+
 ### Wiring Diagram of the robot
 
 ![wiring diagram](https://github.com/OshanJayawardana/Autonomous-Mobile-Robot-Webots-Simulator/blob/main/resources/wiring%20diagram_bb.jpg)
