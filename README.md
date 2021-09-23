@@ -9,4 +9,4 @@ In this repository you will be able to find all project files of the Autonomous 
 ---
 ### Simulating the Robot
 
-![GIF of the simulation]()
+![preview of the simulation](https://github.com/OshanJayawardana/Autonomous-Mobile-Robot-Webots-Simulator/blob/main/resources/preview.mp4)
